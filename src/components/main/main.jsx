@@ -1,8 +1,31 @@
 import React from "react";
+import PropTypes from "prop-types";
 import MovieCard from "../movie-card/movie-card";
 
 const Main = (props) => {
-  const {moviesList} = props;
+  const {titleMovie} = props;
+  const MoviesList = [
+    {img: `img/fantastic-beasts-the-crimes-of-grindelwald.jpg`, movieTitle: `Fantastic Beasts: The Crimes of Grindelwald`},
+    {img: `img/bohemian-rhapsody.jpg`, movieTitle: `Bohemian Rhapsody`},
+    {img: `img/macbeth.jpg`, movieTitle: `Macbeth`},
+    {img: `img/aviator.jpg`, movieTitle: `Aviator`},
+    {img: `img/we-need-to-talk-about-kevin.jpg`, movieTitle: `We need to talk about Kevin`},
+    {img: `img/what-we-do-in-the-shadows.jpg`, movieTitle: `What We Do in the Shadows`},
+    {img: `img/revenant.jpg`, movieTitle: `Revenant`},
+    {img: `img/johnny-english.jpg`, movieTitle: `Johnny English`},
+    {img: `img/shutter-island.jpg`, movieTitle: `Shutter Island`},
+    {img: `img/pulp-fiction.jpg`, movieTitle: `Pulp Fiction`},
+    {img: `img/no-country-for-old-men.jpg`, movieTitle: `No Country for Old Men`},
+    {img: `img/snatch.jpg`, movieTitle: `Snatch`},
+    {img: `img/moonrise-kingdom.jpg`, movieTitle: `Moonrise Kingdom`},
+    {img: `img/seven-years-in-tibet.jpg`, movieTitle: `Seven Years in Tibet`},
+    {img: `img/midnight-special.jpg`, movieTitle: `Midnight Special`},
+    {img: `img/war-of-the-worlds.jpg`, movieTitle: `War of the Worlds`},
+    {img: `img/dardjeeling-limited.jpg`, movieTitle: `Dardjeeling Limited`},
+    {img: `img/orlando.jpg`, movieTitle: `Orlando`},
+    {img: `img/mindhunter.jpg`, movieTitle: `Mindhunter`},
+    {img: `img/midnight-special.jpg`, movieTitle: `Midnight Special`},
+  ];
 
   return <React.Fragment>
     <section className="movie-card">
@@ -35,10 +58,10 @@ const Main = (props) => {
           </div>
 
           <div className="movie-card__desc">
-            <h2 className="movie-card__title">The Grand Budapest Hotel</h2>
+            <h2 className="movie-card__title">{titleMovie.title}</h2>
             <p className="movie-card__meta">
-              <span className="movie-card__genre">Drama</span>
-              <span className="movie-card__year">2014</span>
+              <span className="movie-card__genre">{titleMovie.genre}</span>
+              <span className="movie-card__year">{titleMovie.year}</span>
             </p>
 
             <div className="movie-card__buttons">
@@ -98,7 +121,7 @@ const Main = (props) => {
         </ul>
 
         <div className="catalog__movies-list">
-          <MovieCard/>
+          {MoviesList.map((movie, i) => <MovieCard key = {movie.movieTitle + i} movie = {movie}/>)}
         </div>
 
         <div className="catalog__more">
@@ -121,6 +144,10 @@ const Main = (props) => {
       </footer>
     </div>
   </React.Fragment>;
+};
+
+Main.propTypes = {
+  titleMovie: PropTypes.object.isRequired,
 };
 
 export default Main;
