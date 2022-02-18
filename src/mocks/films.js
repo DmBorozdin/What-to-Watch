@@ -4,7 +4,7 @@ export default [
     name: `Fantastic Beasts: The Crimes of Grindelwald`,
     previewImage: `img/fantastic-beasts-the-crimes-of-grindelwald.jpg`,
     genre: `adventure`,
-    released: `2018`,
+    released: 2018,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -12,7 +12,7 @@ export default [
     name: `Bohemian Rhapsody`,
     previewImage: `img/bohemian-rhapsody.jpg`,
     genre: `drama`,
-    released: `2018`,
+    released: 2018,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -20,7 +20,7 @@ export default [
     name: `Revenant`,
     previewImage: `img/revenant.jpg`,
     genre: `drama`,
-    released: `2015`,
+    released: 2015,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -28,7 +28,7 @@ export default [
     name: `Johnny English`,
     previewImage: `img/johnny-english.jpg`,
     genre: `comedy`,
-    released: `2011`,
+    released: 2011,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -36,7 +36,7 @@ export default [
     name: `Shutter Island`,
     previewImage: `img/shutter-island.jpg`,
     genre: `thriller`,
-    released: `2010`,
+    released: 2010,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -44,7 +44,7 @@ export default [
     name: `Pulp Fiction`,
     previewImage: `img/pulp-fiction.jpg`,
     genre: `crime`,
-    released: `1994`,
+    released: 1994,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -52,7 +52,7 @@ export default [
     name: `Snatch`,
     previewImage: `img/snatch.jpg`,
     genre: `crime`,
-    released: `2000`,
+    released: 2000,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
   {
@@ -60,7 +60,7 @@ export default [
     name: `War of the Worlds`,
     previewImage: `img/war-of-the-worlds.jpg`,
     genre: `scifi`,
-    released: `2005`,
+    released: 2005,
     videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
   },
 ];
