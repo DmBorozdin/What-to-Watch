@@ -1,13 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import MovieCard from "../movie-card/movie-card";
 
 const MoviesList = (props) => {
   const {films} = props;
+  const [, setActiveCard] = useState(null);
 
   return (
     <div className="catalog__movies-list">
-      {films.map((film) => <MovieCard key = {film.id} film = {film}/>)}
+      {films.map((film) =>
+        <MovieCard
+          key = {film.id}
+          film = {film}
+          setActiveCard = {setActiveCard}
+        />
+      )}
     </div>
   );
 };

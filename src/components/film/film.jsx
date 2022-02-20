@@ -1,7 +1,12 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Film = () => {
+const Film = (props) => {
+  const {films} = props;
+  const pageId = Number(useParams().id);
+  const film = films.find((item) => item.id === pageId);
+
   return <React.Fragment>
     <section className="movie-card movie-card--full">
       <div className="movie-card__hero">
@@ -29,10 +34,10 @@ const Film = () => {
 
         <div className="movie-card__wrap">
           <div className="movie-card__desc">
-            <h2 className="movie-card__title">The Grand Budapest Hotel</h2>
+            <h2 className="movie-card__title">{film.name}</h2>
             <p className="movie-card__meta">
-              <span className="movie-card__genre">Drama</span>
-              <span className="movie-card__year">2014</span>
+              <span className="movie-card__genre">{film.genre}</span>
+              <span className="movie-card__year">{film.released}</span>
             </p>
 
             <div className="movie-card__buttons">
@@ -57,7 +62,7 @@ const Film = () => {
       <div className="movie-card__wrap movie-card__translate-top">
         <div className="movie-card__info">
           <div className="movie-card__poster movie-card__poster--big">
-            <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+            <img src={film.previewImage} alt={`${film.name} poster`} width="218" height="327" />
           </div>
 
           <div className="movie-card__desc">
@@ -155,6 +160,17 @@ const Film = () => {
       </footer>
     </div>
   </React.Fragment>;
+};
+
+Film.propTypes = {
+  films: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
+    genre: PropTypes.string.isRequired,
+    released: PropTypes.number.isRequired,
+    videoLink: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
 };
 
 export default Film;

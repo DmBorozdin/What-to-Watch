@@ -1,16 +1,36 @@
 import React from "react";
+import {Link, useHistory} from "react-router-dom";
 import PropTypes from "prop-types";
 
 const MovieCard = (props) => {
-  const {film} = props;
+  const {film, setActiveCard} = props;
+
+  const history = useHistory();
+
+  const hadleMouseEnter = () => setActiveCard(film.id);
+  const hadleMouseLeave = () => setActiveCard(null);
+  const hadleLinkClick = (evt) => {
+    evt.preventDefault();
+    history.push(`/films/${film.id}`);
+  };
 
   return (
-    <article className="small-movie-card catalog__movies-card">
+    <article
+      className="small-movie-card catalog__movies-card"
+      onMouseEnter = {hadleMouseEnter}
+      onMouseLeave = {hadleMouseLeave}
+    >
       <div className="small-movie-card__image">
-        <img src={film.previewImage} alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
+        <img src={film.previewImage} alt={film.name} width="280" height="175" />
       </div>
       <h3 className="small-movie-card__title">
-        <a className="small-movie-card__link" href="movie-page.html">{film.name}</a>
+        <Link
+          className="small-movie-card__link"
+          to="/films/:id}"
+          onClick={hadleLinkClick}
+        >
+          {film.name}
+        </Link>
       </h3>
     </article>
   );
@@ -25,6 +45,7 @@ MovieCard.propTypes = {
     released: PropTypes.number.isRequired,
     videoLink: PropTypes.string.isRequired,
   }).isRequired,
+  setActiveCard: PropTypes.func,
 };
 
 export default MovieCard;
