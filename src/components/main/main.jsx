@@ -1,9 +1,16 @@
 import React from "react";
+import {useHistory} from "react-router-dom";
 import PropTypes from "prop-types";
 import MoviesList from "../movies-list/movies-list";
 
 const Main = (props) => {
   const {titleMovie, films} = props;
+
+  const history = useHistory();
+
+  const handleSignInClick = () => {
+    history.push(`/login`);
+  };
 
   return <React.Fragment>
     <section className="movie-card">
@@ -23,7 +30,7 @@ const Main = (props) => {
         </div>
 
         <div className="user-block">
-          <div className="user-block__avatar">
+          <div className="user-block__avatar" onClick={handleSignInClick}>
             <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
           </div>
         </div>

@@ -1,17 +1,29 @@
 import React from "react";
+import {useParams, useHistory} from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Player = () => {
+const Player = (props) => {
+  const {films} = props;
+  const pageId = Number(useParams().id);
+  const film = films.find((item) => item.id === pageId);
+
+  const history = useHistory();
+
+  const handleExitClick = () => {
+    history.goBack();
+  };
+
   return (
     <div className="player">
-      <video src="#" className="player__video" poster="img/player-poster.jpg"></video>
+      <video src={film.videoLink} className="player__video" poster="img/player-poster.jpg"></video>
 
-      <button type="button" className="player__exit">Exit</button>
+      <button type="button" className="player__exit" onClick={handleExitClick}>Exit</button>
 
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
             <progress className="player__progress" value="30" max="100"></progress>
-            <div className="player__toggler" style={{left: `30%`}} >Toggler</div>
+            <div className="player__toggler" style={{left: `30%`}}>Toggler</div>
           </div>
           <div className="player__time-value">1:30:29</div>
         </div>
@@ -35,6 +47,17 @@ const Player = () => {
       </div>
     </div>
   );
+};
+
+Player.propTypes = {
+  films: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
+    genre: PropTypes.string.isRequired,
+    released: PropTypes.number.isRequired,
+    videoLink: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
 };
 
 export default Player;

@@ -1,11 +1,21 @@
 import React from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useHistory} from "react-router-dom";
 import PropTypes from "prop-types";
 
 const Film = (props) => {
   const {films} = props;
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
+
+  const history = useHistory();
+
+  const handlePlayClick = () => {
+    history.push(`/player/${film.id}`);
+  };
+
+  const handleSignInClick = () => {
+    history.push(`/login`);
+  };
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
@@ -26,7 +36,7 @@ const Film = (props) => {
           </div>
 
           <div className="user-block">
-            <div className="user-block__avatar">
+            <div className="user-block__avatar" onClick={handleSignInClick}>
               <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
             </div>
           </div>
@@ -41,7 +51,7 @@ const Film = (props) => {
             </p>
 
             <div className="movie-card__buttons">
-              <button className="btn btn--play movie-card__button" type="button">
+              <button className="btn btn--play movie-card__button" type="button" onClick={handlePlayClick}>
                 <svg viewBox="0 0 19 19" width="19" height="19">
                   <use xlinkHref="#play-s"></use>
                 </svg>
@@ -53,7 +63,7 @@ const Film = (props) => {
                 </svg>
                 <span>My list</span>
               </button>
-              <Link to="/films/:id/review" className="btn movie-card__button">Add review</Link>
+              <Link to={`/films/${film.id}/review`} className="btn movie-card__button">Add review</Link>
             </div>
           </div>
         </div>
@@ -155,7 +165,7 @@ const Film = (props) => {
         </div>
 
         <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
+          <p>© 2022 What to watch Ltd.</p>
         </div>
       </footer>
     </div>

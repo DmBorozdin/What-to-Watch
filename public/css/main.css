@@ -1342,7 +1342,9 @@ main {
   width: 63px;
   height: 63px;
   overflow: hidden;
-  border-radius: 50%; }
+  border-radius: 50%;
+  cursor: pointer;
+}
   .user-block__avatar img {
     vertical-align: top;
     width: 100%;

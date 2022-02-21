@@ -1,11 +1,12 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import PropTypes from "prop-types";
 import AddReviewForm from "../add-review-form/add-review-form";
 
 const AddReview = (props) => {
   const {films} = props;
-  const film = films[0];
+  const pageId = Number(useParams().id);
+  const film = films.find((item) => item.id === pageId);
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
@@ -28,7 +29,7 @@ const AddReview = (props) => {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <a href="movie-page.html" className="breadcrumbs__link">{film.name}</a>
+                <Link to={`/films/${film.id}`} className="breadcrumbs__link">{film.name}</Link>
               </li>
               <li className="breadcrumbs__item">
                 <a className="breadcrumbs__link">Add review</a>
@@ -44,7 +45,7 @@ const AddReview = (props) => {
         </header>
 
         <div className="movie-card__poster movie-card__poster--small">
-          <img src="img/the-grand-budapest-hotel-poster.jpg" alt={`${film.name}` + ` poster`} width="218" height="327" />
+          <img src={film.previewImage} alt={`${film.name}` + ` poster`} width="218" height="327" />
         </div>
       </div>
 
