@@ -10,28 +10,28 @@ import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 
 const App = (props) => {
-  const {titleMovie} = props;
+  const {titleMovie, films} = props;
 
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Main titleMovie={titleMovie} />
+          <Main titleMovie={titleMovie} films={films}/>
         </Route>
         <Route exact path="/login">
           <SignIn />
         </Route>
         <Route exact path="/mylist">
-          <MyList />
+          <MyList myListFilms = {films}/>
         </Route>
         <Route exact path="/films/:id">
-          <Film />
+          <Film films={films}/>
         </Route>
         <Route exact path="/films/:id/review">
-          <AddReview />
+          <AddReview films={films}/>
         </Route>
         <Route exact path="/player/:id">
-          <Player />
+          <Player films={films}/>
         </Route>
         <Route>
           <NotFoundScreen />
@@ -43,6 +43,7 @@ const App = (props) => {
 
 App.propTypes = {
   titleMovie: PropTypes.object.isRequired,
+  films: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
 };
 
 export default App;
