@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import myListProp from "./my-list.prop.js";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 
@@ -50,7 +50,7 @@ const MyList = (props) => {
 };
 
 MyList.propTypes = {
-  myListFilms: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  myListFilms: myListProp,
 };
 
 export default MyList;

@@ -1,9 +1,10 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import VideoPlayer from "../video-player/video-player";
 
 const MovieCard = (props) => {
-  const {film, setActiveCard} = props;
+  const {film, isPlaying, setActiveCard} = props;
 
   const hadleMouseEnter = () => setActiveCard(film.id);
   const hadleMouseLeave = () => setActiveCard(null);
@@ -15,7 +16,8 @@ const MovieCard = (props) => {
       onMouseLeave = {hadleMouseLeave}
     >
       <div className="small-movie-card__image">
-        <img src={film.previewImage} alt={film.name} width="280" height="175" />
+        {/* <img src={film.previewImage} alt={film.name} width="280" height="175" /> */}
+        <VideoPlayer videoLink={film.videoLink} isPlaying={isPlaying} poster={film.previewImage}/>
       </div>
       <h3 className="small-movie-card__title">
         <Link className="small-movie-card__link" to={`/films/${film.id}`}>{film.name}</Link>
@@ -34,6 +36,7 @@ MovieCard.propTypes = {
     videoLink: PropTypes.string.isRequired,
   }).isRequired,
   setActiveCard: PropTypes.func,
+  isPlaying: PropTypes.bool.isRequired,
 };
 
 export default MovieCard;
