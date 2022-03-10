@@ -13,7 +13,7 @@ const MoviesList = (props) => {
           key = {film.id}
           film = {film}
           isPlaying = {activeCard === film.id}
-          setActiveCard = {setActiveCard}
+          onMouseOver = {(item) => setActiveCard(item)}
         />
       )}
     </div>

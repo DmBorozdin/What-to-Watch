@@ -1,11 +1,14 @@
-import React, {useRef, useEffect} from "react";
+import React, {useRef, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 
-const VideoPlayer = ({videoLink, isPlaying, poster}) => {
+const VideoPlayer = ({videoLink, isPlaying, poster, ...props}) => {
   const videoRef = useRef();
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    videoRef.current.src = videoLink;
+    videoRef.current.muted = true;
+    videoRef.current.poster = poster;
+    videoRef.current.oncanplay = () => setDuration(videoRef.current.duration);
 
     return () => {
       videoRef.current.pause();
@@ -19,13 +22,16 @@ const VideoPlayer = ({videoLink, isPlaying, poster}) => {
       return;
     }
 
-    videoRef.current.pause();
+    if (videoRef.current.played) {
+      videoRef.current.currentTime = duration;
+      videoRef.current.pause();
+    }
   }, [isPlaying]);
 
-  return <video ref={videoRef} poster={poster}></video>;
+  return <video src={videoLink} ref={videoRef} {...props}></video>;
 };
 
-VideoPlayer.prototype = {
+VideoPlayer.propTypes = {
   videoLink: PropTypes.string.isRequired,
   isPlaying: PropTypes.bool.isRequired,
   poster: PropTypes.string.isRequired,
