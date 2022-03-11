@@ -3,32 +3,35 @@ import PropTypes from "prop-types";
 
 const VideoPlayer = ({videoLink, isPlaying, poster, ...props}) => {
   const videoRef = useRef();
-  const [duration, setDuration] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     videoRef.current.muted = true;
-    videoRef.current.poster = poster;
-    videoRef.current.oncanplay = () => setDuration(videoRef.current.duration);
+    videoRef.current.oncanplaythrough = () => setIsLoading(false);
+    videoRef.current.onended = () => {
+      videoRef.current.src = videoLink;
+    };
 
     return () => {
       videoRef.current.pause();
+      videoRef.current.oncanplaythrough = null;
+      videoRef.current.onended = null;
       videoRef.current = null;
     };
   }, [videoLink]);
 
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlaying && !isLoading) {
       videoRef.current.play();
       return;
     }
-
-    if (videoRef.current.played) {
-      videoRef.current.currentTime = duration;
+    if (!videoRef.current.paused) {
       videoRef.current.pause();
+      videoRef.current.currentTime = videoRef.current.duration;
     }
   }, [isPlaying]);
 
-  return <video src={videoLink} ref={videoRef} {...props}></video>;
+  return <video src={videoLink} preload={`metadata`} poster={poster} ref={videoRef} {...props}></video>;
 };
 
 VideoPlayer.propTypes = {
