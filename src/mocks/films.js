@@ -5,7 +5,7 @@ export default [
     previewImage: `img/fantastic-beasts-the-crimes-of-grindelwald.jpg`,
     genre: `adventure`,
     released: 2018,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ export default [
     previewImage: `img/bohemian-rhapsody.jpg`,
     genre: `drama`,
     released: 2018,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export default [
     previewImage: `img/revenant.jpg`,
     genre: `drama`,
     released: 2015,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ export default [
     previewImage: `img/johnny-english.jpg`,
     genre: `comedy`,
     released: 2011,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 5,
@@ -37,7 +37,7 @@ export default [
     previewImage: `img/shutter-island.jpg`,
     genre: `thriller`,
     released: 2010,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 6,
@@ -45,7 +45,7 @@ export default [
     previewImage: `img/pulp-fiction.jpg`,
     genre: `crime`,
     released: 1994,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 7,
@@ -53,7 +53,7 @@ export default [
     previewImage: `img/snatch.jpg`,
     genre: `crime`,
     released: 2000,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
   {
     id: 8,
@@ -61,6 +61,6 @@ export default [
     previewImage: `img/war-of-the-worlds.jpg`,
     genre: `scifi`,
     released: 2005,
-    videoLink: `https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
   },
 ];

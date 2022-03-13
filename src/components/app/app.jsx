@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import appProp from "./app.prop.js";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import Main from "../main/main";
 import SignIn from "../sign-in/sign-in";
@@ -42,8 +42,8 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  titleMovie: PropTypes.object.isRequired,
-  films: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  titleMovie: appProp.TITLEMOVIE,
+  films: appProp.FILMS,
 };
 
 export default App;

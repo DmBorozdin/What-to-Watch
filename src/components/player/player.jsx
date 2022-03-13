@@ -1,6 +1,6 @@
 import React from "react";
 import {useParams, useHistory} from "react-router-dom";
-import PropTypes from "prop-types";
+import playerProp from "./player.prop.js";
 
 const Player = (props) => {
   const {films} = props;
@@ -50,14 +50,7 @@ const Player = (props) => {
 };
 
 Player.propTypes = {
-  films: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    previewImage: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    released: PropTypes.number.isRequired,
-    videoLink: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+  films: playerProp,
 };
 
 export default Player;

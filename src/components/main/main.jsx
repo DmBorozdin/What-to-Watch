@@ -1,7 +1,7 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
-import PropTypes from "prop-types";
 import MoviesList from "../movies-list/movies-list";
+import mainProp from "./main.prop.js";
 
 const Main = (props) => {
   const {titleMovie, films} = props;
@@ -130,8 +130,8 @@ const Main = (props) => {
 };
 
 Main.propTypes = {
-  titleMovie: PropTypes.object.isRequired,
-  films: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  titleMovie: mainProp.TITLEMOVIE,
+  films: mainProp.FILMS,
 };
 
 export default Main;
