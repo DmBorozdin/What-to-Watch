@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const VideoPlayer = ({videoLink, isPlaying, poster, ...props}) => {
   const videoRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
+  let setStartDelay = null;
 
   useEffect(() => {
     videoRef.current.muted = true;
@@ -22,13 +23,15 @@ const VideoPlayer = ({videoLink, isPlaying, poster, ...props}) => {
 
   useEffect(() => {
     if (isPlaying && !isLoading) {
-      videoRef.current.play();
-      return;
-    }
-    if (!videoRef.current.paused) {
+      setStartDelay = setTimeout(() => videoRef.current.play(), 1000);
+    } else if (!videoRef.current.paused) {
       videoRef.current.pause();
       videoRef.current.currentTime = videoRef.current.duration;
     }
+
+    return () => {
+      clearTimeout(setStartDelay);
+    };
   }, [isPlaying]);
 
   return <video src={videoLink} preload={`metadata`} poster={poster} ref={videoRef} {...props}></video>;
