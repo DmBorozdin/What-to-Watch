@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 export default {
-  FILMS: PropTypes.arrayOf(PropTypes.shape({
+  FILM: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     posterImage: PropTypes.string.isRequired,
@@ -18,10 +18,7 @@ export default {
     genre: PropTypes.string.isRequired,
     released: PropTypes.number.isRequired,
     isFavorite: PropTypes.bool.isRequired,
-  }).isRequired).isRequired,
-  TITLEMOVIE: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
   }).isRequired,
+  ONMOUSEOVER: PropTypes.func,
+  ISPLAYING: PropTypes.bool.isRequired,
 };
