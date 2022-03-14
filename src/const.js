@@ -7,3 +7,9 @@ export const CardVideoPlayerSize = {
   WIDTH: `280`,
   HEIGHT: `175`,
 };
+
+export const MovieNavItem = {
+  OVERVIEW: `Overview`,
+  DETAILS: `Details`,
+  REVIEWS: `Reviews`,
+};
