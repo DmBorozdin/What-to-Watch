@@ -153,7 +153,7 @@ export default [
     director: `Стивен Спилберг`,
     starring: [`Том Круз`, `Дакота Фаннинг`, `Миранда Отто`, `Джастин Чатвин`, `Тим Роббинс`, `Рик Гонсалес`, `Юл Васкес`],
     runTime: 116,
-    genre: `scifi`,
+    genre: `sci-fi`,
     released: 2005,
     isFavorite: false,
   },
