@@ -1,6 +1,7 @@
 import React from "react";
 import {useParams, useHistory} from "react-router-dom";
-import playerProp from "./player.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 
 const Player = (props) => {
   const {films} = props;
@@ -50,7 +51,7 @@ const Player = (props) => {
 };
 
 Player.propTypes = {
-  films: playerProp,
+  films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
 export default Player;

@@ -2,7 +2,8 @@ import React from "react";
 import {Link} from "react-router-dom";
 import VideoPlayer from "../video-player/video-player";
 import {CardVideoPlayerSize} from "../../const";
-import movieCardProp from "./movie-card.prop";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 
 const MovieCard = (props) => {
   const {film, isPlaying, onMouseOver} = props;
@@ -33,9 +34,9 @@ const MovieCard = (props) => {
 };
 
 MovieCard.propTypes = {
-  film: movieCardProp.FILM,
-  onMouseOver: movieCardProp.ONMOUSEOVER,
-  isPlaying: movieCardProp.ISPLAYING,
+  film: filmProp,
+  onMouseOver: PropTypes.func.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
 };
 
 export default MovieCard;

@@ -1,10 +1,11 @@
 import React from "react";
 import {Link, useParams, useHistory} from "react-router-dom";
-import filmProp from "./film.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
+import reviewsProp from "../../common-props/reviews.js";
 import Tabs from "../tabs/tabs.jsx";
 
-const Film = (props) => {
-  const {films} = props;
+const Film = ({films, reviews}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -76,7 +77,7 @@ const Film = (props) => {
             <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
           </div>
 
-          <Tabs film={film}/>
+          <Tabs film={film} reviews={reviews}/>
         </div>
       </div>
     </section>
@@ -142,7 +143,8 @@ const Film = (props) => {
 };
 
 Film.propTypes = {
-  films: filmProp,
+  films: PropTypes.arrayOf(filmProp).isRequired,
+  reviews: reviewsProp,
 };
 
 export default Film;

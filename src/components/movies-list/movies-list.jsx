@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import moviesListProp from "./movies-list.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 import MovieCard from "../movie-card/movie-card";
 
 const MoviesList = (props) => {
@@ -21,7 +22,7 @@ const MoviesList = (props) => {
 };
 
 MoviesList.propTypes = {
-  films: moviesListProp,
+  films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
 export default MoviesList;
