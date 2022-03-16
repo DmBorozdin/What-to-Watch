@@ -57,6 +57,6 @@ export default [
     },
     rating: 7.0,
     comment: `It is certainly a magical and childlike way of storytelling, even if the content is a little more adult.`,
-    date: `2016-12-20T10:05:00`,
+    date: `2014-12-20T10:05:00`,
   },
 ];

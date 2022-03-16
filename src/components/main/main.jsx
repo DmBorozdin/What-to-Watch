@@ -104,7 +104,7 @@ const Main = ({titleMovie, films}) => {
           </li>
         </ul>
 
-        <MoviesList films={films}/>
+        <MoviesList films={films} autoPlay={true}/>
 
         <div className="catalog__more">
           <button className="catalog__button" type="button">Show more</button>

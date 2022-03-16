@@ -2,10 +2,11 @@ import React, {useState} from "react";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import {MovieNavItem} from "../../const";
-import {getTimeInFormatHM} from "../../utils/common";
+import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD} from "../../utils/common";
 
 const Tabs = ({film, reviews}) => {
   const [currentNavItem, setCurrentNavItem] = useState(MovieNavItem.OVERVIEW);
+  const reviewsFormat = [reviews.slice(0, Math.ceil(reviews.length / 2)), reviews.slice(Math.ceil(reviews.length / 2))];
 
   const handleNavItemClick = (evt) => {
     evt.preventDefault();
@@ -78,62 +79,24 @@ const Tabs = ({film, reviews}) => {
 
       {currentNavItem === MovieNavItem.REVIEWS &&
         <div className="movie-card__reviews movie-card__row">
-          <div className="movie-card__reviews-col">
-            {reviews.map((review) => (
-              <div className="review" key={`review ${review.id}`}>
-                <blockquote className="review__quote">
-                  <p className="review__text">{review.comment}</p>
+          {reviewsFormat.map((columnsReview, index) => (
+            <div className="movie-card__reviews-col" key={`reviews-col ${index}`}>
+              {columnsReview.map((review) => (
+                <div className="review" key={`review ${review.id}`}>
+                  <blockquote className="review__quote">
+                    <p className="review__text">{review.comment}</p>
 
-                  <footer className="review__details">
-                    <cite className="review__author">{review.user.name}</cite>
-                    <time className="review__date" dateTime="2016-12-24">December 24, 2016</time>
-                  </footer>
-                </blockquote>
+                    <footer className="review__details">
+                      <cite className="review__author">{review.user.name}</cite>
+                      <time className="review__date" dateTime={getDateInFormatYMD(review.date)}>{getDateInFormatMDY(review.date)}</time>
+                    </footer>
+                  </blockquote>
 
-                <div className="review__rating">{review.rating}</div>
-              </div>
-            ))}
-          </div>
-          <div className="movie-card__reviews-col">
-            <div className="review">
-              <blockquote className="review__quote">
-                <p className="review__text">The mannered, madcap proceedings are often delightful, occasionally silly, and here and there, gruesome and/or heartbreaking.</p>
-
-                <footer className="review__details">
-                  <cite className="review__author">Matthew Lickona</cite>
-                  <time className="review__date" dateTime="2016-12-20">December 20, 2016</time>
-                </footer>
-              </blockquote>
-
-              <div className="review__rating">7,2</div>
+                  <div className="review__rating">{review.rating}</div>
+                </div>
+              ))}
             </div>
-
-            <div className="review">
-              <blockquote className="review__quote">
-                <p className="review__text">It is certainly a magical and childlike way of storytelling, even if the content is a little more adult.</p>
-
-                <footer className="review__details">
-                  <cite className="review__author">Paula Fleri-Soler</cite>
-                  <time className="review__date" dateTime="2016-12-20">December 20, 2016</time>
-                </footer>
-              </blockquote>
-
-              <div className="review__rating">7,6</div>
-            </div>
-
-            <div className="review">
-              <blockquote className="review__quote">
-                <p className="review__text">It is certainly a magical and childlike way of storytelling, even if the content is a little more adult.</p>
-
-                <footer className="review__details">
-                  <cite className="review__author">Paula Fleri-Soler</cite>
-                  <time className="review__date" dateTime="2016-12-20">December 20, 2016</time>
-                </footer>
-              </blockquote>
-
-              <div className="review__rating">7,0</div>
-            </div>
-          </div>
+          ))}
         </div>
       }
     </div>
