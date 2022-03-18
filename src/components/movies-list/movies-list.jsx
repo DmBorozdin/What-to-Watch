@@ -13,7 +13,7 @@ const MoviesList = ({films, autoPlay}) => {
           key = {`moviecard ${film.id}`}
           film = {film}
           isPlaying = {autoPlay && activeCard === film.id}
-          onMouseOver = {(item) => setActiveCard(item)}
+          onMouseOver = {() => setActiveCard(activeCard === film.id ? -1 : film.id)}
         />
       )}
     </div>

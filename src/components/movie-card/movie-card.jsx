@@ -5,17 +5,12 @@ import {CardVideoPlayerSize} from "../../const";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
-const MovieCard = (props) => {
-  const {film, isPlaying, onMouseOver} = props;
-
-  const hadleMouseEnter = () => onMouseOver(film.id);
-  const hadleMouseLeave = () => onMouseOver(null);
-
+const MovieCard = ({film, isPlaying, onMouseOver}) => {
   return (
     <article
       className="small-movie-card catalog__movies-card"
-      onMouseEnter = {hadleMouseEnter}
-      onMouseLeave = {hadleMouseLeave}
+      onMouseEnter = {onMouseOver}
+      onMouseLeave = {onMouseOver}
     >
       <div className="small-movie-card__image">
         <VideoPlayer
