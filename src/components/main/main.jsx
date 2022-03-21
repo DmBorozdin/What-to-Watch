@@ -1,11 +1,10 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
-import mainProp from "./main.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 
-const Main = (props) => {
-  const {titleMovie, films} = props;
-
+const Main = ({titleMovie, films}) => {
   const history = useHistory();
 
   const handleSignInClick = () => {
@@ -105,7 +104,7 @@ const Main = (props) => {
           </li>
         </ul>
 
-        <MoviesList films={films}/>
+        <MoviesList films={films} autoPlay={true}/>
 
         <div className="catalog__more">
           <button className="catalog__button" type="button">Show more</button>
@@ -130,8 +129,12 @@ const Main = (props) => {
 };
 
 Main.propTypes = {
-  titleMovie: mainProp.TITLEMOVIE,
-  films: mainProp.FILMS,
+  titleMovie: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    genre: PropTypes.string.isRequired,
+    year: PropTypes.string.isRequired,
+  }).isRequired,
+  films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
 export default Main;

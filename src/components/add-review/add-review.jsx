@@ -1,6 +1,7 @@
 import React from "react";
 import {Link, useParams} from "react-router-dom";
-import addReviewProp from "./add-review.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 import AddReviewForm from "../add-review-form/add-review-form";
 
 const AddReview = (props) => {
@@ -58,7 +59,7 @@ const AddReview = (props) => {
 };
 
 AddReview.propTypes = {
-  films: addReviewProp,
+  films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
 export default AddReview;

@@ -2,19 +2,15 @@ import React from "react";
 import {Link} from "react-router-dom";
 import VideoPlayer from "../video-player/video-player";
 import {CardVideoPlayerSize} from "../../const";
-import movieCardProp from "./movie-card.prop";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
 
-const MovieCard = (props) => {
-  const {film, isPlaying, onMouseOver} = props;
-
-  const hadleMouseEnter = () => onMouseOver(film.id);
-  const hadleMouseLeave = () => onMouseOver(null);
-
+const MovieCard = ({film, isPlaying, onMouseOver}) => {
   return (
     <article
       className="small-movie-card catalog__movies-card"
-      onMouseEnter = {hadleMouseEnter}
-      onMouseLeave = {hadleMouseLeave}
+      onMouseEnter = {onMouseOver}
+      onMouseLeave = {onMouseOver}
     >
       <div className="small-movie-card__image">
         <VideoPlayer
@@ -33,9 +29,9 @@ const MovieCard = (props) => {
 };
 
 MovieCard.propTypes = {
-  film: movieCardProp.FILM,
-  onMouseOver: movieCardProp.ONMOUSEOVER,
-  isPlaying: movieCardProp.ISPLAYING,
+  film: filmProp,
+  onMouseOver: PropTypes.func.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
 };
 
 export default MovieCard;

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default PropTypes.arrayOf(PropTypes.shape({
+export default PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   posterImage: PropTypes.string.isRequired,
@@ -17,4 +17,4 @@ export default PropTypes.arrayOf(PropTypes.shape({
   genre: PropTypes.string.isRequired,
   released: PropTypes.number.isRequired,
   isFavorite: PropTypes.bool.isRequired,
-}).isRequired).isRequired;
+}).isRequired;

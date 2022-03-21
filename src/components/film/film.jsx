@@ -1,11 +1,18 @@
 import React from "react";
 import {Link, useParams, useHistory} from "react-router-dom";
-import filmProp from "./film.prop.js";
+import PropTypes from "prop-types";
+import filmProp from "../../common-props/film.js";
+import reviewsProp from "../../common-props/reviews.js";
+import Tabs from "../tabs/tabs.jsx";
+import MoviesList from "../movies-list/movies-list.jsx";
+import {shuffleArray} from "../../utils/common.js";
 
-const Film = (props) => {
-  const {films} = props;
+const countSimilarFilmCard = 4;
+
+const Film = ({films, reviews}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
+  const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, countSimilarFilmCard);
 
   const history = useHistory();
 
@@ -75,83 +82,19 @@ const Film = (props) => {
             <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
           </div>
 
-          <div className="movie-card__desc">
-            <nav className="movie-nav movie-card__nav">
-              <ul className="movie-nav__list">
-                <li className="movie-nav__item movie-nav__item--active">
-                  <a href="#" className="movie-nav__link">Overview</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Details</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Reviews</a>
-                </li>
-              </ul>
-            </nav>
-
-            <div className="movie-rating">
-              <div className="movie-rating__score">{film.rating}</div>
-              <p className="movie-rating__meta">
-                <span className="movie-rating__level">Very good</span>
-                <span className="movie-rating__count">{film.scoresCount} ratings</span>
-              </p>
-            </div>
-
-            <div className="movie-card__text">
-              <p style={{whiteSpace: `pre-line`}}>{film.description}</p>
-
-              <p className="movie-card__director"><strong>Director: {film.director}</strong></p>
-
-              <p className="movie-card__starring"><strong>Starring: {film.starring.join(`, `)}</strong></p>
-            </div>
-          </div>
+          <Tabs film={film} reviews={reviews}/>
         </div>
       </div>
     </section>
 
     <div className="page-content">
-      <section className="catalog catalog--like-this">
-        <h2 className="catalog__title">More like this</h2>
+      {similarFilms.length !== 0 &&
+        <section className="catalog catalog--like-this">
+          <h2 className="catalog__title">More like this</h2>
 
-        <div className="catalog__movies-list">
-          <article className="small-movie-card catalog__movies-card">
-            <div className="small-movie-card__image">
-              <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
-            </div>
-            <h3 className="small-movie-card__title">
-              <a className="small-movie-card__link" href="movie-page.html">Fantastic Beasts: The Crimes of Grindelwald</a>
-            </h3>
-          </article>
-
-          <article className="small-movie-card catalog__movies-card">
-            <div className="small-movie-card__image">
-              <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175" />
-            </div>
-            <h3 className="small-movie-card__title">
-              <a className="small-movie-card__link" href="movie-page.html">Bohemian Rhapsody</a>
-            </h3>
-          </article>
-
-          <article className="small-movie-card catalog__movies-card">
-            <div className="small-movie-card__image">
-              <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175" />
-            </div>
-            <h3 className="small-movie-card__title">
-              <a className="small-movie-card__link" href="movie-page.html">Macbeth</a>
-            </h3>
-          </article>
-
-          <article className="small-movie-card catalog__movies-card">
-            <div className="small-movie-card__image">
-              <img src="img/aviator.jpg" alt="Aviator" width="280" height="175" />
-            </div>
-            <h3 className="small-movie-card__title">
-              <a className="small-movie-card__link" href="movie-page.html">Aviator</a>
-            </h3>
-          </article>
-        </div>
-      </section>
+          <MoviesList films={similarFilms} autoPlay={false}/>
+        </section>
+      }
 
       <footer className="page-footer">
         <div className="logo">
@@ -171,7 +114,8 @@ const Film = (props) => {
 };
 
 Film.propTypes = {
-  films: filmProp,
+  films: PropTypes.arrayOf(filmProp).isRequired,
+  reviews: reviewsProp,
 };
 
 export default Film;
