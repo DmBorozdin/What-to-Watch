@@ -2,46 +2,25 @@ import React from "react";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
-const GenreList = ({films}) => {
-  const genre = films.map((film) => film.genre);
-  console.log(genre);
+const GenreList = ({films, activeGenre}) => {
+  const genreList = Array.from(new Set([`all genres`, ...films.map((film) => film.genre)]));
+
+  const handleGenreItemClick = (evt) => {
+    evt.preventDefault();
+  };
 
   return <ul className="catalog__genres-list">
-    <li className="catalog__genres-item catalog__genres-item--active">
-      <a href="#" className="catalog__genres-link">All genres</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Comedies</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Crime</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Documentary</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Dramas</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Horror</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Kids & Family</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Romance</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Sci-Fi</a>
-    </li>
-    <li className="catalog__genres-item">
-      <a href="#" className="catalog__genres-link">Thrillers</a>
-    </li>
+    {genreList.map((genre) =>
+      <li className={`catalog__genres-item ${genre === activeGenre ? `catalog__genres-item--active` : ``}`} key={genre}>
+        <a href="#" className="catalog__genres-link" onClick={handleGenreItemClick}>{genre.charAt(0).toUpperCase() + genre.slice(1)}</a>
+      </li>
+    )}
   </ul>;
 };
 
 GenreList.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
+  activeGenre: PropTypes.string.isRequired,
 };
 
 export default GenreList;

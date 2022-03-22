@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
 
-const Main = ({titleMovie, films}) => {
+const Main = ({titleMovie, films, filter}) => {
   const history = useHistory();
 
   const handleSignInClick = () => {
@@ -73,7 +73,7 @@ const Main = ({titleMovie, films}) => {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <GenreList films={films}/>
+        <GenreList films={films} activeGenre={filter.genre}/>
 
         <MoviesList films={films} autoPlay={true}/>
 
@@ -106,10 +106,15 @@ Main.propTypes = {
     year: PropTypes.string.isRequired,
   }).isRequired,
   films: PropTypes.arrayOf(filmProp).isRequired,
+  filter: PropTypes.shape({
+    genre: PropTypes.string.isRequired,
+    films: PropTypes.arrayOf(filmProp).isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
+  filter: state.filter,
 });
 
 export {Main};
