@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
 const GenreList = ({films, activeGenre}) => {
-  const genreList = Array.from(new Set([`all genres`, ...films.map((film) => film.genre)]));
+  const genreList = Array.from(new Set([`all genres`, ...films.map((film) => film.genre)])).slice(0, 10);
 
   const handleGenreItemClick = (evt) => {
     evt.preventDefault();
