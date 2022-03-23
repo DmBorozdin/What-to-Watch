@@ -1,17 +1,23 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
+import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
+import {Genre} from "../../const";
 
-const Main = ({titleMovie, films, filter}) => {
+const Main = ({titleMovie, films, filter, onUserGenreClick, onResetFilmList}) => {
   const history = useHistory();
 
   const handleSignInClick = () => {
     history.push(`/login`);
   };
+
+  useEffect(() => {
+    onResetFilmList();
+  }, []);
 
   return <React.Fragment>
     <section className="movie-card">
@@ -73,9 +79,9 @@ const Main = ({titleMovie, films, filter}) => {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <GenreList films={films} activeGenre={filter.genre}/>
+        <GenreList films={films} activeGenre={filter.genre} onGenreClick={onUserGenreClick}/>
 
-        <MoviesList films={films} autoPlay={true}/>
+        <MoviesList films={filter.films} autoPlay={true}/>
 
         <div className="catalog__more">
           <button className="catalog__button" type="button">Show more</button>
@@ -110,6 +116,8 @@ Main.propTypes = {
     genre: PropTypes.string.isRequired,
     films: PropTypes.arrayOf(filmProp).isRequired,
   }).isRequired,
+  onUserGenreClick: PropTypes.func.isRequired,
+  onResetFilmList: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -117,5 +125,14 @@ const mapStateToProps = (state) => ({
   filter: state.filter,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  onUserGenreClick(genre) {
+    dispatch(genre !== Genre.ALL_GENRE ? ActionCreator.changeGenre(genre) : ActionCreator.resetFilmsList());
+  },
+  onResetFilmList() {
+    dispatch(ActionCreator.resetFilmsList());
+  },
+});
+
 export {Main};
-export default connect(mapStateToProps, null)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
