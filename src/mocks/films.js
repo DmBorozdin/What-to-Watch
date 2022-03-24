@@ -157,4 +157,25 @@ export default [
     released: 2005,
     isFavorite: false,
   },
+  {
+    id: 9,
+    name: `War of the Worlds`,
+    posterImage: `img/war-of-the-worlds.jpg`,
+    previewImage: `img/war-of-the-worlds.jpg`,
+    backgroundImage: `img/bg-the-grand-budapest-hotel.jpg`,
+    backgroundColor: `#ffffff`,
+    videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
+    previewVideoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
+    description: `Никто не поверил бы в начале 21 столетия, что за всем происходящим на Земле зорко и внимательно следят существа более развитые, чем человек; что в то время, как люди занимались своими делами, их исследовали и изучали.
+
+    С бесконечным самодовольством сновали люди по всему земному шару, занятые своими делишками, уверенные в своей власти над материей. А между тем через бездну пространства на Землю смотрели глазами полными зависти, существа с высокоразвитым, холодным, бесчувственным интеллектом, и медленно, но верно вырабатывали свои враждебные нам планы...`,
+    rating: 7.1,
+    scoresCount: 181956,
+    director: `Стивен Спилберг`,
+    starring: [`Том Круз`, `Дакота Фаннинг`, `Миранда Отто`, `Джастин Чатвин`, `Тим Роббинс`, `Рик Гонсалес`, `Юл Васкес`],
+    runTime: 116,
+    genre: `sci-fi`,
+    released: 2005,
+    isFavorite: false,
+  },
 ];

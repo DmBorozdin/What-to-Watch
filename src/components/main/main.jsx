@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../store/action";
@@ -6,10 +6,13 @@ import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
+import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
+import {FILM_CARD_PER_STEP} from "../../const";
 
 const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList}) => {
   const history = useHistory();
+  const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
 
   const handleSignInClick = () => {
     history.push(`/login`);
@@ -18,6 +21,12 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
   useEffect(() => {
     onResetFilmList();
   }, []);
+
+  useEffect(() => {
+    if (shownsCardsCount !== FILM_CARD_PER_STEP) {
+      setShownsCardsCount(FILM_CARD_PER_STEP);
+    }
+  }, [selectedGenre]);
 
   return <React.Fragment>
     <section className="movie-card">
@@ -81,11 +90,9 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
 
         <GenreList films={films} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>
 
-        <MoviesList films={filteredFilms} autoPlay={true}/>
+        <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
 
-        <div className="catalog__more">
-          <button className="catalog__button" type="button">Show more</button>
-        </div>
+        {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={() => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP)}/>}
       </section>
 
       <footer className="page-footer">

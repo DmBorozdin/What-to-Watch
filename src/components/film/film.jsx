@@ -7,13 +7,12 @@ import reviewsProp from "../../common-props/reviews.js";
 import Tabs from "../tabs/tabs.jsx";
 import MoviesList from "../movies-list/movies-list.jsx";
 import {shuffleArray} from "../../utils/common.js";
-
-const countSimilarFilmCard = 4;
+import {COUNT_SIMILAR_FILM_CARD} from "../../const.js";
 
 const Film = ({films, reviews}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
-  const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, countSimilarFilmCard);
+  const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
 
   const history = useHistory();
 

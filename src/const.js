@@ -21,3 +21,7 @@ export const Time = {
 export const Genre = {
   ALL_GENRE: `all genres`,
 };
+
+export const MAX_FILM_CARD = 8;
+export const FILM_CARD_PER_STEP = 8;
+export const COUNT_SIMILAR_FILM_CARD = 4;
