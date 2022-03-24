@@ -1,10 +1,10 @@
 import React from "react";
 import {useParams, useHistory} from "react-router-dom";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
-const Player = (props) => {
-  const {films} = props;
+const Player = ({films}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -54,4 +54,9 @@ Player.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
-export default Player;
+const mapStateToProps = (state) => ({
+  films: state.films,
+});
+
+export {Player};
+export default connect(mapStateToProps, null)(Player);

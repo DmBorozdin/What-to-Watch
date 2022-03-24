@@ -1,12 +1,11 @@
 import React from "react";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 
-const MyList = (props) => {
-  const {myListFilms} = props;
-
+const MyList = ({myListFilms}) => {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -30,7 +29,7 @@ const MyList = (props) => {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <MoviesList films={myListFilms}/>
+        <MoviesList films={myListFilms} autoPlay={false}/>
       </section>
 
       <footer className="page-footer">
@@ -54,4 +53,9 @@ MyList.propTypes = {
   myListFilms: PropTypes.arrayOf(filmProp).isRequired,
 };
 
-export default MyList;
+const mapStateToProps = (state) => ({
+  myListFilms: state.films,
+});
+
+export {MyList};
+export default connect(mapStateToProps, null)(MyList);

@@ -1,5 +1,6 @@
 import React from "react";
 import {Link, useParams, useHistory} from "react-router-dom";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
@@ -118,4 +119,10 @@ Film.propTypes = {
   reviews: reviewsProp,
 };
 
-export default Film;
+const mapStateToProps = (state) => ({
+  films: state.films,
+  reviews: state.reviews,
+});
+
+export {Film};
+export default connect(mapStateToProps, null)(Film);

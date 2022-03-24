@@ -1,11 +1,11 @@
 import React from "react";
 import {Link, useParams} from "react-router-dom";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import AddReviewForm from "../add-review-form/add-review-form";
 
-const AddReview = (props) => {
-  const {films} = props;
+const AddReview = ({films}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -62,4 +62,9 @@ AddReview.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
 };
 
-export default AddReview;
+const mapStateToProps = (state) => ({
+  films: state.films,
+});
+
+export {AddReview};
+export default connect(mapStateToProps, null)(AddReview);
