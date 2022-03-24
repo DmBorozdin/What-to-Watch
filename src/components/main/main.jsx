@@ -6,9 +6,9 @@ import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
-import {Genre} from "../../const";
+import {filterFilmsByGenre} from "../../film";
 
-const Main = ({titleMovie, films, filter, onUserGenreClick, onResetFilmList}) => {
+const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList}) => {
   const history = useHistory();
 
   const handleSignInClick = () => {
@@ -79,9 +79,9 @@ const Main = ({titleMovie, films, filter, onUserGenreClick, onResetFilmList}) =>
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <GenreList films={films} activeGenre={filter.genre} onGenreClick={onUserGenreClick}/>
+        <GenreList films={films} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>
 
-        <MoviesList films={filter.films} autoPlay={true}/>
+        <MoviesList films={filteredFilms} autoPlay={true}/>
 
         <div className="catalog__more">
           <button className="catalog__button" type="button">Show more</button>
@@ -112,22 +112,22 @@ Main.propTypes = {
     year: PropTypes.string.isRequired,
   }).isRequired,
   films: PropTypes.arrayOf(filmProp).isRequired,
-  filter: PropTypes.shape({
-    genre: PropTypes.string.isRequired,
-    films: PropTypes.arrayOf(filmProp).isRequired,
-  }).isRequired,
+  selectedGenre: PropTypes.string.isRequired,
+  filteredFilms: PropTypes.arrayOf(filmProp).isRequired,
   onUserGenreClick: PropTypes.func.isRequired,
   onResetFilmList: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
-  filter: state.filter,
+  selectedGenre: state.selectedGenre,
+  filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
+  titleMovie: state.titleMovie,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onUserGenreClick(genre) {
-    dispatch(genre !== Genre.ALL_GENRE ? ActionCreator.changeGenre(genre) : ActionCreator.resetFilmsList());
+  onUserGenreClick(films, genre) {
+    dispatch(ActionCreator.changeGenre(genre));
   },
   onResetFilmList() {
     dispatch(ActionCreator.resetFilmsList());

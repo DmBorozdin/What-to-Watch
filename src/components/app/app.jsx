@@ -1,7 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
-import reviewsProp from "../../common-props/reviews.js";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import Main from "../main/main";
 import SignIn from "../sign-in/sign-in";
@@ -11,29 +8,27 @@ import AddReview from "../add-review/add-review";
 import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 
-const App = (props) => {
-  const {titleMovie, films, reviews} = props;
-
+const App = () => {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Main titleMovie={titleMovie}/>
+          <Main/>
         </Route>
         <Route exact path="/login">
           <SignIn />
         </Route>
         <Route exact path="/mylist">
-          <MyList myListFilms = {films}/>
+          <MyList/>
         </Route>
         <Route exact path="/films/:id">
-          <Film films={films} reviews={reviews}/>
+          <Film/>
         </Route>
         <Route exact path="/films/:id/review">
-          <AddReview films={films}/>
+          <AddReview/>
         </Route>
         <Route exact path="/player/:id">
-          <Player films={films}/>
+          <Player/>
         </Route>
         <Route>
           <NotFoundScreen />
@@ -41,16 +36,6 @@ const App = (props) => {
       </Switch>
     </BrowserRouter>
   );
-};
-
-App.propTypes = {
-  titleMovie: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
-  }).isRequired,
-  films: PropTypes.arrayOf(filmProp).isRequired,
-  reviews: reviewsProp,
 };
 
 export default App;

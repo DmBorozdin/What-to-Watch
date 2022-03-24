@@ -1,13 +1,16 @@
 import {ActionType} from "./action";
 import films from "../mocks/films";
-import {filterFilmsByGenre} from "../film";
+import reviews from "../mocks/reviews";
 
 const initialState = {
   films,
-  filter: {
-    genre: `all genres`,
-    films
+  reviews,
+  titleMovie: {
+    title: `The Grand Budapest Hotel`,
+    genre: `Drama`,
+    year: `2014`,
   },
+  selectedGenre: `all genres`,
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,10 +18,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.CHANGE_GENRE:
       return {
         ...state,
-        filter: {
-          genre: action.payload,
-          films: filterFilmsByGenre(state.films, action.payload),
-        },
+        selectedGenre: action.payload,
       };
 
     case ActionType.RESET_FILMS_LIST:

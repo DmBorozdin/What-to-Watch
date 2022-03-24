@@ -1,6 +1,6 @@
 export const ActionType = {
-  CHANGE_GENRE: `/changeGenre`,
-  RESET_FILMS_LIST: `/reset`,
+  CHANGE_GENRE: `genreList/changeGenre`,
+  RESET_FILMS_LIST: `main/reset`,
 };
 
 export const ActionCreator = {

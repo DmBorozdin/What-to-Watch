@@ -1,3 +1,5 @@
+import {Genre} from "./const";
+
 export const filterFilmsByGenre = (films, genre) => {
-  return films.filter((film) => film.genre === genre);
+  return genre !== Genre.ALL_GENRE ? films.filter((film) => film.genre === genre) : films;
 };

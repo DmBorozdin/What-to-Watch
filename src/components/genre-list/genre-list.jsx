@@ -11,7 +11,7 @@ const GenreList = ({films, activeGenre, onGenreClick}) => {
       <li className={`catalog__genres-item ${genre === activeGenre ? `catalog__genres-item--active` : ``}`} key={genre}>
         <a href="#" className="catalog__genres-link" onClick={(evt) => {
           evt.preventDefault();
-          onGenreClick(genre);
+          onGenreClick(films, genre);
         }}>
           {genre.charAt(0).toUpperCase() + genre.slice(1)}
         </a>
