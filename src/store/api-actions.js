@@ -6,7 +6,7 @@ import {adaptFilmDataToClient} from "../services/api";
 export const fetchFilmList = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FILMS)
     .then(({data}) => adaptFilmDataToClient(data))
-    .then(({adaptedData}) => dispatch(ActionCreator.loadFilms(adaptedData)))
+    .then((adaptedData) => dispatch(ActionCreator.loadFilms(adaptedData)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
