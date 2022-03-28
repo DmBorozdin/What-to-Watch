@@ -9,10 +9,18 @@ import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
 import {FILM_CARD_PER_STEP} from "../../const";
+import LoadingScreen from "../loading-screen/loading-screen";
+import {fetchFilmList} from "../../store/api-actions";
 
-const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList}) => {
+const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData}) => {
   const history = useHistory();
   const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
+
+  useEffect(() => {
+    if (!isDataLoaded) {
+      onLoadData();
+    }
+  }, [isDataLoaded]);
 
   const handleSignInClick = () => {
     history.push(`/login`);
@@ -27,6 +35,10 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       setShownsCardsCount(FILM_CARD_PER_STEP);
     }
   }, [selectedGenre]);
+
+  if (!isDataLoaded) {
+    return (<LoadingScreen/>);
+  }
 
   return <React.Fragment>
     <section className="movie-card">
@@ -88,7 +100,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        <GenreList films={films} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>
+        {films.length > 0 && <GenreList films={films} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>}
 
         <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
 
@@ -123,6 +135,8 @@ Main.propTypes = {
   filteredFilms: PropTypes.arrayOf(filmProp).isRequired,
   onUserGenreClick: PropTypes.func.isRequired,
   onResetFilmList: PropTypes.func.isRequired,
+  isDataLoaded: PropTypes.bool.isRequired,
+  onLoadData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -130,6 +144,7 @@ const mapStateToProps = (state) => ({
   selectedGenre: state.selectedGenre,
   filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
   titleMovie: state.titleMovie,
+  isDataLoaded: state.isDataLoaded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -138,6 +153,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onResetFilmList() {
     dispatch(ActionCreator.resetFilmsList());
+  },
+  onLoadData() {
+    dispatch(fetchFilmList());
   },
 });
 

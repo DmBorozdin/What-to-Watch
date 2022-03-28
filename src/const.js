@@ -25,3 +25,13 @@ export const Genre = {
 export const MAX_FILM_CARD = 8;
 export const FILM_CARD_PER_STEP = 8;
 export const COUNT_SIMILAR_FILM_CARD = 4;
+
+export const AuthorizationStatus = {
+  AUTH: `AUTH`,
+  NO_AUTH: `NO_AUTH`,
+};
+
+export const APIRoute = {
+  FILMS: `/films`,
+  LOGIN: `/login`,
+};
