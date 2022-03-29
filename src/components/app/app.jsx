@@ -7,6 +7,7 @@ import Film from "../film/film";
 import AddReview from "../add-review/add-review";
 import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
+import PrivateRoute from "../private-route/private-route";
 
 const App = () => {
   return (
@@ -18,9 +19,8 @@ const App = () => {
         <Route exact path="/login">
           <SignIn />
         </Route>
-        <Route exact path="/mylist">
-          <MyList/>
-        </Route>
+        <PrivateRoute exact path="/mylist" render={() => <MyList/>}>
+        </PrivateRoute>
         <Route exact path="/films/:id">
           <Film/>
         </Route>

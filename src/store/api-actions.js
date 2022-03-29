@@ -19,3 +19,9 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
   api.post(APIRoute.LOGIN, {email, password})
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
 );
+
+export const logout = () => (dispatch, _getState, api) => (
+  api.get(APIRoute.LOGOUT)
+    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)))
+    .catch(() => {})
+);
