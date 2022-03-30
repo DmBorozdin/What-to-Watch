@@ -21,7 +21,7 @@ const MyList = ({myListFilms}) => {
         <h1 className="page-title user-page__title">My list</h1>
 
         <div className="user-block">
-          <div className="user-block__avatar">
+          <div className="user-block__avatar" style={{cursor: `auto`}}>
             <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
           </div>
         </div>
