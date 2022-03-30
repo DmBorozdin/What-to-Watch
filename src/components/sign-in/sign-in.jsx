@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import {login} from "../../store/api-actions";
+import {APPRoute} from "../../const";
 
 const SignIn = ({onSubmit}) => {
   const loginRef = useRef();
@@ -21,7 +22,7 @@ const SignIn = ({onSubmit}) => {
     <div className="user-page">
       <header className="page-header user-page__head">
         <div className="logo">
-          <Link to="/" className="logo__link">
+          <Link to={APPRoute.MAIN} className="logo__link">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
@@ -59,7 +60,7 @@ const SignIn = ({onSubmit}) => {
 
       <footer className="page-footer">
         <div className="logo">
-          <Link to="/" className="logo__link logo__link--light">
+          <Link to={APPRoute.MAIN} className="logo__link logo__link--light">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>

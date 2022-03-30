@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import VideoPlayer from "../video-player/video-player";
-import {CardVideoPlayerSize} from "../../const";
+import {CardVideoPlayerSize, APPRoute} from "../../const";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
@@ -22,7 +22,7 @@ const MovieCard = ({film, isPlaying, onMouseOver}) => {
         />
       </div>
       <h3 className="small-movie-card__title">
-        <Link className="small-movie-card__link" to={`/films/${film.id}`}>{film.name}</Link>
+        <Link className="small-movie-card__link" to={`${APPRoute.FILMS}/${film.id}`}>{film.name}</Link>
       </h3>
     </article>
   );

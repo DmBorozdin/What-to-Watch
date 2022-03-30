@@ -36,3 +36,13 @@ export const APIRoute = {
   LOGIN: `/login`,
   LOGOUT: `/logout`,
 };
+
+export const APPRoute = {
+  MAIN: `/`,
+  LOGIN: `/login`,
+  MYLIST: `/mylist`,
+  FILMS: `/films`,
+  ID: `/:id`,
+  REVIEW: `/review`,
+  PLAYER: `/player`,
+};

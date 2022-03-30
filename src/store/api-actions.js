@@ -1,6 +1,6 @@
 import {ActionCreator} from "./action";
 import {AuthorizationStatus} from "../const";
-import {APIRoute} from "../const";
+import {APIRoute, APPRoute} from "../const";
 import {adaptFilmDataToClient} from "../services/api";
 
 export const fetchFilmList = () => (dispatch, _getState, api) => (
@@ -18,6 +18,7 @@ export const checkAuth = () => (dispatch, _getState, api) => (
 export const login = ({login: email, password}) => (dispatch, _getState, api) =>(
   api.post(APIRoute.LOGIN, {email, password})
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(ActionCreator.redirectToRoute(APPRoute.MAIN)))
 );
 
 export const logout = () => (dispatch, _getState, api) => (

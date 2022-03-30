@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
@@ -8,12 +7,11 @@ import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
-import {FILM_CARD_PER_STEP} from "../../const";
+import {FILM_CARD_PER_STEP, AuthorizationStatus, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList} from "../../store/api-actions";
 
-const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData}) => {
-  const history = useHistory();
+const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
   const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
 
   useEffect(() => {
@@ -21,10 +19,6 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       onLoadData();
     }
   }, [isDataLoaded]);
-
-  const handleSignInClick = () => {
-    history.push(`/login`);
-  };
 
   useEffect(() => {
     onResetFilmList();
@@ -58,7 +52,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
         </div>
 
         <div className="user-block">
-          <div className="user-block__avatar" onClick={handleSignInClick}>
+          <div className="user-block__avatar" onClick={() => onUserAvatarClick(authorizationStatus)}>
             <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
           </div>
         </div>
@@ -137,6 +131,8 @@ Main.propTypes = {
   onResetFilmList: PropTypes.func.isRequired,
   isDataLoaded: PropTypes.bool.isRequired,
   onLoadData: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  onUserAvatarClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -145,6 +141,7 @@ const mapStateToProps = (state) => ({
   filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
   titleMovie: state.titleMovie,
   isDataLoaded: state.isDataLoaded,
+  authorizationStatus: state.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -156,6 +153,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onLoadData() {
     dispatch(fetchFilmList());
+  },
+  onUserAvatarClick(authorizationStatus) {
+    dispatch(ActionCreator.redirectToRoute(AuthorizationStatus.AUTH === authorizationStatus ? APPRoute.MYLIST : APPRoute.LOGIN));
   },
 });
 

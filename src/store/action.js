@@ -3,6 +3,7 @@ export const ActionType = {
   RESET_FILMS_LIST: `main/reset`,
   LOAD_FILMS: `data/loadFilms`,
   REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
+  REDIRECT_TO_ROUTE: `main/redirectToRoute`,
 };
 
 export const ActionCreator = {
@@ -20,5 +21,9 @@ export const ActionCreator = {
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,
     payload: status,
+  }),
+  redirectToRoute: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url,
   }),
 };

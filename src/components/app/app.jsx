@@ -1,5 +1,5 @@
 import React from "react";
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {Switch, Route, Router} from "react-router-dom";
 import Main from "../main/main";
 import SignIn from "../sign-in/sign-in";
 import MyList from "../my-list/my-list";
@@ -8,33 +8,48 @@ import AddReview from "../add-review/add-review";
 import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import PrivateRoute from "../private-route/private-route";
+import browserHistory from "../../browser-history";
+import {APPRoute, APIRoute, AuthorizationStatus} from "../../const";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <Router history={browserHistory}>
       <Switch>
-        <Route exact path="/">
+        <Route exact path={APPRoute.MAIN}>
           <Main/>
         </Route>
-        <Route exact path="/login">
-          <SignIn />
-        </Route>
-        <PrivateRoute exact path="/mylist" render={() => <MyList/>}>
-        </PrivateRoute>
-        <Route exact path="/films/:id">
+        <PrivateRoute
+          exact
+          path={APPRoute.LOGIN}
+          render={() => <SignIn />}
+          AuthorizationStatus = {AuthorizationStatus.NO_AUTH}
+          redirect = {APIRoute.MAIN}
+        />
+        <PrivateRoute
+          exact
+          path={APPRoute.MYLIST}
+          render={() => <MyList/>}
+          AuthorizationStatus = {AuthorizationStatus.AUTH}
+          redirect = {APIRoute.LOGIN}
+        />
+        <Route exact path={APPRoute.FILMS + APPRoute.ID}>
           <Film/>
         </Route>
-        <Route exact path="/films/:id/review">
-          <AddReview/>
-        </Route>
-        <Route exact path="/player/:id">
+        <PrivateRoute
+          exact
+          path={APPRoute.FILMS + APPRoute.ID + APPRoute.REVIEW}
+          render={() => <AddReview/>}
+          AuthorizationStatus = {AuthorizationStatus.AUTH}
+          redirect = {APIRoute.LOGIN}
+        />
+        <Route exact path={APPRoute.PLAYER + APPRoute.ID}>
           <Player/>
         </Route>
         <Route>
           <NotFoundScreen />
         </Route>
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 

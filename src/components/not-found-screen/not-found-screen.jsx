@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import {APPRoute} from "../../const";
 
 const NotFoundScreen = () => {
   return <React.Fragment>
@@ -16,7 +17,7 @@ const NotFoundScreen = () => {
 
       <div className="user-page__content" style={{textAlign: `center`}}>
         <h1>404. Page not found</h1>
-        <Link to="/">Вернуться на главную страницу</Link>
+        <Link to={APPRoute.MAIN}>Вернуться на главную страницу</Link>
       </div>
 
       <footer className="page-footer">
