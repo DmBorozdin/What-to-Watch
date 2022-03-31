@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
@@ -52,6 +53,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
         </div>
 
         <div className="user-block">
+          <Link to={APPRoute.LOGIN} className="user-block__link">Sign in</Link>
           <div className="user-block__avatar" onClick={() => onUserAvatarClick(authorizationStatus)}>
             <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
           </div>
