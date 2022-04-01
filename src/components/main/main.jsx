@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
@@ -8,12 +7,13 @@ import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
-import {FILM_CARD_PER_STEP} from "../../const";
+import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList} from "../../store/api-actions";
+import UserBlock from "../user-block/user-block";
+import authInfoProp from "../../common-props/auth-info";
 
-const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData}) => {
-  const history = useHistory();
+const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
   const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
 
   useEffect(() => {
@@ -21,10 +21,6 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       onLoadData();
     }
   }, [isDataLoaded]);
-
-  const handleSignInClick = () => {
-    history.push(`/login`);
-  };
 
   useEffect(() => {
     onResetFilmList();
@@ -35,6 +31,8 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       setShownsCardsCount(FILM_CARD_PER_STEP);
     }
   }, [selectedGenre]);
+
+  const handleSetShownsCardsCount = () => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP);
 
   if (!isDataLoaded) {
     return (<LoadingScreen/>);
@@ -57,11 +55,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
           </a>
         </div>
 
-        <div className="user-block">
-          <div className="user-block__avatar" onClick={handleSignInClick}>
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-          </div>
-        </div>
+        <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
       </header>
 
       <div className="movie-card__wrap">
@@ -104,7 +98,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
 
         <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
 
-        {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={() => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP)}/>}
+        {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={handleSetShownsCardsCount}/>}
       </section>
 
       <footer className="page-footer">
@@ -131,20 +125,25 @@ Main.propTypes = {
     year: PropTypes.string.isRequired,
   }).isRequired,
   films: PropTypes.arrayOf(filmProp).isRequired,
+  authInfo: authInfoProp,
   selectedGenre: PropTypes.string.isRequired,
   filteredFilms: PropTypes.arrayOf(filmProp).isRequired,
   onUserGenreClick: PropTypes.func.isRequired,
   onResetFilmList: PropTypes.func.isRequired,
   isDataLoaded: PropTypes.bool.isRequired,
   onLoadData: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  onUserAvatarClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
+  authInfo: state.authInfo,
   selectedGenre: state.selectedGenre,
   filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
   titleMovie: state.titleMovie,
   isDataLoaded: state.isDataLoaded,
+  authorizationStatus: state.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -156,6 +155,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onLoadData() {
     dispatch(fetchFilmList());
+  },
+  onUserAvatarClick() {
+    dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
   },
 });
 

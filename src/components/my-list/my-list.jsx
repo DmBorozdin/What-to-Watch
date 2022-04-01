@@ -4,13 +4,15 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
+import {APPRoute} from "../../const.js";
+import authInfoProp from "../../common-props/auth-info";
 
-const MyList = ({myListFilms}) => {
+const MyList = ({myListFilms, authInfo}) => {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
         <div className="logo">
-          <Link to="/" className="logo__link">
+          <Link to={APPRoute.MAIN} className="logo__link">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
@@ -20,8 +22,8 @@ const MyList = ({myListFilms}) => {
         <h1 className="page-title user-page__title">My list</h1>
 
         <div className="user-block">
-          <div className="user-block__avatar">
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+          <div className="user-block__avatar" style={{cursor: `auto`}}>
+            <img src={authInfo.avatarUrl} alt="User avatar" width="63" height="63" />
           </div>
         </div>
       </header>
@@ -34,7 +36,7 @@ const MyList = ({myListFilms}) => {
 
       <footer className="page-footer">
         <div className="logo">
-          <Link to="/" className="logo__link logo__link--light">
+          <Link to={APPRoute.MAIN} className="logo__link logo__link--light">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
@@ -51,10 +53,12 @@ const MyList = ({myListFilms}) => {
 
 MyList.propTypes = {
   myListFilms: PropTypes.arrayOf(filmProp).isRequired,
+  authInfo: authInfoProp,
 };
 
 const mapStateToProps = (state) => ({
   myListFilms: state.films,
+  authInfo: state.authInfo,
 });
 
 export {MyList};

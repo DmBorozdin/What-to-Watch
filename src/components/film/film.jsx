@@ -1,28 +1,38 @@
-import React from "react";
-import {Link, useParams, useHistory} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link, useParams} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {ActionCreator} from "../../store/action.js";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import Tabs from "../tabs/tabs.jsx";
 import MoviesList from "../movies-list/movies-list.jsx";
 import {shuffleArray} from "../../utils/common.js";
-import {COUNT_SIMILAR_FILM_CARD} from "../../const.js";
+import {COUNT_SIMILAR_FILM_CARD, APPRoute, AuthorizationStatus} from "../../const.js";
+import UserBlock from "../user-block/user-block.jsx";
+import authInfoProp from "../../common-props/auth-info";
+import {fetchFilm} from "../../store/api-actions.js";
+import LoadingScreen from "../loading-screen/loading-screen.jsx";
 
-const Film = ({films, reviews}) => {
+const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoadData, isOneFilmLoaded}) => {
   const pageId = Number(useParams().id);
+
+  useEffect(() => {
+    if (!isOneFilmLoaded) {
+      onLoadData(pageId);
+    }
+  }, [isOneFilmLoaded]);
+
   const film = films.find((item) => item.id === pageId);
   const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
 
-  const history = useHistory();
+  const handlePlayClick = () => onRedirect(`${APPRoute.PLAYER}/${film.id}`);
 
-  const handlePlayClick = () => {
-    history.push(`/player/${film.id}`);
-  };
+  const handleAvatarClick = () => onRedirect(APPRoute.MYLIST);
 
-  const handleSignInClick = () => {
-    history.push(`/login`);
-  };
+  if (!isOneFilmLoaded) {
+    return (<LoadingScreen/>);
+  }
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
@@ -35,18 +45,14 @@ const Film = ({films, reviews}) => {
 
         <header className="page-header movie-card__head">
           <div className="logo">
-            <Link to="/" className="logo__link">
+            <Link to={APPRoute.MAIN} className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
             </Link>
           </div>
 
-          <div className="user-block">
-            <div className="user-block__avatar" onClick={handleSignInClick}>
-              <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-            </div>
-          </div>
+          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={handleAvatarClick}/>
         </header>
 
         <div className="movie-card__wrap">
@@ -70,7 +76,7 @@ const Film = ({films, reviews}) => {
                 </svg>
                 <span>My list</span>
               </button>
-              <Link to={`/films/${film.id}/review`} className="btn movie-card__button">Add review</Link>
+              {authorizationStatus === AuthorizationStatus.AUTH && <Link to={`${APPRoute.FILMS}/${film.id}${APPRoute.REVIEW}`} className="btn movie-card__button">Add review</Link>}
             </div>
           </div>
         </div>
@@ -98,7 +104,7 @@ const Film = ({films, reviews}) => {
 
       <footer className="page-footer">
         <div className="logo">
-          <Link to="/" className="logo__link logo__link--light">
+          <Link to={APPRoute.MAIN} className="logo__link logo__link--light">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
@@ -116,12 +122,29 @@ const Film = ({films, reviews}) => {
 Film.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
   reviews: reviewsProp,
+  authInfo: authInfoProp,
+  onRedirect: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  onLoadData: PropTypes.func.isRequired,
+  isOneFilmLoaded: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
   reviews: state.reviews,
+  authInfo: state.authInfo,
+  authorizationStatus: state.authorizationStatus,
+  isOneFilmLoaded: state.isOneFilmLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onLoadData(pageId) {
+    dispatch(fetchFilm(pageId));
+  },
+  onRedirect(url) {
+    dispatch(ActionCreator.redirectToRoute(url));
+  },
 });
 
 export {Film};
-export default connect(mapStateToProps, null)(Film);
+export default connect(mapStateToProps, mapDispatchToProps)(Film);

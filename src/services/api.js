@@ -64,3 +64,17 @@ export const adaptFilmDataToClient = (filmList) => {
     return adaptedFilm;
   });
 };
+
+export const adaptAuthDataToClient = (authInfo) => {
+  const adaptedAuthInfo = Object.assign(
+      {},
+      authInfo,
+      {
+        avatarUrl: authInfo.avatar_url,
+      }
+  );
+
+  delete adaptedAuthInfo.avatar_url;
+
+  return adaptedAuthInfo;
+};
