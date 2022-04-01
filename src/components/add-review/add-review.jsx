@@ -4,8 +4,12 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import AddReviewForm from "../add-review-form/add-review-form";
+import {APPRoute, AuthorizationStatus} from "../../const.js";
+import UserBlock from "../user-block/user-block.jsx";
+import {ActionCreator} from "../../store/action.js";
+import authInfoProp from "../../common-props/auth-info";
 
-const AddReview = ({films}) => {
+const AddReview = ({films, authInfo, onUserAvatarClick}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -20,7 +24,7 @@ const AddReview = ({films}) => {
 
         <header className="page-header">
           <div className="logo">
-            <Link to="/" className="logo__link">
+            <Link to={APPRoute.MAIN} className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
@@ -30,7 +34,7 @@ const AddReview = ({films}) => {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <Link to={`/films/${film.id}`} className="breadcrumbs__link">{film.name}</Link>
+                <Link to={`${APPRoute.FILMS}/${film.id}`} className="breadcrumbs__link">{film.name}</Link>
               </li>
               <li className="breadcrumbs__item">
                 <a className="breadcrumbs__link">Add review</a>
@@ -38,11 +42,7 @@ const AddReview = ({films}) => {
             </ul>
           </nav>
 
-          <div className="user-block">
-            <div className="user-block__avatar">
-              <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-            </div>
-          </div>
+          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={onUserAvatarClick}/>
         </header>
 
         <div className="movie-card__poster movie-card__poster--small">
@@ -60,11 +60,20 @@ const AddReview = ({films}) => {
 
 AddReview.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
+  onUserAvatarClick: PropTypes.func.isRequired,
+  authInfo: authInfoProp,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
+  authInfo: state.authInfo,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onUserAvatarClick() {
+    dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
+  },
 });
 
 export {AddReview};
-export default connect(mapStateToProps, null)(AddReview);
+export default connect(mapStateToProps, mapDispatchToProps)(AddReview);

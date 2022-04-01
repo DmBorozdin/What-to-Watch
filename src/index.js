@@ -22,11 +22,13 @@ const store = createStore(
     )
 );
 
-store.dispatch(checkAuth());
+(async () => {
+  await store.dispatch(checkAuth());
+  ReactDOM.render(
+      <Provider store={store}>
+        <App/>
+      </Provider>,
+      document.querySelector(`#root`)
+  );
+})();
 
-ReactDOM.render(
-    <Provider store={store}>
-      <App/>
-    </Provider>,
-    document.querySelector(`#root`)
-);

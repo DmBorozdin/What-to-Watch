@@ -10,9 +10,16 @@ const initialState = {
     genre: `Drama`,
     year: `2014`,
   },
+  authInfo: {
+    id: -1,
+    email: ``,
+    name: ``,
+    avatarUrl: ``,
+  },
   selectedGenre: Genre.ALL_GENRE,
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   isDataLoaded: false,
+  isOneFilmLoaded: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -34,12 +41,26 @@ const reducer = (state = initialState, action) => {
         ...state,
         films: action.payload,
         isDataLoaded: true,
+        isOneFilmLoaded: true,
+      };
+
+    case ActionType.LOAD_FILM:
+      return {
+        ...state,
+        films: action.payload,
+        isOneFilmLoaded: true,
       };
 
     case ActionType.REQUIRED_AUTHORIZATION:
       return {
         ...state,
         authorizationStatus: action.payload,
+      };
+
+    case ActionType.LOAD_AUTH_INFO:
+      return {
+        ...state,
+        authInfo: action.payload,
       };
   }
 

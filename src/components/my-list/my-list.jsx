@@ -5,8 +5,9 @@ import filmProp from "../../common-props/film.js";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
+import authInfoProp from "../../common-props/auth-info";
 
-const MyList = ({myListFilms}) => {
+const MyList = ({myListFilms, authInfo}) => {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -22,7 +23,7 @@ const MyList = ({myListFilms}) => {
 
         <div className="user-block">
           <div className="user-block__avatar" style={{cursor: `auto`}}>
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+            <img src={authInfo.avatarUrl} alt="User avatar" width="63" height="63" />
           </div>
         </div>
       </header>
@@ -52,10 +53,12 @@ const MyList = ({myListFilms}) => {
 
 MyList.propTypes = {
   myListFilms: PropTypes.arrayOf(filmProp).isRequired,
+  authInfo: authInfoProp,
 };
 
 const mapStateToProps = (state) => ({
   myListFilms: state.films,
+  authInfo: state.authInfo,
 });
 
 export {MyList};

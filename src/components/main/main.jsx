@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {Link} from "react-router-dom";
 import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
@@ -8,11 +7,13 @@ import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
-import {FILM_CARD_PER_STEP, AuthorizationStatus, APPRoute} from "../../const";
+import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList} from "../../store/api-actions";
+import UserBlock from "../user-block/user-block";
+import authInfoProp from "../../common-props/auth-info";
 
-const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
+const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
   const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
 
   useEffect(() => {
@@ -30,6 +31,8 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
       setShownsCardsCount(FILM_CARD_PER_STEP);
     }
   }, [selectedGenre]);
+
+  const handleSetShownsCardsCount = () => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP);
 
   if (!isDataLoaded) {
     return (<LoadingScreen/>);
@@ -52,12 +55,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
           </a>
         </div>
 
-        <div className="user-block">
-          <Link to={APPRoute.LOGIN} className="user-block__link">Sign in</Link>
-          <div className="user-block__avatar" onClick={() => onUserAvatarClick(authorizationStatus)}>
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-          </div>
-        </div>
+        <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
       </header>
 
       <div className="movie-card__wrap">
@@ -100,7 +98,7 @@ const Main = ({titleMovie, films, selectedGenre, filteredFilms, onUserGenreClick
 
         <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
 
-        {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={() => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP)}/>}
+        {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={handleSetShownsCardsCount}/>}
       </section>
 
       <footer className="page-footer">
@@ -127,6 +125,7 @@ Main.propTypes = {
     year: PropTypes.string.isRequired,
   }).isRequired,
   films: PropTypes.arrayOf(filmProp).isRequired,
+  authInfo: authInfoProp,
   selectedGenre: PropTypes.string.isRequired,
   filteredFilms: PropTypes.arrayOf(filmProp).isRequired,
   onUserGenreClick: PropTypes.func.isRequired,
@@ -139,6 +138,7 @@ Main.propTypes = {
 
 const mapStateToProps = (state) => ({
   films: state.films,
+  authInfo: state.authInfo,
   selectedGenre: state.selectedGenre,
   filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
   titleMovie: state.titleMovie,
@@ -156,8 +156,8 @@ const mapDispatchToProps = (dispatch) => ({
   onLoadData() {
     dispatch(fetchFilmList());
   },
-  onUserAvatarClick(authorizationStatus) {
-    dispatch(ActionCreator.redirectToRoute(AuthorizationStatus.AUTH === authorizationStatus ? APPRoute.MYLIST : APPRoute.LOGIN));
+  onUserAvatarClick() {
+    dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
   },
 });
 

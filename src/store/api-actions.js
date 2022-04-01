@@ -1,7 +1,7 @@
 import {ActionCreator} from "./action";
 import {AuthorizationStatus} from "../const";
 import {APIRoute, APPRoute} from "../const";
-import {adaptFilmDataToClient} from "../services/api";
+import {adaptFilmDataToClient, adaptAuthDataToClient} from "../services/api";
 
 export const fetchFilmList = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FILMS)
@@ -9,16 +9,27 @@ export const fetchFilmList = () => (dispatch, _getState, api) => (
     .then((adaptedData) => dispatch(ActionCreator.loadFilms(adaptedData)))
 );
 
+export const fetchFilm = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.FILMS}/${id}`)
+    .then(({data}) => adaptFilmDataToClient([data]))
+    .then((adaptedData) => dispatch(ActionCreator.loadFilm(adaptedData)))
+);
+
 export const checkAuth = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
+    .then(({data}) => adaptAuthDataToClient(data))
+    .then((adaptedData) => dispatch(ActionCreator.loadAuthInfo(adaptedData)))
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
     .catch(() => {})
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) =>(
   api.post(APIRoute.LOGIN, {email, password})
+    .then(({data}) => adaptAuthDataToClient(data))
+    .then((adaptedData) => dispatch(ActionCreator.loadAuthInfo(adaptedData)))
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
     .then(() => dispatch(ActionCreator.redirectToRoute(APPRoute.MAIN)))
+    .catch(() => {})
 );
 
 export const logout = () => (dispatch, _getState, api) => (

@@ -9,7 +9,7 @@ import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import PrivateRoute from "../private-route/private-route";
 import browserHistory from "../../browser-history";
-import {APPRoute, APIRoute, AuthorizationStatus} from "../../const";
+import {APPRoute} from "../../const";
 
 const App = () => {
   return (
@@ -18,30 +18,14 @@ const App = () => {
         <Route exact path={APPRoute.MAIN}>
           <Main/>
         </Route>
-        <PrivateRoute
-          exact
-          path={APPRoute.LOGIN}
-          render={() => <SignIn />}
-          AuthorizationStatus = {AuthorizationStatus.NO_AUTH}
-          redirect = {APIRoute.MAIN}
-        />
-        <PrivateRoute
-          exact
-          path={APPRoute.MYLIST}
-          render={() => <MyList/>}
-          AuthorizationStatus = {AuthorizationStatus.AUTH}
-          redirect = {APIRoute.LOGIN}
-        />
+        <Route exact path="/login">
+          <SignIn />
+        </Route>
+        <PrivateRoute exact path={APPRoute.MYLIST} render={() => <MyList/>}/>
         <Route exact path={APPRoute.FILMS + APPRoute.ID}>
           <Film/>
         </Route>
-        <PrivateRoute
-          exact
-          path={APPRoute.FILMS + APPRoute.ID + APPRoute.REVIEW}
-          render={() => <AddReview/>}
-          AuthorizationStatus = {AuthorizationStatus.AUTH}
-          redirect = {APIRoute.LOGIN}
-        />
+        <PrivateRoute exact path={APPRoute.FILMS + APPRoute.ID + APPRoute.REVIEW} render={() => <AddReview/>}/>
         <Route exact path={APPRoute.PLAYER + APPRoute.ID}>
           <Player/>
         </Route>
