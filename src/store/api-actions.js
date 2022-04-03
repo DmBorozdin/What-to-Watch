@@ -13,6 +13,7 @@ export const fetchFilm = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.FILMS}/${id}`)
     .then(({data}) => adaptFilmDataToClient([data]))
     .then((adaptedData) => dispatch(ActionCreator.loadFilm(adaptedData)))
+    .catch(() => dispatch(ActionCreator.redirectToRoute(APPRoute.FILMS)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
@@ -35,5 +36,10 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
 export const logout = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGOUT)
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)))
+    .catch(() => {})
+);
+
+export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(
+  api.post(`${APIRoute.COMMENTS}${id}`, {rating, comment})
     .catch(() => {})
 );

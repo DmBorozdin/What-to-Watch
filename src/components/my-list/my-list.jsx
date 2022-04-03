@@ -5,9 +5,9 @@ import filmProp from "../../common-props/film.js";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
-import authInfoProp from "../../common-props/auth-info";
+import {logout} from "../../store/api-actions.js";
 
-const MyList = ({myListFilms, authInfo}) => {
+const MyList = ({myListFilms, onLogOut}) => {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -22,9 +22,7 @@ const MyList = ({myListFilms, authInfo}) => {
         <h1 className="page-title user-page__title">My list</h1>
 
         <div className="user-block">
-          <div className="user-block__avatar" style={{cursor: `auto`}}>
-            <img src={authInfo.avatarUrl} alt="User avatar" width="63" height="63" />
-          </div>
+          <Link to={APPRoute.MAIN} className="user-block__link" onClick={onLogOut}>Log out</Link>
         </div>
       </header>
 
@@ -53,13 +51,18 @@ const MyList = ({myListFilms, authInfo}) => {
 
 MyList.propTypes = {
   myListFilms: PropTypes.arrayOf(filmProp).isRequired,
-  authInfo: authInfoProp,
+  onLogOut: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   myListFilms: state.films,
-  authInfo: state.authInfo,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onLogOut() {
+    dispatch(logout());
+  }
 });
 
 export {MyList};
-export default connect(mapStateToProps, null)(MyList);
+export default connect(mapStateToProps, mapDispatchToProps)(MyList);

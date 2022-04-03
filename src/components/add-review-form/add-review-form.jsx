@@ -3,8 +3,8 @@ import {ReviewFormType} from "../../const";
 
 const AddReviewForm = () => {
   const [review, setReview] = useState({
-    text: ``,
-    rating: 0,
+    rating: 10,
+    comment: ``,
   });
 
   const handleAddReview = (evt) => {
@@ -48,13 +48,13 @@ const AddReviewForm = () => {
         <input className="rating__input" id="star-7" type="radio" name="rating" value="7" />
         <label className="rating__label" htmlFor="star-7">Rating 7</label>
 
-        <input className="rating__input" id="star-8" type="radio" name="rating" value="8" defaultChecked />
+        <input className="rating__input" id="star-8" type="radio" name="rating" value="8" />
         <label className="rating__label" htmlFor="star-8">Rating 8</label>
 
         <input className="rating__input" id="star-9" type="radio" name="rating" value="9" />
         <label className="rating__label" htmlFor="star-9">Rating 9</label>
 
-        <input className="rating__input" id="star-10" type="radio" name="rating" value="10" />
+        <input className="rating__input" id="star-10" type="radio" name="rating" value="10" defaultChecked />
         <label className="rating__label" htmlFor="star-10">Rating 10</label>
       </div>
     </div>
