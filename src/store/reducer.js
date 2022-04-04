@@ -1,10 +1,9 @@
 import {ActionType} from "./action";
-import reviews from "../mocks/reviews";
 import {AuthorizationStatus, Genre} from "../const";
 
 const initialState = {
   films: [],
-  reviews,
+  reviews: [],
   titleMovie: {
     title: `The Grand Budapest Hotel`,
     genre: `Drama`,
@@ -20,6 +19,7 @@ const initialState = {
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   isDataLoaded: false,
   isOneFilmLoaded: false,
+  isReviewLoaded: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -61,6 +61,19 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         authInfo: action.payload,
+      };
+
+    case ActionType.LOAD_REVIEW:
+      return {
+        ...state,
+        reviews: action.payload,
+        isReviewLoaded: true,
+      };
+
+    case ActionType.RESET_REVIEW:
+      return {
+        ...state,
+        isReviewLoaded: initialState.isReviewLoaded,
       };
   }
 

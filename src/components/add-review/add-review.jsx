@@ -8,8 +8,9 @@ import {APPRoute, AuthorizationStatus} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
 import {ActionCreator} from "../../store/action.js";
 import authInfoProp from "../../common-props/auth-info";
+import {sendComment} from "../../store/api-actions.js";
 
-const AddReview = ({films, authInfo, onUserAvatarClick}) => {
+const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -51,7 +52,7 @@ const AddReview = ({films, authInfo, onUserAvatarClick}) => {
       </div>
 
       <div className="add-review">
-        <AddReviewForm/>
+        <AddReviewForm onSubmit={onSubmitReview} pageId={pageId}/>
       </div>
 
     </section>
@@ -62,6 +63,7 @@ AddReview.propTypes = {
   films: PropTypes.arrayOf(filmProp).isRequired,
   onUserAvatarClick: PropTypes.func.isRequired,
   authInfo: authInfoProp,
+  onSubmitReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -72,6 +74,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onUserAvatarClick() {
     dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
+  },
+  onSubmitReview(commentPost) {
+    dispatch(sendComment(commentPost));
   },
 });
 

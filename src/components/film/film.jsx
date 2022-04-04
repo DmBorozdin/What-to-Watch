@@ -11,17 +11,27 @@ import {shuffleArray} from "../../utils/common.js";
 import {COUNT_SIMILAR_FILM_CARD, APPRoute, AuthorizationStatus} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
 import authInfoProp from "../../common-props/auth-info";
-import {fetchFilm} from "../../store/api-actions.js";
+import {fetchFilm, fetchComment} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen.jsx";
 
-const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoadData, isOneFilmLoaded}) => {
+const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoadData, onLoadReviews, isOneFilmLoaded, isReviewLoaded, onResetReview}) => {
   const pageId = Number(useParams().id);
+
+  useEffect(() => {
+    onResetReview();
+  }, []);
 
   useEffect(() => {
     if (!isOneFilmLoaded) {
       onLoadData(pageId);
     }
   }, [isOneFilmLoaded]);
+
+  useEffect(() => {
+    if (!isReviewLoaded) {
+      onLoadReviews(pageId);
+    }
+  }, [isReviewLoaded]);
 
   const film = films.find((item) => item.id === pageId);
   const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
@@ -30,7 +40,7 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
 
   const handleAvatarClick = () => onRedirect(APPRoute.MYLIST);
 
-  if (!isOneFilmLoaded) {
+  if (!isOneFilmLoaded || !isReviewLoaded) {
     return (<LoadingScreen/>);
   }
 
@@ -127,6 +137,9 @@ Film.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
   onLoadData: PropTypes.func.isRequired,
   isOneFilmLoaded: PropTypes.bool.isRequired,
+  isReviewLoaded: PropTypes.bool.isRequired,
+  onLoadReviews: PropTypes.func.isRequired,
+  onResetReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -135,14 +148,21 @@ const mapStateToProps = (state) => ({
   authInfo: state.authInfo,
   authorizationStatus: state.authorizationStatus,
   isOneFilmLoaded: state.isOneFilmLoaded,
+  isReviewLoaded: state.isReviewLoaded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onLoadData(pageId) {
     dispatch(fetchFilm(pageId));
   },
+  onLoadReviews(pageId) {
+    dispatch(fetchComment(pageId));
+  },
   onRedirect(url) {
     dispatch(ActionCreator.redirectToRoute(url));
+  },
+  onResetReview() {
+    dispatch(ActionCreator.resetReview());
   },
 });
 

@@ -1,30 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
+import PropTypes from "prop-types";
 import {ReviewFormType} from "../../const";
 
-const AddReviewForm = () => {
-  const [review, setReview] = useState({
-    rating: 10,
-    comment: ``,
-  });
+const AddReviewForm = ({onSubmit, pageId}) => {
+  const commentRef = useRef();
+
+  const [rating, setRating] = useState(10);
 
   const handleAddReview = (evt) => {
-    switch (evt.target.tagName) {
-      case ReviewFormType.INPUT:
-        setReview({
-          ...review,
-          rating: evt.target.value,
-        });
-        break;
-      case ReviewFormType.TEXTAREA:
-        setReview({
-          ...review,
-          text: evt.target.value,
-        });
-        break;
+    if (evt.target.tagName === ReviewFormType.INPUT) {
+      setRating(evt.target.value);
     }
   };
 
-  return <form action="#" className="add-review__form" onChange={handleAddReview}>
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    onSubmit({
+      rating,
+      comment: commentRef.current.value,
+      id: pageId,
+    });
+  };
+
+  return <form action="#" className="add-review__form" onChange={handleAddReview} onSubmit={handleSubmit}>
     <div className="rating">
       <div className="rating__stars">
         <input className="rating__input" id="star-1" type="radio" name="rating" value="1"/>
@@ -60,13 +59,18 @@ const AddReviewForm = () => {
     </div>
 
     <div className="add-review__text">
-      <textarea className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text"></textarea>
+      <textarea ref={commentRef} className="add-review__textarea" name="rating-text" id="rating-text" placeholder="Review text"></textarea>
       <div className="add-review__submit">
         <button className="add-review__btn" type="submit">Post</button>
       </div>
 
     </div>
   </form>;
+};
+
+AddReviewForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  pageId: PropTypes.number.isRequired,
 };
 
 export default AddReviewForm;

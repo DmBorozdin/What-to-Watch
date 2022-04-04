@@ -6,6 +6,8 @@ export const ActionType = {
   REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
   REDIRECT_TO_ROUTE: `main/redirectToRoute`,
   LOAD_AUTH_INFO: `data/loadAuthInfo`,
+  LOAD_REVIEW: `film/loadReview`,
+  RESET_REVIEW: `film/resetReview`,
 };
 
 export const ActionCreator = {
@@ -35,5 +37,12 @@ export const ActionCreator = {
   loadAuthInfo: (authInfo) => ({
     type: ActionType.LOAD_AUTH_INFO,
     payload: authInfo,
+  }),
+  loadReview: (reviews) =>({
+    type: ActionType.LOAD_REVIEW,
+    payload: reviews,
+  }),
+  resetReview: () =>({
+    type: ActionType.RESET_REVIEW,
   }),
 };

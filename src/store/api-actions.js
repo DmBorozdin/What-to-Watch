@@ -39,7 +39,14 @@ export const logout = () => (dispatch, _getState, api) => (
     .catch(() => {})
 );
 
+export const fetchComment = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.COMMENTS}${id}`)
+    .then(({data}) => dispatch(ActionCreator.loadReview(data)))
+    .catch(() => {})
+);
+
 export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(
   api.post(`${APIRoute.COMMENTS}${id}`, {rating, comment})
+    // .then(() => dispatch(ActionCreator.redirectToRoute(`${APPRoute.FILMS}/${id}`)))
     .catch(() => {})
 );
