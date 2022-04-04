@@ -47,6 +47,6 @@ export const fetchComment = (id) => (dispatch, _getState, api) => (
 
 export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(
   api.post(`${APIRoute.COMMENTS}${id}`, {rating, comment})
-    // .then(() => dispatch(ActionCreator.redirectToRoute(`${APPRoute.FILMS}/${id}`)))
+    .then(() => dispatch(ActionCreator.redirectToRoute(`${APPRoute.FILMS}/${id}`)))
     .catch(() => {})
 );

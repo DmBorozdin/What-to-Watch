@@ -47,3 +47,8 @@ export const APPRoute = {
   REVIEW: `/review`,
   PLAYER: `/player`,
 };
+
+export const ReviewValidation = {
+  MIN_TEXT_LENGTH: 50,
+  MAX_TEXT_LENGTH: 400,
+};
