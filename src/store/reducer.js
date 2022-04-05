@@ -1,5 +1,5 @@
 import {ActionType} from "./action";
-import {AuthorizationStatus, Genre} from "../const";
+import {AuthorizationStatus, Genre, ReviewFormStatus, ReviewFormError} from "../const";
 
 const initialState = {
   films: [],
@@ -20,6 +20,8 @@ const initialState = {
   isDataLoaded: false,
   isOneFilmLoaded: false,
   isReviewLoaded: false,
+  reviewFormStatus: ReviewFormStatus.ENABLE,
+  isReviewFormSubmError: ReviewFormError.NO_ERROR,
 };
 
 const reducer = (state = initialState, action) => {
@@ -74,6 +76,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isReviewLoaded: initialState.isReviewLoaded,
+      };
+
+    case ActionType.SET_REVIEW_FORM:
+      return {
+        ...state,
+        reviewFormStatus: action.payload,
+      };
+    case ActionType.SET_REVIEW_FORM_ERR:
+      return {
+        ...state,
+        isReviewFormSubmError: action.payload,
       };
   }
 

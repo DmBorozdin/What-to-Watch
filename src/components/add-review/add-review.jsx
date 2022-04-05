@@ -1,18 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Link, useParams} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import AddReviewForm from "../add-review-form/add-review-form";
-import {APPRoute, AuthorizationStatus} from "../../const.js";
+import {APPRoute, AuthorizationStatus, ReviewFormStatus, ReviewFormError} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
 import {ActionCreator} from "../../store/action.js";
 import authInfoProp from "../../common-props/auth-info";
 import {sendComment} from "../../store/api-actions.js";
 
-const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview}) => {
+const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview, reviewFormStatus, isReviewFormSubmError, onResetReviewFormError}) => {
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
+
+  useEffect(() => {
+    if (isReviewFormSubmError === ReviewFormError.ERROR) {
+      onResetReviewFormError();
+    }
+  }, []);
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
@@ -52,9 +58,13 @@ const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview}) => {
       </div>
 
       <div className="add-review">
-        <AddReviewForm onSubmit={onSubmitReview} pageId={pageId}/>
+        <AddReviewForm onSubmit={onSubmitReview} pageId={pageId} reviewFormStatus={reviewFormStatus}/>
       </div>
-
+      {isReviewFormSubmError === ReviewFormError.ERROR &&
+        <div className="rating__error-message">
+          <p>An error occurred while submitting the form. Please try later.</p>
+        </div>
+      }
     </section>
   </React.Fragment>;
 };
@@ -64,11 +74,16 @@ AddReview.propTypes = {
   onUserAvatarClick: PropTypes.func.isRequired,
   authInfo: authInfoProp,
   onSubmitReview: PropTypes.func.isRequired,
+  reviewFormStatus: PropTypes.string.isRequired,
+  isReviewFormSubmError: PropTypes.string.isRequired,
+  onResetReviewFormError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
   authInfo: state.authInfo,
+  reviewFormStatus: state.reviewFormStatus,
+  isReviewFormSubmError: state.isReviewFormSubmError,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -77,6 +92,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSubmitReview(commentPost) {
     dispatch(sendComment(commentPost));
+    dispatch(ActionCreator.setReviewForm(ReviewFormStatus.DISABLE));
+  },
+  onResetReviewFormError() {
+    dispatch(ActionCreator.setReviewFormError(ReviewFormError.NO_ERROR));
   },
 });
 

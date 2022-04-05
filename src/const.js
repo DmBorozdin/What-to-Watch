@@ -52,3 +52,13 @@ export const ReviewValidation = {
   MIN_TEXT_LENGTH: 50,
   MAX_TEXT_LENGTH: 400,
 };
+
+export const ReviewFormStatus = {
+  ENABLE: `ENABLE`,
+  DISABLE: `DISABLE`,
+};
+
+export const ReviewFormError = {
+  ERROR: `ERROR`,
+  NO_ERROR: `NO_ERROR`,
+};
