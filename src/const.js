@@ -35,6 +35,7 @@ export const APIRoute = {
   FILMS: `/films`,
   LOGIN: `/login`,
   LOGOUT: `/logout`,
+  COMMENTS: `/comments/`
 };
 
 export const APPRoute = {
@@ -45,4 +46,19 @@ export const APPRoute = {
   ID: `/:id`,
   REVIEW: `/review`,
   PLAYER: `/player`,
+};
+
+export const ReviewValidation = {
+  MIN_TEXT_LENGTH: 50,
+  MAX_TEXT_LENGTH: 400,
+};
+
+export const ReviewFormStatus = {
+  ENABLE: `ENABLE`,
+  DISABLE: `DISABLE`,
+};
+
+export const ReviewFormError = {
+  ERROR: `ERROR`,
+  NO_ERROR: `NO_ERROR`,
 };

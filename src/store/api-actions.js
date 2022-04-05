@@ -1,6 +1,6 @@
 import {ActionCreator} from "./action";
 import {AuthorizationStatus} from "../const";
-import {APIRoute, APPRoute} from "../const";
+import {APIRoute, APPRoute, ReviewFormStatus, ReviewFormError} from "../const";
 import {adaptFilmDataToClient, adaptAuthDataToClient} from "../services/api";
 
 export const fetchFilmList = () => (dispatch, _getState, api) => (
@@ -13,6 +13,7 @@ export const fetchFilm = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.FILMS}/${id}`)
     .then(({data}) => adaptFilmDataToClient([data]))
     .then((adaptedData) => dispatch(ActionCreator.loadFilm(adaptedData)))
+    .catch(() => dispatch(ActionCreator.redirectToRoute(APPRoute.FILMS)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
@@ -36,4 +37,20 @@ export const logout = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGOUT)
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)))
     .catch(() => {})
+);
+
+export const fetchComment = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.COMMENTS}${id}`)
+    .then(({data}) => dispatch(ActionCreator.loadReview(data)))
+    .catch(() => {})
+);
+
+export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(
+  api.post(`${APIRoute.COMMENTS}${id}`, {rating, comment})
+    .then(() => dispatch(ActionCreator.redirectToRoute(`${APPRoute.FILMS}/${id}`)))
+    .then(() => dispatch(ActionCreator.setReviewForm(ReviewFormStatus.ENABLE)))
+    .catch(() => {
+      dispatch(ActionCreator.setReviewFormError(ReviewFormError.ERROR));
+      dispatch(ActionCreator.setReviewForm(ReviewFormStatus.ENABLE));
+    })
 );

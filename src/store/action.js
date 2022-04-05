@@ -6,6 +6,10 @@ export const ActionType = {
   REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
   REDIRECT_TO_ROUTE: `main/redirectToRoute`,
   LOAD_AUTH_INFO: `data/loadAuthInfo`,
+  LOAD_REVIEW: `film/loadReview`,
+  RESET_REVIEW: `film/resetReview`,
+  SET_REVIEW_FORM: `review/setReviewForm`,
+  SET_REVIEW_FORM_ERR: `review/setReviewFormError`,
 };
 
 export const ActionCreator = {
@@ -35,5 +39,20 @@ export const ActionCreator = {
   loadAuthInfo: (authInfo) => ({
     type: ActionType.LOAD_AUTH_INFO,
     payload: authInfo,
+  }),
+  loadReview: (reviews) =>({
+    type: ActionType.LOAD_REVIEW,
+    payload: reviews,
+  }),
+  resetReview: () =>({
+    type: ActionType.RESET_REVIEW,
+  }),
+  setReviewForm: (statusForm) =>({
+    type: ActionType.SET_REVIEW_FORM,
+    payload: statusForm,
+  }),
+  setReviewFormError: (error) => ({
+    type: ActionType.SET_REVIEW_FORM_ERR,
+    payload: error,
   }),
 };
