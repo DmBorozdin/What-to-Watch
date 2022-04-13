@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
@@ -12,9 +12,10 @@ import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList} from "../../store/api-actions";
 import UserBlock from "../user-block/user-block";
 import authInfoProp from "../../common-props/auth-info";
+import {useShownsCards} from "../../hooks/use-showns-cards";
 
 const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
-  const [shownsCardsCount, setShownsCardsCount] = useState(FILM_CARD_PER_STEP);
+  const [shownsCardsCount, handleResetShownsCardsCount, handleSetShownsCardsCount] = useShownsCards(FILM_CARD_PER_STEP);
 
   useEffect(() => {
     if (!isDataLoaded) {
@@ -27,12 +28,8 @@ const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUser
   }, []);
 
   useEffect(() => {
-    if (shownsCardsCount !== FILM_CARD_PER_STEP) {
-      setShownsCardsCount(FILM_CARD_PER_STEP);
-    }
+    handleResetShownsCardsCount();
   }, [selectedGenre]);
-
-  const handleSetShownsCardsCount = () => setShownsCardsCount(shownsCardsCount + FILM_CARD_PER_STEP);
 
   if (!isDataLoaded) {
     return (<LoadingScreen/>);

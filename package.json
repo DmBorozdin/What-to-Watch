@@ -2,7 +2,7 @@
   "name": "what-to-watch",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://dmborozdin.github.io/What-to-Watch/",
+  "homepage": "https://dmborozdin.github.io/What-to-Watch",
   "description": "Личный проект «{{projectTitle}}» от HTML Academy",
   "scripts": {
     "build": "webpack --mode production",

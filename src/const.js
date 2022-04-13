@@ -25,6 +25,7 @@ export const Genre = {
 export const MAX_FILM_CARD = 8;
 export const FILM_CARD_PER_STEP = 8;
 export const COUNT_SIMILAR_FILM_CARD = 4;
+export const FILM_START_DELAY = 1000;
 
 export const AuthorizationStatus = {
   AUTH: `AUTH`,
