@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Link, useParams} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {ActionCreator} from "../../store/action.js";
+import {redirectToRoute, resetReview} from "../../store/action.js";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import Tabs from "../tabs/tabs.jsx";
@@ -18,8 +18,10 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
   const pageId = Number(useParams().id);
 
   useEffect(() => {
-    onResetReview();
-  }, []);
+    if (isReviewLoaded) {
+      onResetReview();
+    }
+  }, [pageId]);
 
   useEffect(() => {
     if (!isOneFilmLoaded) {
@@ -40,7 +42,7 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
 
   const handleAvatarClick = () => onRedirect(APPRoute.MYLIST);
 
-  if (!isOneFilmLoaded || !isReviewLoaded) {
+  if (!isOneFilmLoaded) {
     return (<LoadingScreen/>);
   }
 
@@ -98,7 +100,7 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
             <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
           </div>
 
-          <Tabs film={film} reviews={reviews}/>
+          <Tabs film={film} reviews={reviews} isReviewLoaded={isReviewLoaded}/>
         </div>
       </div>
     </section>
@@ -159,10 +161,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(fetchComment(pageId));
   },
   onRedirect(url) {
-    dispatch(ActionCreator.redirectToRoute(url));
+    dispatch(redirectToRoute(url));
   },
   onResetReview() {
-    dispatch(ActionCreator.resetReview());
+    dispatch(resetReview());
   },
 });
 

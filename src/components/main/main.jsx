@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {connect} from "react-redux";
-import {ActionCreator} from "../../store/action";
+import {changeGenre, resetFilmsList, redirectToRoute} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
@@ -145,16 +145,16 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onUserGenreClick(films, genre) {
-    dispatch(ActionCreator.changeGenre(genre));
+    dispatch(changeGenre(genre));
   },
   onResetFilmList() {
-    dispatch(ActionCreator.resetFilmsList());
+    dispatch(resetFilmsList());
   },
   onLoadData() {
     dispatch(fetchFilmList());
   },
   onUserAvatarClick() {
-    dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
+    dispatch(redirectToRoute(APPRoute.MYLIST));
   },
 });
 

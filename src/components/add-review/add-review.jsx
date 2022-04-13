@@ -6,7 +6,7 @@ import filmProp from "../../common-props/film.js";
 import AddReviewForm from "../add-review-form/add-review-form";
 import {APPRoute, AuthorizationStatus, ReviewFormStatus, ReviewFormError} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
-import {ActionCreator} from "../../store/action.js";
+import {redirectToRoute, setReviewForm, setReviewFormError} from "../../store/action.js";
 import authInfoProp from "../../common-props/auth-info";
 import {sendComment} from "../../store/api-actions.js";
 
@@ -88,14 +88,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onUserAvatarClick() {
-    dispatch(ActionCreator.redirectToRoute(APPRoute.MYLIST));
+    dispatch(redirectToRoute(APPRoute.MYLIST));
   },
   onSubmitReview(commentPost) {
     dispatch(sendComment(commentPost));
-    dispatch(ActionCreator.setReviewForm(ReviewFormStatus.DISABLE));
+    dispatch(setReviewForm(ReviewFormStatus.DISABLE));
   },
   onResetReviewFormError() {
-    dispatch(ActionCreator.setReviewFormError(ReviewFormError.NO_ERROR));
+    dispatch(setReviewFormError(ReviewFormError.NO_ERROR));
   },
 });
 

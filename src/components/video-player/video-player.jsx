@@ -1,5 +1,6 @@
 import React, {useRef, useEffect, useState} from "react";
 import PropTypes from "prop-types";
+import {FILM_START_DELAY} from "../../const";
 
 const VideoPlayer = ({src, isPlaying, poster, width, height}) => {
   const videoRef = useRef();
@@ -23,7 +24,7 @@ const VideoPlayer = ({src, isPlaying, poster, width, height}) => {
 
   useEffect(() => {
     if (isPlaying && !isLoading) {
-      setStartDelay = setTimeout(() => videoRef.current.play(), 1000);
+      setStartDelay = setTimeout(() => videoRef.current.play(), FILM_START_DELAY);
     } else if (!videoRef.current.paused) {
       videoRef.current.pause();
       videoRef.current.currentTime = videoRef.current.duration;
