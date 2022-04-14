@@ -1,9 +1,7 @@
 import React, {useEffect} from "react";
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {changeGenre, resetFilmsList, redirectToRoute} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
-import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
@@ -11,29 +9,43 @@ import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList} from "../../store/api-actions";
 import UserBlock from "../user-block/user-block";
-import authInfoProp from "../../common-props/auth-info";
 import {useShownsCards} from "../../hooks/use-showns-cards";
 
-const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUserGenreClick, onResetFilmList, isDataLoaded, onLoadData, onUserAvatarClick, authorizationStatus}) => {
+const Main = () => {
+  const {films, titleMovie, authInfo, isDataLoaded} = useSelector((state) => state.DATA);
+  const {selectedGenre} = useSelector((state) => state.LIST);
+  const {authorizationStatus} = useSelector((state) => state.USER);
   const [shownsCardsCount, handleResetShownsCardsCount, handleSetShownsCardsCount] = useShownsCards(FILM_CARD_PER_STEP);
+  let filteredFilms = filterFilmsByGenre(films, selectedGenre);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isDataLoaded) {
-      onLoadData();
+      dispatch(fetchFilmList());
     }
   }, [isDataLoaded]);
 
   useEffect(() => {
-    onResetFilmList();
+    dispatch(resetFilmsList());
   }, []);
 
   useEffect(() => {
     handleResetShownsCardsCount();
+    filteredFilms = filterFilmsByGenre(films, selectedGenre);
   }, [selectedGenre]);
 
   if (!isDataLoaded) {
     return (<LoadingScreen/>);
   }
+
+  const onUserGenreClick = (genre) => {
+    dispatch(changeGenre(genre));
+  };
+
+  const onUserAvatarClick = () => {
+    dispatch(redirectToRoute(APPRoute.MYLIST));
+  };
 
   return <React.Fragment>
     <section className="movie-card">
@@ -115,48 +127,4 @@ const Main = ({titleMovie, films, authInfo, selectedGenre, filteredFilms, onUser
   </React.Fragment>;
 };
 
-Main.propTypes = {
-  titleMovie: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
-  }).isRequired,
-  films: PropTypes.arrayOf(filmProp).isRequired,
-  authInfo: authInfoProp,
-  selectedGenre: PropTypes.string.isRequired,
-  filteredFilms: PropTypes.arrayOf(filmProp).isRequired,
-  onUserGenreClick: PropTypes.func.isRequired,
-  onResetFilmList: PropTypes.func.isRequired,
-  isDataLoaded: PropTypes.bool.isRequired,
-  onLoadData: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  onUserAvatarClick: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: state.films,
-  authInfo: state.authInfo,
-  selectedGenre: state.selectedGenre,
-  filteredFilms: filterFilmsByGenre(state.films, state.selectedGenre),
-  titleMovie: state.titleMovie,
-  isDataLoaded: state.isDataLoaded,
-  authorizationStatus: state.authorizationStatus,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onUserGenreClick(films, genre) {
-    dispatch(changeGenre(genre));
-  },
-  onResetFilmList() {
-    dispatch(resetFilmsList());
-  },
-  onLoadData() {
-    dispatch(fetchFilmList());
-  },
-  onUserAvatarClick() {
-    dispatch(redirectToRoute(APPRoute.MYLIST));
-  },
-});
-
-export {Main};
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default Main;

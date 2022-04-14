@@ -1,24 +1,33 @@
 import React, {useEffect} from "react";
 import {Link, useParams} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
+import {useSelector, useDispatch} from "react-redux";
 import AddReviewForm from "../add-review-form/add-review-form";
 import {APPRoute, AuthorizationStatus, ReviewFormStatus, ReviewFormError} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
 import {redirectToRoute, setReviewForm, setReviewFormError} from "../../store/action.js";
-import authInfoProp from "../../common-props/auth-info";
 import {sendComment} from "../../store/api-actions.js";
 
-const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview, reviewFormStatus, isReviewFormSubmError, onResetReviewFormError}) => {
+const AddReview = () => {
+  const {films, authInfo} = useSelector((state) => state.DATA);
+  const {reviewFormStatus, isReviewFormSubmError} = useSelector((state) => state.REVIEW);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isReviewFormSubmError === ReviewFormError.ERROR) {
-      onResetReviewFormError();
+      dispatch(setReviewFormError(ReviewFormError.NO_ERROR));
     }
   }, []);
+
+  const onSubmitReview = (commentPost) => {
+    dispatch(sendComment(commentPost));
+    dispatch(setReviewForm(ReviewFormStatus.DISABLE));
+  };
+
+  const onUserAvatarClick = () => {
+    dispatch(redirectToRoute(APPRoute.MYLIST));
+  };
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
@@ -69,35 +78,4 @@ const AddReview = ({films, authInfo, onUserAvatarClick, onSubmitReview, reviewFo
   </React.Fragment>;
 };
 
-AddReview.propTypes = {
-  films: PropTypes.arrayOf(filmProp).isRequired,
-  onUserAvatarClick: PropTypes.func.isRequired,
-  authInfo: authInfoProp,
-  onSubmitReview: PropTypes.func.isRequired,
-  reviewFormStatus: PropTypes.string.isRequired,
-  isReviewFormSubmError: PropTypes.string.isRequired,
-  onResetReviewFormError: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: state.films,
-  authInfo: state.authInfo,
-  reviewFormStatus: state.reviewFormStatus,
-  isReviewFormSubmError: state.isReviewFormSubmError,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onUserAvatarClick() {
-    dispatch(redirectToRoute(APPRoute.MYLIST));
-  },
-  onSubmitReview(commentPost) {
-    dispatch(sendComment(commentPost));
-    dispatch(setReviewForm(ReviewFormStatus.DISABLE));
-  },
-  onResetReviewFormError() {
-    dispatch(setReviewFormError(ReviewFormError.NO_ERROR));
-  },
-});
-
-export {AddReview};
-export default connect(mapStateToProps, mapDispatchToProps)(AddReview);
+export default AddReview;

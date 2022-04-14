@@ -1,13 +1,19 @@
 import React from "react";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
+import {useSelector, useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
 import {logout} from "../../store/api-actions.js";
 
-const MyList = ({myListFilms, onLogOut}) => {
+const MyList = () => {
+  const {films} = useSelector((state) => state.DATA);
+  const myListFilms = films;
+  const dispatch = useDispatch();
+
+  const onLogOut = () => {
+    dispatch(logout());
+  };
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -49,20 +55,4 @@ const MyList = ({myListFilms, onLogOut}) => {
   );
 };
 
-MyList.propTypes = {
-  myListFilms: PropTypes.arrayOf(filmProp).isRequired,
-  onLogOut: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  myListFilms: state.films,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLogOut() {
-    dispatch(logout());
-  }
-});
-
-export {MyList};
-export default connect(mapStateToProps, mapDispatchToProps)(MyList);
+export default MyList;

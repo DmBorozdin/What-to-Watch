@@ -1,10 +1,9 @@
 import React from "react";
 import {useParams, useHistory} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
+import {useSelector} from "react-redux";
 
-const Player = ({films}) => {
+const Player = () => {
+  const {films} = useSelector((state) => state.DATA);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
 
@@ -50,13 +49,4 @@ const Player = ({films}) => {
   );
 };
 
-Player.propTypes = {
-  films: PropTypes.arrayOf(filmProp).isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: state.films,
-});
-
-export {Player};
-export default connect(mapStateToProps, null)(Player);
+export default Player;

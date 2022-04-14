@@ -1,3 +1,5 @@
+import {createAction} from "@reduxjs/toolkit";
+
 export const ActionType = {
   CHANGE_GENRE: `filmsList/changeGenre`,
   RESET_FILMS_LIST: `filmsList/reset`,
@@ -12,55 +14,24 @@ export const ActionType = {
   SET_REVIEW_FORM_ERR: `review/setReviewFormError`,
 };
 
-export const changeGenre = (genre) => ({
-  type: ActionType.CHANGE_GENRE,
-  payload: genre,
-});
+export const changeGenre = createAction(ActionType.CHANGE_GENRE, (genre) => ({payload: genre}));
 
-export const resetFilmsList = () => ({
-  type: ActionType.RESET_FILMS_LIST,
-});
+export const resetFilmsList = createAction(ActionType.RESET_FILMS_LIST);
 
-export const loadFilms = (films) => ({
-  type: ActionType.LOAD_FILMS,
-  payload: films,
-});
+export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({payload: films}));
 
-export const loadFilm = (film) => ({
-  type: ActionType.LOAD_FILM,
-  payload: film,
-});
+export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({payload: film}));
 
-export const requireAuthorization = (status) => ({
-  type: ActionType.REQUIRED_AUTHORIZATION,
-  payload: status,
-});
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({payload: status}));
 
-export const redirectToRoute = (url) => ({
-  type: ActionType.REDIRECT_TO_ROUTE,
-  payload: url,
-});
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({payload: url}));
 
-export const loadAuthInfo = (authInfo) => ({
-  type: ActionType.LOAD_AUTH_INFO,
-  payload: authInfo,
-});
+export const loadAuthInfo = createAction(ActionType.LOAD_AUTH_INFO, (authInfo) => ({payload: authInfo}));
 
-export const loadReview = (reviews) =>({
-  type: ActionType.LOAD_REVIEW,
-  payload: reviews,
-});
+export const loadReview = createAction(ActionType.LOAD_REVIEW, (reviews) =>({payload: reviews}));
 
-export const resetReview = () =>({
-  type: ActionType.RESET_REVIEW,
-});
+export const resetReview = createAction(ActionType.RESET_REVIEW);
 
-export const setReviewForm = (statusForm) =>({
-  type: ActionType.SET_REVIEW_FORM,
-  payload: statusForm,
-});
+export const setReviewForm = createAction(ActionType.SET_REVIEW_FORM, (statusForm) =>({payload: statusForm}));
 
-export const setReviewFormError = (error) => ({
-  type: ActionType.SET_REVIEW_FORM_ERR,
-  payload: error,
-});
+export const setReviewFormError = createAction(ActionType.SET_REVIEW_FORM_ERR, (error) => ({payload: error}));
