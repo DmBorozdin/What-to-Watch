@@ -36,4 +36,6 @@ MovieCard.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
 };
 
-export default MovieCard;
+export default React.memo(MovieCard, (prevProps, nextProps) => {
+  return prevProps.isPlaying === nextProps.isPlaying;
+});
