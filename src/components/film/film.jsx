@@ -1,46 +1,47 @@
 import React, {useEffect} from "react";
 import {Link, useParams} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import {ActionCreator} from "../../store/action.js";
-import filmProp from "../../common-props/film.js";
-import reviewsProp from "../../common-props/reviews.js";
+import {useSelector, useDispatch} from "react-redux";
+import {redirectToRoute, resetReview} from "../../store/action.js";
 import Tabs from "../tabs/tabs.jsx";
 import MoviesList from "../movies-list/movies-list.jsx";
 import {shuffleArray} from "../../utils/common.js";
 import {COUNT_SIMILAR_FILM_CARD, APPRoute, AuthorizationStatus} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
-import authInfoProp from "../../common-props/auth-info";
 import {fetchFilm, fetchComment} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen.jsx";
 
-const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoadData, onLoadReviews, isOneFilmLoaded, isReviewLoaded, onResetReview}) => {
+const Film = () => {
+  const {films, reviews, authInfo, isOneFilmLoaded, isReviewLoaded} = useSelector((state) => state.DATA);
+  const {authorizationStatus} = useSelector((state) => state.USER);
   const pageId = Number(useParams().id);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    onResetReview();
-  }, []);
+    if (isReviewLoaded) {
+      dispatch(resetReview());
+    }
+  }, [pageId]);
 
   useEffect(() => {
     if (!isOneFilmLoaded) {
-      onLoadData(pageId);
+      dispatch(fetchFilm(pageId));
     }
   }, [isOneFilmLoaded]);
 
   useEffect(() => {
     if (!isReviewLoaded) {
-      onLoadReviews(pageId);
+      dispatch(fetchComment(pageId));
     }
   }, [isReviewLoaded]);
 
   const film = films.find((item) => item.id === pageId);
   const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
 
-  const handlePlayClick = () => onRedirect(`${APPRoute.PLAYER}/${film.id}`);
+  const handlePlayClick = () => dispatch(redirectToRoute(`${APPRoute.PLAYER}/${film.id}`));
 
-  const handleAvatarClick = () => onRedirect(APPRoute.MYLIST);
+  const handleAvatarClick = () => dispatch(redirectToRoute(APPRoute.MYLIST));
 
-  if (!isOneFilmLoaded || !isReviewLoaded) {
+  if (!isOneFilmLoaded) {
     return (<LoadingScreen/>);
   }
 
@@ -98,7 +99,7 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
             <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
           </div>
 
-          <Tabs film={film} reviews={reviews}/>
+          <Tabs film={film} reviews={reviews} isReviewLoaded={isReviewLoaded}/>
         </div>
       </div>
     </section>
@@ -129,42 +130,4 @@ const Film = ({films, reviews, authInfo, authorizationStatus, onRedirect, onLoad
   </React.Fragment>;
 };
 
-Film.propTypes = {
-  films: PropTypes.arrayOf(filmProp).isRequired,
-  reviews: reviewsProp,
-  authInfo: authInfoProp,
-  onRedirect: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  onLoadData: PropTypes.func.isRequired,
-  isOneFilmLoaded: PropTypes.bool.isRequired,
-  isReviewLoaded: PropTypes.bool.isRequired,
-  onLoadReviews: PropTypes.func.isRequired,
-  onResetReview: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: state.films,
-  reviews: state.reviews,
-  authInfo: state.authInfo,
-  authorizationStatus: state.authorizationStatus,
-  isOneFilmLoaded: state.isOneFilmLoaded,
-  isReviewLoaded: state.isReviewLoaded,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadData(pageId) {
-    dispatch(fetchFilm(pageId));
-  },
-  onLoadReviews(pageId) {
-    dispatch(fetchComment(pageId));
-  },
-  onRedirect(url) {
-    dispatch(ActionCreator.redirectToRoute(url));
-  },
-  onResetReview() {
-    dispatch(ActionCreator.resetReview());
-  },
-});
-
-export {Film};
-export default connect(mapStateToProps, mapDispatchToProps)(Film);
+export default Film;

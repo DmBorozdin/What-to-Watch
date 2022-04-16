@@ -6,6 +6,12 @@ import MovieCard from "../movie-card/movie-card";
 const MoviesList = ({films, autoPlay}) => {
   const [activeCard, setActiveCard] = useState(null);
 
+  const handleSetActiveCard = (id) => {
+    if (autoPlay) {
+      setActiveCard(activeCard === id ? -1 : id);
+    }
+  };
+
   return (
     <div className="catalog__movies-list">
       {films.map((film) =>
@@ -13,7 +19,7 @@ const MoviesList = ({films, autoPlay}) => {
           key = {`moviecard ${film.id}`}
           film = {film}
           isPlaying = {autoPlay && activeCard === film.id}
-          onMouseOver = {() => setActiveCard(activeCard === film.id ? -1 : film.id)}
+          onMouseOver = {handleSetActiveCard}
         />
       )}
     </div>

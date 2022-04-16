@@ -6,11 +6,13 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 
 const MovieCard = ({film, isPlaying, onMouseOver}) => {
+  const handleMouseOver = () => onMouseOver(film.id);
+
   return (
     <article
       className="small-movie-card catalog__movies-card"
-      onMouseEnter = {onMouseOver}
-      onMouseLeave = {onMouseOver}
+      onMouseEnter = {handleMouseOver}
+      onMouseLeave = {handleMouseOver}
     >
       <div className="small-movie-card__image">
         <VideoPlayer
@@ -34,4 +36,6 @@ MovieCard.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
 };
 
-export default MovieCard;
+export default React.memo(MovieCard, (prevProps, nextProps) => {
+  return prevProps.isPlaying === nextProps.isPlaying;
+});

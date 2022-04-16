@@ -1,58 +1,37 @@
+import {createAction} from "@reduxjs/toolkit";
+
 export const ActionType = {
-  CHANGE_GENRE: `genreList/changeGenre`,
-  RESET_FILMS_LIST: `main/reset`,
+  CHANGE_GENRE: `filmsList/changeGenre`,
+  RESET_FILMS_LIST: `filmsList/reset`,
   LOAD_FILMS: `data/loadFilms`,
   LOAD_FILM: `data/loadFilm`,
-  REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
-  REDIRECT_TO_ROUTE: `main/redirectToRoute`,
   LOAD_AUTH_INFO: `data/loadAuthInfo`,
-  LOAD_REVIEW: `film/loadReview`,
-  RESET_REVIEW: `film/resetReview`,
+  LOAD_REVIEW: `data/loadReview`,
+  RESET_REVIEW: `data/resetReview`,
+  REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
+  REDIRECT_TO_ROUTE: `route/redirectToRoute`,
   SET_REVIEW_FORM: `review/setReviewForm`,
   SET_REVIEW_FORM_ERR: `review/setReviewFormError`,
 };
 
-export const ActionCreator = {
-  changeGenre: (genre) => ({
-    type: ActionType.CHANGE_GENRE,
-    payload: genre,
-  }),
-  resetFilmsList: () => ({
-    type: ActionType.RESET_FILMS_LIST,
-  }),
-  loadFilms: (films) => ({
-    type: ActionType.LOAD_FILMS,
-    payload: films,
-  }),
-  loadFilm: (film) => ({
-    type: ActionType.LOAD_FILM,
-    payload: film,
-  }),
-  requireAuthorization: (status) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
-    payload: status,
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    payload: url,
-  }),
-  loadAuthInfo: (authInfo) => ({
-    type: ActionType.LOAD_AUTH_INFO,
-    payload: authInfo,
-  }),
-  loadReview: (reviews) =>({
-    type: ActionType.LOAD_REVIEW,
-    payload: reviews,
-  }),
-  resetReview: () =>({
-    type: ActionType.RESET_REVIEW,
-  }),
-  setReviewForm: (statusForm) =>({
-    type: ActionType.SET_REVIEW_FORM,
-    payload: statusForm,
-  }),
-  setReviewFormError: (error) => ({
-    type: ActionType.SET_REVIEW_FORM_ERR,
-    payload: error,
-  }),
-};
+export const changeGenre = createAction(ActionType.CHANGE_GENRE, (genre) => ({payload: genre}));
+
+export const resetFilmsList = createAction(ActionType.RESET_FILMS_LIST);
+
+export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({payload: films}));
+
+export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({payload: film}));
+
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({payload: status}));
+
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({payload: url}));
+
+export const loadAuthInfo = createAction(ActionType.LOAD_AUTH_INFO, (authInfo) => ({payload: authInfo}));
+
+export const loadReview = createAction(ActionType.LOAD_REVIEW, (reviews) =>({payload: reviews}));
+
+export const resetReview = createAction(ActionType.RESET_REVIEW);
+
+export const setReviewForm = createAction(ActionType.SET_REVIEW_FORM, (statusForm) =>({payload: statusForm}));
+
+export const setReviewFormError = createAction(ActionType.SET_REVIEW_FORM_ERR, (error) => ({payload: error}));

@@ -1,10 +1,12 @@
 import React, {useState} from "react";
+import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import {MovieNavItem} from "../../const";
+import LoadingScreen from "../loading-screen/loading-screen.jsx";
 import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD} from "../../utils/common";
 
-const Tabs = ({film, reviews}) => {
+const Tabs = ({film, reviews, isReviewLoaded}) => {
   const [currentNavItem, setCurrentNavItem] = useState(MovieNavItem.OVERVIEW);
   const reviewsFormat = [reviews.slice(0, Math.ceil(reviews.length / 2)), reviews.slice(Math.ceil(reviews.length / 2))];
 
@@ -78,26 +80,31 @@ const Tabs = ({film, reviews}) => {
       }
 
       {currentNavItem === MovieNavItem.REVIEWS &&
-        <div className="movie-card__reviews movie-card__row">
-          {reviewsFormat.map((columnsReview, index) => (
-            <div className="movie-card__reviews-col" key={`reviews-col ${index}`}>
-              {columnsReview.map((review) => (
-                <div className="review" key={`review ${review.id}`}>
-                  <blockquote className="review__quote">
-                    <p className="review__text">{review.comment}</p>
+        <React.Fragment>
+          {isReviewLoaded &&
+            <div className="movie-card__reviews movie-card__row">
+              {reviewsFormat.map((columnsReview, index) => (
+                <div className="movie-card__reviews-col" key={`reviews-col ${index}`}>
+                  {columnsReview.map((review) => (
+                    <div className="review" key={`review ${review.id}`}>
+                      <blockquote className="review__quote">
+                        <p className="review__text">{review.comment}</p>
 
-                    <footer className="review__details">
-                      <cite className="review__author">{review.user.name}</cite>
-                      <time className="review__date" dateTime={getDateInFormatYMD(review.date)}>{getDateInFormatMDY(review.date)}</time>
-                    </footer>
-                  </blockquote>
+                        <footer className="review__details">
+                          <cite className="review__author">{review.user.name}</cite>
+                          <time className="review__date" dateTime={getDateInFormatYMD(review.date)}>{getDateInFormatMDY(review.date)}</time>
+                        </footer>
+                      </blockquote>
 
-                  <div className="review__rating">{review.rating}</div>
+                      <div className="review__rating">{review.rating}</div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
-        </div>
+          }
+          {!isReviewLoaded && <LoadingScreen/>}
+        </React.Fragment>
       }
     </div>
   </React.Fragment>;
@@ -106,6 +113,7 @@ const Tabs = ({film, reviews}) => {
 Tabs.propTypes = {
   film: filmProp,
   reviews: reviewsProp,
+  isReviewLoaded: PropTypes.bool.isRequired,
 };
 
 export default Tabs;
