@@ -16,6 +16,8 @@ export const MovieNavItem = {
 
 export const Time = {
   MINUTE_IN_HOUR: 60,
+  SECOND_IN_MINUTE: 60,
+  SECOND_IN_HOUR: 3600,
 };
 
 export const Genre = {
