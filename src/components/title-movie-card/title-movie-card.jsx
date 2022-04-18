@@ -4,7 +4,7 @@ import {redirectToRoute} from "../../store/action";
 import PropTypes from "prop-types";
 import UserBlock from "../user-block/user-block";
 import filmProp from "../../common-props/film";
-import {APPRoute} from "../../const";
+import {APPRoute, AuthorizationStatus} from "../../const";
 import {sendFavoriteStatus} from "../../store/api-actions";
 
 const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatarClick}) => {
@@ -12,7 +12,13 @@ const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatar
 
   const handlePlayClick = () => dispatch(redirectToRoute(`${APPRoute.PLAYER}/${promoFilm.id}`));
 
-  const handleAddToFavoriteClick = () => dispatch(sendFavoriteStatus(promoFilm.id, Number(!promoFilm.isFavorite)));
+  const handleAddToFavoriteClick = () => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavoriteStatus(promoFilm.id, Number(!promoFilm.isFavorite)));
+    } else {
+      dispatch(redirectToRoute(APPRoute.LOGIN));
+    }
+  };
 
   return (
     <section className="movie-card">

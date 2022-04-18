@@ -41,7 +41,13 @@ const Film = () => {
 
   const handleAvatarClick = () => dispatch(redirectToRoute(APPRoute.MYLIST));
 
-  const handleAddToFavoriteClick = () => dispatch(sendFavoriteStatus(film.id, Number(!film.isFavorite)));
+  const handleAddToFavoriteClick = () => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      dispatch(sendFavoriteStatus(film.id, Number(!film.isFavorite)));
+    } else {
+      dispatch(redirectToRoute(APPRoute.LOGIN));
+    }
+  };
 
   if (!isOneFilmLoaded) {
     return (<LoadingScreen/>);

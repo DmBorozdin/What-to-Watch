@@ -39,7 +39,21 @@ export const fetchFavoriteFilms = () => (dispatch, _getState, api) => (
 export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) =>(
   api.post(`${APIRoute.FAVORITE}/${id}/${status}`)
     .then(({data}) => adaptFilmDataToClient([data]))
-    .then((adaptedData) => dispatch(addToFavoriteFilms(adaptedData[0])))
+    .then((adaptedData) => {
+      if (adaptedData[0].isFavorite) {
+        dispatch(addToFavoriteFilms(adaptedData[0]));
+      } else {
+        const favorite = _getState().DATA.favorite;
+        const newFavorite = favorite.filter((film) => film.id !== adaptedData[0].id);
+        dispatch(loadFavoriteFilms(newFavorite));
+      }
+      return adaptedData[0];
+    })
+    .then((adaptedData) => {
+      const films = _getState().DATA.films;
+      const newFilms = films.map((film) => film.id === adaptedData.id ? adaptedData : film);
+      dispatch(_getState().DATA.isDataLoaded ? loadFilms(newFilms) : loadFilm(newFilms));
+    })
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
