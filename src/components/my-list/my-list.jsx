@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
-import {logout} from "../../store/api-actions.js";
+import {logout, fetchFavoriteFilms} from "../../store/api-actions.js";
+import LoadingScreen from "../loading-screen/loading-screen";
 
 const MyList = () => {
-  const {films} = useSelector((state) => state.DATA);
-  const myListFilms = films;
+  const {favorite, isFavoriteFilmsLoaded} = useSelector((state) => state.DATA);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isFavoriteFilmsLoaded) {
+      dispatch(fetchFavoriteFilms());
+    }
+  }, [isFavoriteFilmsLoaded]);
 
   const onLogOut = () => {
     dispatch(logout());
@@ -34,8 +40,8 @@ const MyList = () => {
 
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
-
-        <MoviesList films={myListFilms} autoPlay={false}/>
+        {!isFavoriteFilmsLoaded && <LoadingScreen/>}
+        {isFavoriteFilmsLoaded && <MoviesList films={favorite} autoPlay={false}/>}
       </section>
 
       <footer className="page-footer">

@@ -7,7 +7,7 @@ import MoviesList from "../movies-list/movies-list.jsx";
 import {shuffleArray} from "../../utils/common.js";
 import {COUNT_SIMILAR_FILM_CARD, APPRoute, AuthorizationStatus} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
-import {fetchFilm, fetchComment} from "../../store/api-actions.js";
+import {fetchFilm, fetchComment, sendFavoriteStatus} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen.jsx";
 
 const Film = () => {
@@ -41,6 +41,8 @@ const Film = () => {
 
   const handleAvatarClick = () => dispatch(redirectToRoute(APPRoute.MYLIST));
 
+  const handleAddToFavoriteClick = () => dispatch(sendFavoriteStatus(film.id, Number(!film.isFavorite)));
+
   if (!isOneFilmLoaded) {
     return (<LoadingScreen/>);
   }
@@ -49,7 +51,7 @@ const Film = () => {
     <section className="movie-card movie-card--full">
       <div className="movie-card__hero">
         <div className="movie-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={film.backgroundImage} alt={film.name} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -81,7 +83,7 @@ const Film = () => {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list movie-card__button" type="button">
+              <button className="btn btn--list movie-card__button" type="button" onClick={handleAddToFavoriteClick}>
                 <svg viewBox="0 0 19 20" width="19" height="20">
                   <use xlinkHref="#add"></use>
                 </svg>

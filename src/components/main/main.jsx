@@ -7,12 +7,12 @@ import ShowMore from "../show-more/show-more";
 import {filterFilmsByGenre} from "../../film";
 import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
-import {fetchFilmList} from "../../store/api-actions";
+import {fetchFilmList, fetchPromoFilm} from "../../store/api-actions";
 import TitleMovieCard from "../title-movie-card/title-movie-card";
 import {useShownsCards} from "../../hooks/use-showns-cards";
 
 const Main = () => {
-  const {films, titleMovie, authInfo, isDataLoaded} = useSelector((state) => state.DATA);
+  const {films, promoFilm, authInfo, isDataLoaded, isPromoFilmLoaded} = useSelector((state) => state.DATA);
   const {selectedGenre} = useSelector((state) => state.LIST);
   const {authorizationStatus} = useSelector((state) => state.USER);
   const [shownsCardsCount, handleResetShownsCardsCount, handleSetShownsCardsCount] = useShownsCards(FILM_CARD_PER_STEP);
@@ -27,6 +27,12 @@ const Main = () => {
   }, [isDataLoaded]);
 
   useEffect(() => {
+    if (!isPromoFilmLoaded) {
+      dispatch(fetchPromoFilm());
+    }
+  }, [isPromoFilmLoaded]);
+
+  useEffect(() => {
     dispatch(resetFilmsList());
   }, []);
 
@@ -35,7 +41,7 @@ const Main = () => {
     filteredFilms = filterFilmsByGenre(films, selectedGenre);
   }, [selectedGenre]);
 
-  if (!isDataLoaded) {
+  if (!isDataLoaded || !isPromoFilmLoaded) {
     return (<LoadingScreen/>);
   }
 
@@ -48,7 +54,7 @@ const Main = () => {
   };
 
   return <React.Fragment>
-    <TitleMovieCard titleMovie={titleMovie} avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
+    <TitleMovieCard promoFilm={promoFilm} avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
 
     <div className="page-content">
       <section className="catalog">

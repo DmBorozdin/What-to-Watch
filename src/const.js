@@ -38,7 +38,9 @@ export const APIRoute = {
   FILMS: `/films`,
   LOGIN: `/login`,
   LOGOUT: `/logout`,
-  COMMENTS: `/comments/`
+  COMMENTS: `/comments/`,
+  PROMO: `/films/promo`,
+  FAVORITE: `favorite`,
 };
 
 export const APPRoute = {

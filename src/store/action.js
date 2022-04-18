@@ -5,6 +5,9 @@ export const ActionType = {
   RESET_FILMS_LIST: `filmsList/reset`,
   LOAD_FILMS: `data/loadFilms`,
   LOAD_FILM: `data/loadFilm`,
+  LOAD_PROMO_FILM: `data/loadPromoFilm`,
+  LOAD_FAVORITE_FILMS: `data/loadFavoriteFilms`,
+  ADD_TO_FAVORITE: `data/addToFavoriteFilms`,
   LOAD_AUTH_INFO: `data/loadAuthInfo`,
   LOAD_REVIEW: `data/loadReview`,
   RESET_REVIEW: `data/resetReview`,
@@ -21,6 +24,12 @@ export const resetFilmsList = createAction(ActionType.RESET_FILMS_LIST);
 export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({payload: films}));
 
 export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({payload: film}));
+
+export const loadPromoFilm = createAction(ActionType.LOAD_PROMO_FILM, (film) => ({payload: film}));
+
+export const loadFavoriteFilms = createAction(ActionType.LOAD_FAVORITE_FILMS, (films) => ({payload: films}));
+
+export const addToFavoriteFilms = createAction(ActionType.ADD_TO_FAVORITE, (film) => ({payload: film}));
 
 export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({payload: status}));
 

@@ -1,14 +1,11 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {loadFilms, loadFilm, loadAuthInfo, loadReview, resetReview} from "../action";
+import {loadFilms, loadFilm, loadPromoFilm, loadFavoriteFilms, addToFavoriteFilms, loadAuthInfo, loadReview, resetReview} from "../action";
 
 const initialState = {
   films: [],
   reviews: [],
-  titleMovie: {
-    title: `The Grand Budapest Hotel`,
-    genre: `Drama`,
-    year: `2014`,
-  },
+  promoFilm: {},
+  favorite: [],
   authInfo: {
     id: -1,
     email: ``,
@@ -17,6 +14,8 @@ const initialState = {
   },
   isDataLoaded: false,
   isOneFilmLoaded: false,
+  isPromoFilmLoaded: false,
+  isFavoriteFilmsLoaded: false,
   isReviewLoaded: false,
 };
 
@@ -29,6 +28,17 @@ const filmsData = createReducer(initialState, (builder) => {
   builder.addCase(loadFilm, (state, action) => {
     state.films = action.payload;
     state.isOneFilmLoaded = true;
+  });
+  builder.addCase(loadPromoFilm, (state, action) => {
+    state.promoFilm = action.payload;
+    state.isPromoFilmLoaded = true;
+  });
+  builder.addCase(loadFavoriteFilms, (state, action) => {
+    state.favorite = action.payload;
+    state.isFavoriteFilmsLoaded = true;
+  });
+  builder.addCase(addToFavoriteFilms, (state, action) => {
+    state.favorite = [...state.favorite, action.payload];
   });
   builder.addCase(loadAuthInfo, (state, action) => {
     state.authInfo = action.payload;

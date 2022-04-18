@@ -1,12 +1,23 @@
 import React from "react";
+import {useDispatch} from "react-redux";
+import {redirectToRoute} from "../../store/action";
 import PropTypes from "prop-types";
 import UserBlock from "../user-block/user-block";
+import filmProp from "../../common-props/film";
+import {APPRoute} from "../../const";
+import {sendFavoriteStatus} from "../../store/api-actions";
 
-const TitleMovieCard = ({titleMovie, avatarUrl, authorizationStatus, onUserAvatarClick}) => {
+const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatarClick}) => {
+  const dispatch = useDispatch();
+
+  const handlePlayClick = () => dispatch(redirectToRoute(`${APPRoute.PLAYER}/${promoFilm.id}`));
+
+  const handleAddToFavoriteClick = () => dispatch(sendFavoriteStatus(promoFilm.id, Number(!promoFilm.isFavorite)));
+
   return (
     <section className="movie-card">
       <div className="movie-card__bg">
-        <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+        <img src={promoFilm.backgroundImage} alt={promoFilm.name} />
       </div>
 
       <h1 className="visually-hidden">WTW</h1>
@@ -26,24 +37,24 @@ const TitleMovieCard = ({titleMovie, avatarUrl, authorizationStatus, onUserAvata
       <div className="movie-card__wrap">
         <div className="movie-card__info">
           <div className="movie-card__poster">
-            <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+            <img src={promoFilm.posterImage} alt={`${promoFilm.name} poster`} width="218" height="327" />
           </div>
 
           <div className="movie-card__desc">
-            <h2 className="movie-card__title">{titleMovie.title}</h2>
+            <h2 className="movie-card__title">{promoFilm.name}</h2>
             <p className="movie-card__meta">
-              <span className="movie-card__genre">{titleMovie.genre}</span>
-              <span className="movie-card__year">{titleMovie.year}</span>
+              <span className="movie-card__genre">{promoFilm.genre}</span>
+              <span className="movie-card__year">{promoFilm.released}</span>
             </p>
 
             <div className="movie-card__buttons">
-              <button className="btn btn--play movie-card__button" type="button">
+              <button className="btn btn--play movie-card__button" type="button" onClick={handlePlayClick}>
                 <svg viewBox="0 0 19 19" width="19" height="19">
                   <use xlinkHref="#play-s"></use>
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list movie-card__button" type="button">
+              <button className="btn btn--list movie-card__button" type="button" onClick={handleAddToFavoriteClick}>
                 <svg viewBox="0 0 19 20" width="19" height="20">
                   <use xlinkHref="#add"></use>
                 </svg>
@@ -58,11 +69,7 @@ const TitleMovieCard = ({titleMovie, avatarUrl, authorizationStatus, onUserAvata
 };
 
 TitleMovieCard.propTypes = {
-  titleMovie: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.string.isRequired,
-  }).isRequired,
+  promoFilm: filmProp,
   avatarUrl: PropTypes.string.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
   onUserAvatarClick: PropTypes.func.isRequired,
