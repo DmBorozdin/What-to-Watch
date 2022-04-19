@@ -1,4 +1,4 @@
-import {loadFilms, loadFilm, redirectToRoute, loadAuthInfo, requireAuthorization, loadReview, setReviewForm, setReviewFormError} from "./action";
+import {loadFilms, loadFilm, loadPromoFilm, loadFavoriteFilms, addToFavoriteFilms, redirectToRoute, loadAuthInfo, requireAuthorization, loadReview, setReviewForm, setReviewFormError} from "./action";
 import {AuthorizationStatus} from "../const";
 import {APIRoute, APPRoute, ReviewFormStatus, ReviewFormError} from "../const";
 import {adaptFilmDataToClient, adaptAuthDataToClient} from "../services/api";
@@ -6,7 +6,15 @@ import {adaptFilmDataToClient, adaptAuthDataToClient} from "../services/api";
 export const fetchFilmList = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FILMS)
     .then(({data}) => adaptFilmDataToClient(data))
-    .then((adaptedData) => dispatch(loadFilms(adaptedData)))
+    .then((adaptedData) => {
+      dispatch(loadFilms(adaptedData));
+      return adaptedData;
+    })
+    .then((adaptedData) => {
+      if (!_getState().DATA.isFavoriteFilmsLoaded) {
+        dispatch(loadFavoriteFilms(adaptedData.filter((film) => film.isFavorite)));
+      }
+    })
 );
 
 export const fetchFilm = (id) => (dispatch, _getState, api) => (
@@ -14,6 +22,41 @@ export const fetchFilm = (id) => (dispatch, _getState, api) => (
     .then(({data}) => adaptFilmDataToClient([data]))
     .then((adaptedData) => dispatch(loadFilm(adaptedData)))
     .catch(() => dispatch(redirectToRoute(APPRoute.FILMS)))
+);
+
+export const fetchPromoFilm = () => (dispatch, _getState, api) => (
+  api.get(APIRoute.PROMO)
+    .then(({data}) => adaptFilmDataToClient([data]))
+    .then((adaptedData) => dispatch(loadPromoFilm(adaptedData[0])))
+);
+
+export const fetchFavoriteFilms = () => (dispatch, _getState, api) => (
+  api.get(APIRoute.FAVORITE)
+    .then(({data}) => adaptFilmDataToClient(data))
+    .then((adaptedData) => dispatch(loadFavoriteFilms(adaptedData)))
+);
+
+export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) =>(
+  api.post(`${APIRoute.FAVORITE}/${id}/${status}`)
+    .then(({data}) => adaptFilmDataToClient([data]))
+    .then((adaptedData) => {
+      if (adaptedData[0].isFavorite) {
+        dispatch(addToFavoriteFilms(adaptedData[0]));
+      } else {
+        const favorite = _getState().DATA.favorite;
+        const newFavorite = favorite.filter((film) => film.id !== adaptedData[0].id);
+        dispatch(loadFavoriteFilms(newFavorite));
+      }
+      return adaptedData[0];
+    })
+    .then((adaptedData) => {
+      const films = _getState().DATA.films;
+      const newFilms = films.map((film) => film.id === adaptedData.id ? adaptedData : film);
+      dispatch(_getState().DATA.isDataLoaded ? loadFilms(newFilms) : loadFilm(newFilms));
+      if (adaptedData.id === _getState().DATA.promoFilm.id) {
+        dispatch(loadPromoFilm(adaptedData));
+      }
+    })
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (

@@ -16,6 +16,8 @@ export const MovieNavItem = {
 
 export const Time = {
   MINUTE_IN_HOUR: 60,
+  SECOND_IN_MINUTE: 60,
+  SECOND_IN_HOUR: 3600,
 };
 
 export const Genre = {
@@ -36,7 +38,9 @@ export const APIRoute = {
   FILMS: `/films`,
   LOGIN: `/login`,
   LOGOUT: `/logout`,
-  COMMENTS: `/comments/`
+  COMMENTS: `/comments/`,
+  PROMO: `/films/promo`,
+  FAVORITE: `favorite`,
 };
 
 export const APPRoute = {

@@ -11,6 +11,17 @@ export const getTimeInFormatHM = (time) => {
   return `${hourInTime}h ${minuteInTime}m`;
 };
 
+export const getTimeInFormatHMS = (time) => {
+  if (time < Time.SECOND_IN_MINUTE) {
+    return `0:00:${time}`;
+  }
+
+  const hourInTime = Math.floor(time / Time.SECOND_IN_HOUR);
+  const minuteInTime = Math.floor((time - (hourInTime * Time.SECOND_IN_HOUR)) / Time.SECOND_IN_MINUTE);
+  const secondInTime = Math.round(time - hourInTime * Time.SECOND_IN_HOUR - minuteInTime * Time.SECOND_IN_MINUTE);
+  return `${hourInTime}:${minuteInTime > 9 ? minuteInTime : `0${minuteInTime}`}:${secondInTime > 9 ? secondInTime : `0${secondInTime}`}`;
+};
+
 export const getDateInFormatMDY = (date) => date === null ? `` : dayjs(date).format(`MMMM D, YYYY`);
 
 export const getDateInFormatYMD = (date) => date === null ? `` : dayjs(date).format(`YYYY-MM-DD`);
