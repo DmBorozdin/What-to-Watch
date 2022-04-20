@@ -4,19 +4,21 @@ import {changeGenre, resetFilmsList, redirectToRoute} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
-import {filterFilmsByGenre} from "../../film";
 import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList, fetchPromoFilm} from "../../store/api-actions";
 import TitleMovieCard from "../title-movie-card/title-movie-card";
 import {useShownsCards} from "../../hooks/use-showns-cards";
+import {filterFilmsByGenre} from "../../store/films-data/selectors";
+import {chooseGenre} from "../../store/films-list/selectors";
 
 const Main = () => {
-  const {films, promoFilm, authInfo, isDataLoaded, isPromoFilmLoaded} = useSelector((state) => state.DATA);
+  const {promoFilm, authInfo, isDataLoaded, isPromoFilmLoaded} = useSelector((state) => state.DATA);
   const {selectedGenre} = useSelector((state) => state.LIST);
   const {authorizationStatus} = useSelector((state) => state.USER);
   const [shownsCardsCount, handleResetShownsCardsCount, handleSetShownsCardsCount] = useShownsCards(FILM_CARD_PER_STEP);
-  let filteredFilms = filterFilmsByGenre(films, selectedGenre);
+  const filteredFilms = useSelector(filterFilmsByGenre);
+  const genreList = useSelector(chooseGenre);
 
   const dispatch = useDispatch();
 
@@ -38,7 +40,6 @@ const Main = () => {
 
   useEffect(() => {
     handleResetShownsCardsCount();
-    filteredFilms = filterFilmsByGenre(films, selectedGenre);
   }, [selectedGenre]);
 
   if (!isDataLoaded || !isPromoFilmLoaded) {
@@ -60,7 +61,7 @@ const Main = () => {
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-        {films.length > 0 && <GenreList films={films} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>}
+        {genreList.length > 1 && <GenreList genreList={genreList} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>}
 
         <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
 

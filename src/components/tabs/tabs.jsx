@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import {MovieNavItem} from "../../const";
-import LoadingScreen from "../loading-screen/loading-screen.jsx";
 import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD} from "../../utils/common";
 
 const Tabs = ({film, reviews, isReviewLoaded}) => {
@@ -103,7 +102,6 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
               ))}
             </div>
           }
-          {!isReviewLoaded && <LoadingScreen/>}
         </React.Fragment>
       }
     </div>

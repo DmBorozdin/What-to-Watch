@@ -1,10 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import filmProp from "../../common-props/film.js";
-import {Genre} from "../../const.js";
 
-const GenreList = ({films, activeGenre, onGenreClick}) => {
-  const genreList = Array.from(new Set([Genre.ALL_GENRE, ...films.map((film) => film.genre)])).slice(0, 10);
+const GenreList = ({genreList, activeGenre, onGenreClick}) => {
 
   return <ul className="catalog__genres-list">
     {genreList.map((genre) =>
@@ -21,7 +18,7 @@ const GenreList = ({films, activeGenre, onGenreClick}) => {
 };
 
 GenreList.propTypes = {
-  films: PropTypes.arrayOf(filmProp).isRequired,
+  genreList: PropTypes.arrayOf(PropTypes.string).isRequired,
   activeGenre: PropTypes.string.isRequired,
   onGenreClick: PropTypes.func.isRequired,
 };

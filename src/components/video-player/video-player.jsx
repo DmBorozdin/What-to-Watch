@@ -1,15 +1,13 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect} from "react";
 import PropTypes from "prop-types";
 import {FILM_START_DELAY} from "../../const";
 
 const VideoPlayer = ({src, isPlaying, poster, width, height}) => {
   const videoRef = useRef();
-  const [isLoading, setIsLoading] = useState(true);
   let setStartDelay = null;
 
   useEffect(() => {
     videoRef.current.muted = true;
-    videoRef.current.oncanplaythrough = () => setIsLoading(false);
     videoRef.current.onended = () => {
       videoRef.current.src = src;
     };
@@ -23,7 +21,7 @@ const VideoPlayer = ({src, isPlaying, poster, width, height}) => {
   }, [src]);
 
   useEffect(() => {
-    if (isPlaying && !isLoading) {
+    if (isPlaying) {
       setStartDelay = setTimeout(() => videoRef.current.play(), FILM_START_DELAY);
     } else if (!videoRef.current.paused) {
       videoRef.current.pause();
