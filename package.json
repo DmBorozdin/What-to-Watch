@@ -15,6 +15,7 @@
     "@babel/core": "7.12.17",
     "@babel/preset-env": "7.12.17",
     "@babel/preset-react": "7.12.13",
+    "axios-mock-adapter": "1.19.0",
     "babel-loader": "8.2.3",
     "css-loader": "5.2.7",
     "eslint": "7.18.0",
