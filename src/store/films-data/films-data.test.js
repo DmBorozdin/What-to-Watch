@@ -2,7 +2,7 @@ import MockAdapter from "axios-mock-adapter";
 import {createApi} from "../../services/api";
 import {filmsData} from "./films-data";
 import {ActionType} from "../action";
-import {fetchFilmList, fetchFilm, fetchPromoFilm, fetchFavoriteFilms} from "../api-actions";
+import {fetchFilmList, fetchFilm, fetchPromoFilm, fetchFavoriteFilms, sendFavoriteStatus} from "../api-actions";
 import {APIRoute, APPRoute} from "../../const";
 
 const api = createApi(() => {});
@@ -399,6 +399,90 @@ describe(`Async operation should work correctly`, () => {
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.LOAD_FAVORITE_FILMS,
           payload: films
+        });
+      });
+  });
+
+  it(`Should make a correct API call to /favorite/id/status; in initial state favorite film list empty; data loaded`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const id = 1;
+    const status = true;
+    const sendFavoriteStatusLoader = sendFavoriteStatus(id, status);
+
+    apiMock
+      .onPost(`${APIRoute.FAVORITE}/${id}/${status}`)
+      .reply(200, {...filmsFromServer[0], "is_favorite": true});
+
+    return sendFavoriteStatusLoader(dispatch, () => ({DATA: {...initialState, films, isDataLoaded: true}}), api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.ADD_TO_FAVORITE,
+          payload: {...films[0], "isFavorite": true}
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.LOAD_FILMS,
+          payload: [{...films[0], "isFavorite": true}, ...films.slice(1)]
+        });
+      });
+  });
+
+  it(`Should make a correct API call to /favorite/id/status; in initial state favorite film list not empty ; data loaded`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const id = 1;
+    const status = false;
+    const sendFavoriteStatusLoader = sendFavoriteStatus(id, status);
+
+    apiMock
+      .onPost(`${APIRoute.FAVORITE}/${id}/${status}`)
+      .reply(200, {...filmsFromServer[0], "is_favorite": status});
+
+    return sendFavoriteStatusLoader(dispatch, () => ({
+      DATA: {
+        ...initialState,
+        films: [{...films[0], "isFavorite": true}, {...films[1], "isFavorite": true}, films[2]],
+        favorite: [{...films[0], "isFavorite": true}, {...films[1], "isFavorite": true}],
+        isDataLoaded: true
+      }}), api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.LOAD_FAVORITE_FILMS,
+          payload: [{...films[1], "isFavorite": true}]
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.LOAD_FILMS,
+          payload: [films[0], {...films[1], "isFavorite": true}, films[2]]
+        });
+      });
+  });
+
+  it(`Should make a correct API call to /favorite/id/status; in initial state favorite film list empty ; data not loaded`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const id = 1;
+    const status = true;
+    const sendFavoriteStatusLoader = sendFavoriteStatus(id, status);
+
+    apiMock
+      .onPost(`${APIRoute.FAVORITE}/${id}/${status}`)
+      .reply(200, {...filmsFromServer[0], "is_favorite": status});
+
+    return sendFavoriteStatusLoader(dispatch, () => ({DATA: {...initialState, films: [films[0]]}}), api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.ADD_TO_FAVORITE,
+          payload: {...films[0], "isFavorite": true}
+        });
+
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.LOAD_FILM,
+          payload: [{...films[0], "isFavorite": true}]
         });
       });
   });
