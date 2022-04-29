@@ -53,7 +53,7 @@ export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) =>(
       const films = _getState().DATA.films;
       const newFilms = films.map((film) => film.id === adaptedData.id ? adaptedData : film);
       dispatch(_getState().DATA.isDataLoaded ? loadFilms(newFilms) : loadFilm(newFilms));
-      if (adaptedData.id === _getState().DATA.promoFilm.id) {
+      if (_getState().DATA.isDataLoaded && adaptedData.id === _getState().DATA.promoFilm.id) {
         dispatch(loadPromoFilm(adaptedData));
       }
     })
