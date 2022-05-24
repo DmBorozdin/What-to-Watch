@@ -15,6 +15,9 @@
     "@babel/core": "7.12.17",
     "@babel/preset-env": "7.12.17",
     "@babel/preset-react": "7.12.13",
+    "@testing-library/jest-dom": "5.11.10",
+    "@testing-library/react": "11.2.7",
+    "@testing-library/user-event": "12.8.3",
     "axios-mock-adapter": "1.19.0",
     "babel-loader": "8.2.3",
     "css-loader": "5.2.7",
@@ -22,6 +25,7 @@
     "eslint-config-htmlacademy": "2.1.0",
     "eslint-plugin-react": "7.22.0",
     "jest": "26.6.3",
+    "redux-mock-store": "1.5.4",
     "style-loader": "2.0.0",
     "webpack": "4.46.0",
     "webpack-cli": "3.3.12",
@@ -44,6 +48,9 @@
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/src/style-mock.js"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "./setup-tests.js"
+    ]
   }
 }
