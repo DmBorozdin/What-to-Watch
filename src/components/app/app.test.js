@@ -14,15 +14,21 @@ describe(`Test routing`, () => {
   jest.spyOn(redux, `useDispatch`);
 
   it(`Render 'Main' when user navigate to '/' url`, () => {
+    const store = mockStore({
+
+    });
+
     const history = createMemoryHistory();
 
     render(
-        <Provider store={mockStore({})}>
+        <Provider store={store}>
           <Router history={history}>
             <App />
           </Router>
         </Provider>
     );
+
+
   });
 });
 
