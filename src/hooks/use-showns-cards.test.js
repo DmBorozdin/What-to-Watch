@@ -31,4 +31,21 @@ describe(`useShownsCards tests`, () => {
     expect(firstTimeCount).toBe(16);
     expect(secondTimeCount).toBe(24);
   });
+
+  it(`useShownsCards should be correctly reset state`, () => {
+    const {result} = renderHook(() => useShownsCards(FILM_CARD_PER_STEP));
+    const [initialShownsCardsCount] = result.current;
+    let [, handleResetShownsCardsCount, handleSetShownsCardsCount] = result.current;
+
+    act(() => handleSetShownsCardsCount());
+    const [firstTimeCount] = result.current;
+
+    [, handleResetShownsCardsCount, handleSetShownsCardsCount] = result.current;
+    act(() => handleResetShownsCardsCount());
+    const [secondTimeCount] = result.current;
+
+    expect(initialShownsCardsCount).toBe(8);
+    expect(firstTimeCount).toBe(16);
+    expect(secondTimeCount).toBe(8);
+  });
 });
