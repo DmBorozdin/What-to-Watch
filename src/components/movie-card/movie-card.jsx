@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import VideoPlayer from "../video-player/video-player";
+import MiniVideoPlayer from "../mini-player/mini-player";
 import {CardVideoPlayerSize, APPRoute} from "../../const";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
@@ -15,7 +15,7 @@ const MovieCard = ({film, isPlaying, onMouseOver}) => {
       onMouseLeave = {handleMouseOver}
     >
       <div className="small-movie-card__image">
-        <VideoPlayer
+        <MiniVideoPlayer
           src={film.videoLink}
           isPlaying={isPlaying}
           poster={film.previewImage}
