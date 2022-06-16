@@ -1,7 +1,8 @@
 import React, {useRef, useEffect, useState} from "react";
-import {useParams, useHistory} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {getTimeInFormatHMS} from "../../utils/common";
+import browserHistory from "../../browser-history";
 
 const Player = () => {
   const {films} = useSelector((state) => state.DATA);
@@ -11,7 +12,6 @@ const Player = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filmCurrentTime, setfilmCurrentTime] = useState(0);
   const [filmDuration, setfilmDuration] = useState(0);
-  const history = useHistory();
 
   useEffect(() => {
     videoRef.current.oncanplaythrough = () => {
@@ -31,7 +31,7 @@ const Player = () => {
   }, []);
 
   const handleExitClick = () => {
-    history.goBack();
+    browserHistory.goBack();
   };
 
   const handlePlayClick = () => {
