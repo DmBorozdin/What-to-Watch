@@ -11,8 +11,6 @@ const mockStore = configureStore({});
 let history;
 
 describe(`Test MyList`, () => {
-  jest.spyOn(redux, `useDispatch`);
-  const dispatch = jest.fn();
   beforeAll(() => {
     window.HTMLMediaElement.prototype.play = () => {};
     window.HTMLMediaElement.prototype.pause = () => {};
@@ -82,6 +80,9 @@ describe(`Test MyList`, () => {
   });
 
   it(`MoviesList should render preloader when favorite films are not loaded`, () => {
+    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
+    const mockDispatch = jest.fn();
+    mockUseDispatch.mockReturnValue(mockDispatch);
     const store = mockStore({
       DATA: {
         favorite: [],
@@ -101,5 +102,6 @@ describe(`Test MyList`, () => {
     expect(screen.getByText(/Log out/i)).toBeInTheDocument();
     expect(screen.getByText(/Catalog/i)).toBeInTheDocument();
     expect(container.querySelector(`.catalog__movies-list`)).not.toBeInTheDocument();
+    expect(mockDispatch).toHaveBeenCalled();
   });
 });
