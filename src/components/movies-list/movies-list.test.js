@@ -6,7 +6,7 @@ import MoviesList from "./movies-list";
 
 let history;
 
-describe(`Test MovieCard`, () => {
+describe(`Test MovieList`, () => {
   beforeAll(() => {
     window.HTMLMediaElement.prototype.play = () => {};
     window.HTMLMediaElement.prototype.pause = () => {};
