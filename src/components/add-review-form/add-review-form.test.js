@@ -87,4 +87,20 @@ describe(`AddReviewForm test`, () => {
     fireEvent.change(screen.getByPlaceholderText(`Review text`), {target: {value: `I love this movie. Great Immersive camera-work. This film is an experience and i has already seen it 4 times.`}});
     expect(screen.getByText(`Post`)).toBeEnabled();
   });
+
+  it(`When form is submitted, "onSubmit" function must be called`, () => {
+    const handleSubmit = jest.fn();
+    render(
+        <AddReviewForm onSubmit={handleSubmit} pageId={1} reviewFormStatus={ReviewFormStatus.ENABLE}/>
+    );
+
+    userEvent.click(screen.getByLabelText(`Rating 5`));
+    fireEvent.change(screen.getByPlaceholderText(`Review text`), {target: {value: `I love this movie. Great Immersive camera-work. This film is an experience and i has already seen it 4 times.`}});
+    userEvent.click(screen.getByText(`Post`));
+    expect(handleSubmit).toHaveBeenCalledWith({
+      rating: `5`,
+      comment: `I love this movie. Great Immersive camera-work. This film is an experience and i has already seen it 4 times.`,
+      id: 1,
+    });
+  });
 });
