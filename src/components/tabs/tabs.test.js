@@ -54,6 +54,9 @@ describe(`Tabs test`, ()=> {
     expect(screen.getByText(`Overview`)).toBeInTheDocument();
     expect(screen.getByText(`Details`)).toBeInTheDocument();
     expect(screen.getByText(`Reviews`)).toBeInTheDocument();
+    expect(screen.getByText(`Overview`).parentElement).toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Details`).parentElement).not.toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Reviews`).parentElement).not.toHaveClass(`movie-nav__item--active`);
     expect(screen.getByText(`6.7`)).toBeInTheDocument();
     expect(screen.getByText(`264039 ratings`)).toBeInTheDocument();
     expect(screen.getByText(mockFilm.description)).toBeInTheDocument();
@@ -90,6 +93,9 @@ describe(`Tabs test`, ()=> {
     expect(container.querySelector(`.movie-rating`)).toBeInTheDocument();
     expect(container.querySelector(`.movie-card__text`)).toBeInTheDocument();
     userEvent.click(screen.getByText(`Details`));
+    expect(screen.getByText(`Overview`).parentElement).not.toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Details`).parentElement).toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Reviews`).parentElement).not.toHaveClass(`movie-nav__item--active`);
     expect(screen.getByText(`Director`)).toBeInTheDocument();
     expect(screen.getByText(`Дэвид Йейтс`)).toBeInTheDocument();
     expect(screen.getByText(`Starring`)).toBeInTheDocument();
@@ -152,6 +158,9 @@ describe(`Tabs test`, ()=> {
     expect(container.querySelector(`.movie-rating`)).toBeInTheDocument();
     expect(container.querySelector(`.movie-card__text`)).toBeInTheDocument();
     userEvent.click(screen.getByText(`Reviews`));
+    expect(screen.getByText(`Overview`).parentElement).not.toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Details`).parentElement).not.toHaveClass(`movie-nav__item--active`);
+    expect(screen.getByText(`Reviews`).parentElement).toHaveClass(`movie-nav__item--active`);
     expect(screen.getByText(`This movie is perfect in all its categories.`)).toBeInTheDocument();
     expect(screen.getByText(`1.6`)).toBeInTheDocument();
     expect(screen.getByText(`Corey`)).toBeInTheDocument();
