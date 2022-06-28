@@ -3,12 +3,17 @@ import {render, screen} from "@testing-library/react";
 import {Router} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import UserBlock from "./user-block";
+import userEvent from "@testing-library/user-event";
 import {AuthorizationStatus} from "../../const";
 
+let history;
 
 describe(`UserBlock should render correctly`, () => {
+  beforeEach(() => {
+    history = createMemoryHistory();
+  });
+
   it(`Should render link`, () => {
-    const history = createMemoryHistory();
     render(
         <Router history={history}>
           <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.NO_AUTH} onUserAvatarClick={jest.fn()}/>
@@ -20,14 +25,25 @@ describe(`UserBlock should render correctly`, () => {
   });
 
   it(`Should render img`, () => {
-    const history = createMemoryHistory();
     render(
         <Router history={history}>
           <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={jest.fn()}/>
         </Router>
     );
-    const imgElement = screen.getByAltText(`User avatar`);
 
-    expect(imgElement).toBeInTheDocument();
+    expect(screen.getByAltText(`User avatar`)).toBeInTheDocument();
+  });
+
+  it(`UserBlock should cal 'onUserAvatarClick' function when mouse click the avatar`, () => {
+    const handleUserAvatarClick = jest.fn();
+    const {container} = render(
+        <Router history={history}>
+          <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={handleUserAvatarClick}/>
+        </Router>
+    );
+
+    expect(screen.getByAltText(`User avatar`)).toBeInTheDocument();
+    userEvent.click(container.querySelector(`.user-block__avatar`));
+    expect(handleUserAvatarClick).toBeCalled();
   });
 });

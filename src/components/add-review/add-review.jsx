@@ -25,7 +25,7 @@ const AddReview = () => {
     dispatch(setReviewForm(ReviewFormStatus.DISABLE));
   };
 
-  const onUserAvatarClick = () => {
+  const handleUserAvatarClick = () => {
     dispatch(redirectToRoute(APPRoute.MYLIST));
   };
 
@@ -58,7 +58,7 @@ const AddReview = () => {
             </ul>
           </nav>
 
-          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={onUserAvatarClick}/>
+          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={handleUserAvatarClick}/>
         </header>
 
         <div className="movie-card__poster movie-card__poster--small">
