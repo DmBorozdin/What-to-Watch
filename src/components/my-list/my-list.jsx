@@ -3,11 +3,11 @@ import {useSelector, useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
-import {logout, fetchFavoriteFilms} from "../../store/api-actions.js";
+import {logout, fetchFavoriteFilms, fetchFilmList} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen";
 
 const MyList = () => {
-  const {favorite, isFavoriteFilmsLoaded} = useSelector((state) => state.DATA);
+  const {favorite, isFavoriteFilmsLoaded, isDataLoaded} = useSelector((state) => state.DATA);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,6 +15,12 @@ const MyList = () => {
       dispatch(fetchFavoriteFilms());
     }
   }, [isFavoriteFilmsLoaded]);
+
+  useEffect(() => {
+    if (!isDataLoaded) {
+      dispatch(fetchFilmList());
+    }
+  }, [isDataLoaded]);
 
   const onLogOut = () => {
     dispatch(logout());

@@ -67,3 +67,11 @@ export const ReviewFormError = {
   ERROR: `ERROR`,
   NO_ERROR: `NO_ERROR`,
 };
+
+export const AssessmentDescription = {
+  BAD: `Bad`,
+  NORMAL: `Normal`,
+  GOOD: `Good`,
+  VERY_GOOD: `Very good`,
+  AWESOME: `Awesome`
+};

@@ -1,4 +1,4 @@
-import {Time} from "../const";
+import {Time, AssessmentDescription} from "../const";
 import dayjs from "dayjs";
 
 export const getTimeInFormatHM = (time) => {
@@ -33,4 +33,19 @@ export const shuffleArray = (array) => {
   }
 
   return array;
+};
+
+export const getAssessmentDescription = (rating) => {
+  let description = AssessmentDescription.AWESOME;
+  if (rating < 3) {
+    description = AssessmentDescription.BAD;
+  } else if (rating < 5) {
+    description = AssessmentDescription.NORMAL;
+  } else if (rating < 8) {
+    description = AssessmentDescription.GOOD;
+  } else if (rating < 10) {
+    description = AssessmentDescription.VERY_GOOD;
+  }
+
+  return description;
 };

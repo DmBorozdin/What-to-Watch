@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
 import {MovieNavItem} from "../../const";
-import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD} from "../../utils/common";
+import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD, getAssessmentDescription} from "../../utils/common";
 
 const Tabs = ({film, reviews, isReviewLoaded}) => {
   const [currentNavItem, setCurrentNavItem] = useState(MovieNavItem.OVERVIEW);
   const reviewsFormat = [reviews.slice(0, Math.ceil(reviews.length / 2)), reviews.slice(Math.ceil(reviews.length / 2))];
+  const assessmentDescription = getAssessmentDescription(film.rating);
 
   const handleNavItemClick = (evt) => {
     evt.preventDefault();
@@ -31,7 +32,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
           <div className="movie-rating">
             <div className="movie-rating__score">{film.rating}</div>
             <p className="movie-rating__meta">
-              <span className="movie-rating__level">Very good</span>
+              <span className="movie-rating__level">{assessmentDescription}</span>
               <span className="movie-rating__count">{film.scoresCount} ratings</span>
             </p>
           </div>

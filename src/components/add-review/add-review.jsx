@@ -5,10 +5,11 @@ import AddReviewForm from "../add-review-form/add-review-form";
 import {APPRoute, AuthorizationStatus, ReviewFormStatus, ReviewFormError} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
 import {redirectToRoute, setReviewForm, setReviewFormError} from "../../store/action.js";
-import {sendComment} from "../../store/api-actions.js";
+import {sendComment, fetchFilm} from "../../store/api-actions.js";
+import LoadingScreen from "../loading-screen/loading-screen";
 
 const AddReview = () => {
-  const {films, authInfo} = useSelector((state) => state.DATA);
+  const {films, authInfo, isOneFilmLoaded} = useSelector((state) => state.DATA);
   const {reviewFormStatus, isReviewFormSubmError} = useSelector((state) => state.REVIEW);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
@@ -20,6 +21,12 @@ const AddReview = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!isOneFilmLoaded) {
+      dispatch(fetchFilm(pageId));
+    }
+  }, [isOneFilmLoaded]);
+
   const onSubmitReview = (commentPost) => {
     dispatch(sendComment(commentPost));
     dispatch(setReviewForm(ReviewFormStatus.DISABLE));
@@ -28,6 +35,10 @@ const AddReview = () => {
   const handleUserAvatarClick = () => {
     dispatch(redirectToRoute(APPRoute.MYLIST));
   };
+
+  if (!isOneFilmLoaded) {
+    return (<LoadingScreen/>);
+  }
 
   return <React.Fragment>
     <section className="movie-card movie-card--full">
