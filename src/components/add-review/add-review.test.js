@@ -9,7 +9,7 @@ import {createMemoryHistory} from "history";
 import {ReviewFormStatus, ReviewFormError} from "../../const";
 import {ActionType} from "../../store/action";
 import AddReview from "./add-review";
-import {sendComment} from "../../store/api-actions.js";
+import {sendComment, fetchFilm} from "../../store/api-actions.js";
 
 const mockStore = configureStore({});
 let history;
@@ -23,6 +23,7 @@ jest.mock(`../../store/api-actions`, () => ({
   __esModule: true,
   ...jest.requireActual(`../../store/api-actions`),
   sendComment: jest.fn(() => `sendComment`),
+  fetchFilm: jest.fn(() => `fetchFilm`)
 }));
 
 describe(`AddReview test`, () => {
@@ -55,7 +56,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE
@@ -105,7 +107,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE
@@ -159,7 +162,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE
@@ -212,7 +216,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE
@@ -264,7 +269,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE
@@ -320,7 +326,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE,
@@ -369,7 +376,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE,
@@ -418,7 +426,8 @@ describe(`AddReview test`, () => {
         }],
         authInfo: {
           avatarUrl: `hello.jpg`
-        }
+        },
+        isOneFilmLoaded: true
       },
       REVIEW: {
         reviewFormStatus: ReviewFormStatus.ENABLE,
@@ -427,5 +436,52 @@ describe(`AddReview test`, () => {
     };
     store.dispatch({type: `ANY_ACTION`});
     expect(screen.queryByText(`An error occurred while submitting the form. Please try later.`)).toBeInTheDocument();
+  });
+
+  it(`When film is not loaded film should be fetch from server and preloaser will appear`, () => {
+    const store = mockStore({
+      DATA: {
+        films: [{
+          id: 1,
+          name: `Fantastic Beasts: The Crimes of Grindelwald`,
+          posterImage: `img/fantastic-beasts-the-crimes-of-grindelwald.jpg`,
+          previewImage: `img/fantastic-beasts-the-crimes-of-grindelwald.jpg`,
+          backgroundImage: `img/bg-the-grand-budapest-hotel.jpg`,
+          backgroundColor: `#ffffff`,
+          videoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
+          previewVideoLink: `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Big_Buck_Bunny_Trailer_400p.ogv/Big_Buck_Bunny_Trailer_400p.ogv.360p.webm`,
+          description: `Могущественный тёмный волшебник Геллерт Грин-де-Вальд пойман в Штатах, но не собирается молча сидеть в темнице и устраивает грандиозный побег. Теперь ничто не помешает ему добиться своей цели — установить превосходство волшебников над всеми немагическими существами на планете. Чтобы сорвать планы Грин-де-Вальда, Альбус Дамблдор обращается к своему бывшему студенту Ньюту Саламандеру, который соглашается помочь, не подозревая, какая опасность ему грозит. В раскалывающемся на части волшебном мире любовь и верность проверяются на прочность, а конфликт разделяет даже настоящих друзей и членов семей.`,
+          rating: 6.7,
+          scoresCount: 264039,
+          director: `Дэвид Йейтс`,
+          starring: [`Эдди Редмэйн`, `Джонни Депп`, `Кэтрин Уотерстон`, `Элисон Судол`, `Дэн Фоглер`, `Джуд Лоу`, `Эзра Миллер`, `Зои Кравиц`],
+          runTime: 134,
+          genre: `adventure`,
+          released: 2018,
+          isFavorite: false,
+        }],
+        authInfo: {
+          avatarUrl: `hello.jpg`
+        },
+        isOneFilmLoaded: false
+      },
+      REVIEW: {
+        reviewFormStatus: ReviewFormStatus.ENABLE
+      }
+    });
+    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
+    const mockDispatch = jest.fn();
+    mockUseDispatch.mockReturnValue(mockDispatch);
+
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <AddReview />
+          </Router>
+        </Provider>
+    );
+
+    expect(fetchFilm).toHaveBeenCalledWith(1);
+    expect(screen.getByTestId(`preloader`)).toBeInTheDocument();
   });
 });

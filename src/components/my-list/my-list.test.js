@@ -15,6 +15,7 @@ jest.mock(`../../store/api-actions`, () => ({
   __esModule: true,
   ...jest.requireActual(`../../store/api-actions`),
   fetchFavoriteFilms: jest.fn(() => `fetchFavoriteFilms`),
+  fetchFilmList: jest.fn(() => `fetchFilmList`),
   logout: jest.fn(() => `logout`)
 }));
 
@@ -70,7 +71,8 @@ describe(`Test MyList`, () => {
           released: 2018,
           isFavorite: false,
         }],
-        isFavoriteFilmsLoaded: true
+        isFavoriteFilmsLoaded: true,
+        isDataLoaded: true
       }
     });
     const {container} = render(
@@ -249,5 +251,27 @@ describe(`Test MyList`, () => {
       userEvent.click(logo);
       expect(screen.getByText(/Main screen/i)).toBeInTheDocument();
     });
+  });
+
+  it(`When data is not loaded film list should be fetch from server`, () => {
+    const store = mockStore({
+      DATA: {
+        favorite: [],
+        isFavoriteFilmsLoaded: false
+      },
+    });
+    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
+    const mockDispatch = jest.fn();
+    mockUseDispatch.mockReturnValue(mockDispatch);
+
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <MyList />
+          </Router>
+        </Provider>
+    );
+
+    expect(mockDispatch).toHaveBeenCalledWith(`fetchFilmList`);
   });
 });
