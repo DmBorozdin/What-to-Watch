@@ -127,7 +127,7 @@ describe(`Test routing`, () => {
   it(`Render 'MyList' when user navigate to '/mylist' url`, () => {
     const store = mockStore({
       USER: {authorizationStatus: AuthorizationStatus.AUTH},
-      DATA: {favorite: [], isFavoriteFilmsLoaded: true}
+      DATA: {favorite: [], isFavoriteFilmsLoaded: true, isDataLoaded: true}
     });
 
     const history = createMemoryHistory();
