@@ -1,5 +1,6 @@
 import React, {useRef, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {redirectToRoute} from "../../store/action";
 import {CardVideoPlayerSize, APPRoute, FILM_START_DELAY} from "../../const";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
@@ -8,6 +9,7 @@ const MovieCard = ({film, isPlaying, onMouseOver}) => {
   const handleMouseOver = () => onMouseOver(film.id);
   const videoRef = useRef();
   let setStartDelay = null;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     videoRef.current.muted = true;
@@ -36,17 +38,22 @@ const MovieCard = ({film, isPlaying, onMouseOver}) => {
     };
   }, [isPlaying]);
 
+  const handleFilmCardClick = () => {
+    dispatch(redirectToRoute(`${APPRoute.FILMS}/${film.id}`));
+  };
+
   return (
     <article
       className="small-movie-card catalog__movies-card"
       onMouseEnter = {handleMouseOver}
       onMouseLeave = {handleMouseOver}
+      onClick = {handleFilmCardClick}
     >
       <div className="small-movie-card__image">
         <video src={film.videoLink} preload={`metadata`} poster={film.previewImage} ref={videoRef} width={CardVideoPlayerSize.WIDTH} height={CardVideoPlayerSize.HEIGHT}></video>;
       </div>
       <h3 className="small-movie-card__title">
-        <Link className="small-movie-card__link" to={`${APPRoute.FILMS}/${film.id}`}>{film.name}</Link>
+        <a className="small-movie-card__link" href="#" onClick={(evt) => evt.preventDefault()}>{film.name}</a>
       </h3>
     </article>
   );
