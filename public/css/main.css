@@ -364,6 +364,11 @@ main {
   background: #E8C3C4;
   border-radius: 8px; }
 
+.add-review__fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0; }
+
 .add-review__textarea {
   display: block;
   width: 100%;
@@ -1087,14 +1092,22 @@ main {
     -webkit-transform: scale(1.1);
             transform: scale(1.1); }
 
+.rating {
+  margin-bottom: 15px; }
+
 .rating__stars {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
-          justify-content: center;
-  margin-bottom: 15px; }
+          justify-content: center; }
+
+.rating__error-message {
+  color: red;
+  margin: 0;
+  text-align: center;
+  font-size: 15px; }
 
 .rating__input {
   display: none; }
@@ -1284,6 +1297,7 @@ main {
 
 .small-movie-card {
   border-radius: 6px;
+  cursor: pointer;
   overflow: hidden;
   position: relative;
   -webkit-transition: 0.2s -webkit-transform;
