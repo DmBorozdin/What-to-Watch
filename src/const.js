@@ -51,6 +51,7 @@ export const APPRoute = {
   ID: `/:id`,
   REVIEW: `/review`,
   PLAYER: `/player`,
+  NOTAVAILABLE: `/error`
 };
 
 export const ReviewValidation = {
@@ -74,4 +75,9 @@ export const AssessmentDescription = {
   GOOD: `Good`,
   VERY_GOOD: `Very good`,
   AWESOME: `Awesome`
+};
+
+export const HttpCode = {
+  UNAUTHORIZED: 401,
+  NOTFOUND: 404
 };

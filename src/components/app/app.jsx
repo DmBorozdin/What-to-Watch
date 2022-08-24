@@ -8,6 +8,7 @@ import AddReview from "../add-review/add-review";
 import Player from "../player/player";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import PrivateRoute from "../private-route/private-route";
+import ServerNotAvailable from "../server-not-available/server-not-available";
 import {APPRoute} from "../../const";
 
 const App = () => {
@@ -26,6 +27,9 @@ const App = () => {
       <PrivateRoute exact path={APPRoute.FILMS + APPRoute.ID + APPRoute.REVIEW} render={() => <AddReview/>}/>
       <Route exact path={APPRoute.PLAYER + APPRoute.ID}>
         <Player/>
+      </Route>
+      <Route exact path={APPRoute.NOTAVAILABLE}>
+        <ServerNotAvailable />
       </Route>
       <Route>
         <NotFoundScreen />

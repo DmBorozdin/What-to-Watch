@@ -2,7 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {APPRoute} from "../../const";
 
-const NotFoundScreen = () => {
+const ServerNotAvailable = () => {
   return <React.Fragment>
     <div className="user-page">
       <header className="page-header">
@@ -15,8 +15,9 @@ const NotFoundScreen = () => {
         </div>
       </header>
 
-      <div className="user-page__content" style={{textAlign: `center`}}>
-        <h1>404. Page not found</h1>
+      <div className="user-page__content">
+        <h1>Server not available</h1>
+        <p>Please try to load the page later</p>
         <Link to={APPRoute.MAIN}>Go to the home page</Link>
       </div>
 
@@ -29,4 +30,4 @@ const NotFoundScreen = () => {
   </React.Fragment>;
 };
 
-export default NotFoundScreen;
+export default ServerNotAvailable;

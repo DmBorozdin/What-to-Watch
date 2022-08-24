@@ -1,6 +1,6 @@
 import {loadFilms, loadFilm, loadPromoFilm, loadFavoriteFilms, addToFavoriteFilms, redirectToRoute, loadAuthInfo, requireAuthorization, loadReview, setReviewForm, setReviewFormError} from "./action";
 import {AuthorizationStatus} from "../const";
-import {APIRoute, APPRoute, ReviewFormStatus, ReviewFormError} from "../const";
+import {APIRoute, APPRoute, ReviewFormStatus, ReviewFormError, HttpCode} from "../const";
 import {adaptFilmDataToClient, adaptAuthDataToClient} from "../services/api";
 
 export const fetchFilmList = () => (dispatch, _getState, api) => (
@@ -15,19 +15,27 @@ export const fetchFilmList = () => (dispatch, _getState, api) => (
         dispatch(loadFavoriteFilms(adaptedData.filter((film) => film.isFavorite)));
       }
     })
+    .catch(() => dispatch(redirectToRoute(APPRoute.NOTAVAILABLE)))
 );
 
 export const fetchFilm = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.FILMS}/${id}`)
     .then(({data}) => adaptFilmDataToClient([data]))
     .then((adaptedData) => dispatch(loadFilm(adaptedData)))
-    .catch(() => dispatch(redirectToRoute(APPRoute.FILMS)))
+    .catch((err) => {
+      if (err.response && err.response.status === HttpCode.NOTFOUND) {
+        dispatch(redirectToRoute(APPRoute.FILMS));
+      } else {
+        dispatch(redirectToRoute(APPRoute.NOTAVAILABLE));
+      }
+    })
 );
 
 export const fetchPromoFilm = () => (dispatch, _getState, api) => (
   api.get(APIRoute.PROMO)
     .then(({data}) => adaptFilmDataToClient([data]))
     .then((adaptedData) => dispatch(loadPromoFilm(adaptedData[0])))
+    .catch(() => dispatch(redirectToRoute(APPRoute.NOTAVAILABLE)))
 );
 
 export const fetchFavoriteFilms = () => (dispatch, _getState, api) => (
@@ -64,7 +72,6 @@ export const checkAuth = () => (dispatch, _getState, api) => (
     .then(({data}) => adaptAuthDataToClient(data))
     .then((adaptedData) => dispatch(loadAuthInfo(adaptedData)))
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
-    .catch(() => {})
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) =>(
@@ -73,19 +80,16 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then((adaptedData) => dispatch(loadAuthInfo(adaptedData)))
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
     .then(() => dispatch(redirectToRoute(APPRoute.MAIN)))
-    .catch(() => {})
 );
 
 export const logout = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGOUT)
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)))
-    .catch(() => {})
 );
 
 export const fetchComment = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.COMMENTS}${id}`)
     .then(({data}) => dispatch(loadReview(data)))
-    .catch(() => {})
 );
 
 export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(

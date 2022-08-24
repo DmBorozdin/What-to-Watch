@@ -1403,7 +1403,12 @@ main {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  width: 100%; }
+  width: 100%;
+  text-align: center;}
+
+  .user-page__content a {
+    color: inherit;
+  }
 
 .user-page__title {
   position: absolute;
