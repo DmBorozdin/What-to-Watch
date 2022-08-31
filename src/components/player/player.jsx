@@ -1,25 +1,24 @@
 import React, {useRef, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {getTimeInFormatHMS} from "../../utils/common";
 import browserHistory from "../../browser-history";
+import {fetchFilm} from "../../store/api-actions";
 
 const Player = () => {
-  const {films} = useSelector((state) => state.DATA);
+  const {films, isOneFilmLoaded} = useSelector((state) => state.DATA);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
   const videoRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [filmCurrentTime, setfilmCurrentTime] = useState(0);
   const [filmDuration, setfilmDuration] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     videoRef.current.oncanplaythrough = () => {
       setIsLoading(false);
       setfilmDuration(videoRef.current.duration);
-    };
-    videoRef.current.onended = () => {
-      videoRef.current.src = film.videoLink;
     };
 
     return () => {
@@ -29,6 +28,16 @@ const Player = () => {
       videoRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (!isOneFilmLoaded) {
+      dispatch(fetchFilm(pageId));
+    } else {
+      videoRef.current.onended = () => {
+        videoRef.current.src = film.videoLink;
+      };
+    }
+  }, [isOneFilmLoaded]);
 
   const handleExitClick = () => {
     browserHistory.goBack();
@@ -79,7 +88,7 @@ const Player = () => {
   return (
     <div className="player">
       <video
-        src={film.videoLink}
+        src={film ? film.videoLink : ``}
         preload={`metadata`}
         ref={videoRef}
         className="player__video"

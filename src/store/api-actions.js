@@ -72,6 +72,7 @@ export const checkAuth = () => (dispatch, _getState, api) => (
     .then(({data}) => adaptAuthDataToClient(data))
     .then((adaptedData) => dispatch(loadAuthInfo(adaptedData)))
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .catch(() => {})
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) =>(
@@ -80,16 +81,19 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then((adaptedData) => dispatch(loadAuthInfo(adaptedData)))
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
     .then(() => dispatch(redirectToRoute(APPRoute.MAIN)))
+    .catch(() => {})
 );
 
 export const logout = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGOUT)
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)))
+    .catch(() => {})
 );
 
 export const fetchComment = (id) => (dispatch, _getState, api) => (
   api.get(`${APIRoute.COMMENTS}${id}`)
     .then(({data}) => dispatch(loadReview(data)))
+    .catch(() => {})
 );
 
 export const sendComment = ({rating, comment, id}) => (dispatch, _getState, api) =>(
