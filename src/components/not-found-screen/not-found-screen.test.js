@@ -12,7 +12,7 @@ it(`NotFoundScreen should render correctly`, () => {
       </Router>
   );
   const headerElement = getByText(`404. Page not found`);
-  const linkElement = getByText(`Вернуться на главную страницу`);
+  const linkElement = getByText(`Go to the home page`);
 
   expect(headerElement).toBeInTheDocument();
   expect(linkElement).toBeInTheDocument();

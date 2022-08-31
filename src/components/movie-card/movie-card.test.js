@@ -1,10 +1,15 @@
 import React from "react";
 import {render, screen} from "@testing-library/react";
-import {Router, Switch, Route} from "react-router-dom";
+import configureStore from "redux-mock-store";
+import {Router} from "react-router-dom";
+import * as redux from 'react-redux';
+import {Provider} from "react-redux";
 import {createMemoryHistory} from "history";
 import userEvent from "@testing-library/user-event";
 import MovieCard from "./movie-card";
+import {ActionType} from "../../store/action";
 
+const mockStore = configureStore({});
 let history;
 
 describe(`Test MovieCard`, () => {
@@ -18,6 +23,7 @@ describe(`Test MovieCard`, () => {
   });
 
   it(`MovieCard should be render correctly`, () => {
+    const store = mockStore({});
     const mockFilm = {
       id: 1,
       name: `Fantastic Beasts: The Crimes of Grindelwald`,
@@ -38,9 +44,11 @@ describe(`Test MovieCard`, () => {
       isFavorite: false,
     };
     const {container} = render(
-        <Router history={history}>
-          <MovieCard film={mockFilm} isPlaying={false} onMouseOver={jest.fn()} />
-        </Router>
+        <Provider store={store}>
+          <Router history={history}>
+            <MovieCard film={mockFilm} isPlaying={false} onMouseOver={jest.fn()} />
+          </Router>
+        </Provider>
     );
 
     expect(screen.getByRole(`article`)).toBeInTheDocument();
@@ -49,6 +57,7 @@ describe(`Test MovieCard`, () => {
   });
 
   it(`MovieCard should cal 'onMouseOver' function when mouse over the card`, () => {
+    const store = mockStore({});
     const mockFilm = {
       id: 1,
       name: `Fantastic Beasts: The Crimes of Grindelwald`,
@@ -70,9 +79,11 @@ describe(`Test MovieCard`, () => {
     };
     const handleMouseOver = jest.fn();
     render(
-        <Router history={history}>
-          <MovieCard film={mockFilm} isPlaying={false} onMouseOver={handleMouseOver} />
-        </Router>
+        <Provider store={store}>
+          <Router history={history}>
+            <MovieCard film={mockFilm} isPlaying={false} onMouseOver={handleMouseOver} />
+          </Router>
+        </Provider>
     );
 
     userEvent.hover(screen.getByRole(`article`));
@@ -85,6 +96,7 @@ describe(`Test MovieCard`, () => {
   });
 
   it(`When user click by film name should be redirect`, () => {
+    const store = mockStore({});
     const mockFilm = {
       id: 1,
       name: `Fantastic Beasts: The Crimes of Grindelwald`,
@@ -104,22 +116,23 @@ describe(`Test MovieCard`, () => {
       released: 2018,
       isFavorite: false,
     };
+    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
+    const mockDispatch = jest.fn();
+    mockUseDispatch.mockReturnValue(mockDispatch);
     const handleMouseOver = jest.fn();
     render(
-        <Router history={history}>
-          <Switch>
-            <Route exact path="/">
-              <MovieCard film={mockFilm} isPlaying={false} onMouseOver={handleMouseOver} />
-            </Route>
-            <Route exact path="/films/1">
-              <h1>Film screen</h1>
-            </Route>
-          </Switch>
-        </Router>
+        <Provider store={store}>
+          <Router history={history}>
+            <MovieCard film={mockFilm} isPlaying={false} onMouseOver={handleMouseOver} />
+          </Router>
+        </Provider>
     );
 
     expect(screen.getByText(/Fantastic Beasts: The Crimes of Grindelwald/i)).toBeInTheDocument();
     userEvent.click(screen.getByText(/Fantastic Beasts: The Crimes of Grindelwald/i));
-    expect(screen.getByText(`Film screen`)).toBeInTheDocument();
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: ActionType.REDIRECT_TO_ROUTE,
+      payload: `/films/1`
+    });
   });
 });

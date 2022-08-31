@@ -469,25 +469,24 @@ describe(`Film test`, () => {
         authorizationStatus: AuthorizationStatus.NO_AUTH
       }
     });
+    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
+    const mockDispatch = jest.fn();
+    mockUseDispatch.mockReturnValue(mockDispatch);
 
     render(
         <Provider store={store}>
           <Router history={history}>
-            <Switch>
-              <Route exact path="/films/2">
-                <Film />
-              </Route>
-              <Route exact path="/films/3">
-                <h1>New film page</h1>
-              </Route>
-            </Switch>
+            <Film />
           </Router>
         </Provider>
     );
 
     expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
     userEvent.click(screen.getByText(`Revenant`));
-    expect(screen.getByText(`New film page`)).toBeInTheDocument();
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: ActionType.REDIRECT_TO_ROUTE,
+      payload: `/films/3`
+    });
   });
 
   it(`When there are more than 4 movies in the list of similar movies, only 4 movie cards should be shown`, () => {

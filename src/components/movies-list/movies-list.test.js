@@ -1,9 +1,12 @@
 import React from "react";
 import {render} from "@testing-library/react";
+import configureStore from "redux-mock-store";
+import {Provider} from "react-redux";
 import {Router} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import MoviesList from "./movies-list";
 
+const mockStore = configureStore({});
 let history;
 
 describe(`Test MovieList`, () => {
@@ -17,6 +20,7 @@ describe(`Test MovieList`, () => {
   });
 
   it(`MoviesList should be render correctly`, () => {
+    const store = mockStore({});
     const mockFilms = [{
       id: 1,
       name: `Fantastic Beasts: The Crimes of Grindelwald`,
@@ -56,9 +60,11 @@ describe(`Test MovieList`, () => {
       isFavorite: false,
     }];
     const {container} = render(
-        <Router history={history}>
-          <MoviesList films={mockFilms} autoPlay={false} />
-        </Router>
+        <Provider store={store}>
+          <Router history={history}>
+            <MoviesList films={mockFilms} autoPlay={false} />
+          </Router>
+        </Provider>
     );
 
     expect(container.querySelector(`.catalog__movies-list`)).toBeInTheDocument();

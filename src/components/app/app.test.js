@@ -270,6 +270,7 @@ describe(`Test routing`, () => {
           released: 2018,
           isFavorite: false,
         }],
+        isOneFilmLoaded: true,
       }
     });
 
@@ -303,7 +304,7 @@ describe(`Test routing`, () => {
     );
 
     expect(screen.getByText(`404. Page not found`)).toBeInTheDocument();
-    expect(screen.getByText(`Вернуться на главную страницу`)).toBeInTheDocument();
+    expect(screen.getByText(`Go to the home page`)).toBeInTheDocument();
   });
 });
 

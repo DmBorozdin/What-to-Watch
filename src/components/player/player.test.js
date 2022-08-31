@@ -56,6 +56,7 @@ describe(`Test Player`, () => {
           released: 2018,
           isFavorite: false,
         }],
+        isOneFilmLoaded: true,
       }
     });
 
@@ -96,6 +97,7 @@ describe(`Test Player`, () => {
           released: 2018,
           isFavorite: false,
         }],
+        isOneFilmLoaded: true,
       }
     });
 
