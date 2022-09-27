@@ -19,6 +19,7 @@ const Player = () => {
     videoRef.current.oncanplaythrough = () => {
       setIsLoading(false);
       setfilmDuration(videoRef.current.duration);
+      videoRef.current.play();
     };
 
     return () => {
@@ -28,6 +29,13 @@ const Player = () => {
       videoRef.current = null;
     };
   }, []);
+
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     // videoRef.current.play();
+  //     handlePlayClick();
+  //   }
+  // }, [isLoading]);
 
   useEffect(() => {
     if (!isOneFilmLoaded) {
@@ -96,6 +104,8 @@ const Player = () => {
         onTimeUpdate={handleTimeUpdate}
         onDoubleClick={handleFullScreen}
         onClick={handlePlayClick}
+        // muted="muted"
+        muted={true}
       />
 
       <button type="button" className="player__exit" onClick={handleExitClick}>Exit</button>
@@ -116,7 +126,7 @@ const Player = () => {
             </svg>
             <span>Play</span>
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{isOneFilmLoaded ? film.name : `Transpotting`}</div>
 
           <button type="button" className="player__full-screen" onClick={handleFullScreen}>
             <svg viewBox="0 0 27 27" width="27" height="27">
