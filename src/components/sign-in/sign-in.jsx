@@ -34,6 +34,9 @@ const SignIn = () => {
 
       <div className="sign-in user-page__content">
         <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
+          <div className="sign-in__message">
+            <p>Please enter a valid email address</p>
+          </div>
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input
@@ -44,7 +47,7 @@ const SignIn = () => {
                 name="user-email"
                 id="user-email"
                 data-testid="login"
-                pattern= "^([^ ]+@[^ ]+\.[a-z]{2,6}|)$"
+                pattern="^([^ ]+@[^ ]+\.[a-z]{2,6}|)$"
                 required/>
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
             </div>
