@@ -17,9 +17,7 @@ const App = () => {
       <Route exact path={APPRoute.MAIN}>
         <Main/>
       </Route>
-      <Route exact path={APPRoute.LOGIN}>
-        <SignIn />
-      </Route>
+      <PrivateRoute exact path={APPRoute.LOGIN} render={() => <SignIn/>}/>
       <PrivateRoute exact path={APPRoute.MYLIST} render={() => <MyList/>}/>
       <Route exact path={APPRoute.FILMS + APPRoute.ID}>
         <Film/>

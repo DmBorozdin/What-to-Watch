@@ -35,6 +35,7 @@ export const AuthorizationStatus = {
 };
 
 export const APIRoute = {
+  MAIN: `/`,
   FILMS: `/films`,
   LOGIN: `/login`,
   LOGOUT: `/logout`,

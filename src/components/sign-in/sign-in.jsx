@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import {login} from "../../store/api-actions";
@@ -8,14 +8,42 @@ const SignIn = () => {
   const loginRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
+  const [validErrText, setValidErrText] = useState(``);
+
+  const createValidErrText = () => {
+    if (loginRef.current.validity.valueMissing && passwordRef.current.validity.valueMissing) {
+      setValidErrText(`Please enter email address and password`);
+    } else {
+      let loginErrText = ``;
+      let passwordErrText = ``;
+      // const loginErrText = loginRef.current.validity.patternMismatch ? `Please enter a valid email address. ` : ``;
+      // const passwordErrText = passwordRef.current.validity.patternMismatch ? `Please enter not empty password.` : ``;
+      if (loginRef.current.validity.valueMissing) {
+        loginErrText = `email address`;
+      } else if(loginRef.current.validity.patternMismatch) {
+        loginErrText = `a valid email address`;
+      }
+      if (passwordRef.current.validity.valueMissing) {
+        passwordErrText = `password`;
+      } else if(passwordRef.current.validity.patternMismatch) {
+        passwordErrText = `not empty password`;
+      }
+      setValidErrText(`Please enter ${loginErrText} ${loginErrText && passwordErrText ? ` and ` : ``} ${passwordErrText}`);
+    }
+  }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    dispatch(login({
-      login: loginRef.current.value,
-      password: passwordRef.current.value,
-    }));
+    if (loginRef.current.validity.valid && passwordRef.current.validity.valid) {
+      dispatch(login({
+        login: loginRef.current.value,
+        password: passwordRef.current.value,
+      }));
+    } else {
+      // setValidErrText(`Please enter a valid email address`);
+      createValidErrText();
+    }
   };
 
   return (
@@ -33,10 +61,10 @@ const SignIn = () => {
       </header>
 
       <div className="sign-in user-page__content">
-        <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
-          <div className="sign-in__message">
-            <p>Please enter a valid email address</p>
-          </div>
+        <form action="#" className="sign-in__form" onSubmit={handleSubmit} noValidate>
+          {validErrText && <div className="sign-in__message">
+            <p>{validErrText}</p>
+          </div>}
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input
@@ -48,11 +76,22 @@ const SignIn = () => {
                 id="user-email"
                 data-testid="login"
                 pattern="^([^ ]+@[^ ]+\.[a-z]{2,6}|)$"
-                required/>
+                required
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
             </div>
             <div className="sign-in__field">
-              <input ref={passwordRef} className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password" data-testid="password" required/>
+              <input
+                ref={passwordRef}
+                className="sign-in__input"
+                type="password"
+                placeholder="Password"
+                name="user-password"
+                id="user-password"
+                data-testid="password"
+                pattern="\S*"
+                required
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
             </div>
           </div>

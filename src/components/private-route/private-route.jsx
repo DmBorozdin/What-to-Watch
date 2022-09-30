@@ -2,11 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Route, Redirect} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {AuthorizationStatus, APIRoute} from "../../const";
+import {AuthorizationStatus, APIRoute, APPRoute} from "../../const";
 
 const PrivateRoute = ({render, path, exact}) => {
   const {authorizationStatus} = useSelector((state) => state.USER);
-  return (
+  return (path === APPRoute.LOGIN ?
+    <Route
+      path={path}
+      exact={exact}
+      render={(routeProps) => authorizationStatus !== AuthorizationStatus.AUTH ? render(routeProps) : <Redirect to={APIRoute.MAIN}/>}
+    /> :
     <Route
       path={path}
       exact={exact}
