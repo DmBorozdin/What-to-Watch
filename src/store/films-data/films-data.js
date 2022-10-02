@@ -1,5 +1,5 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {loadFilms, loadFilm, loadPromoFilm, loadFavoriteFilms, addToFavoriteFilms, loadAuthInfo, loadReview, resetReview} from "../action";
+import {loadFilms, loadFilm, loadPromoFilm, loadFavoriteFilms, resetFavoriteList, loadAuthInfo, loadReview, resetReview} from "../action";
 
 const initialState = {
   films: [],
@@ -37,8 +37,8 @@ const filmsData = createReducer(initialState, (builder) => {
     state.favorite = action.payload;
     state.isFavoriteFilmsLoaded = true;
   });
-  builder.addCase(addToFavoriteFilms, (state, action) => {
-    state.favorite = [...state.favorite, action.payload];
+  builder.addCase(resetFavoriteList, (state) => {
+    state.isFavoriteFilmsLoaded = initialState.isFavoriteFilmsLoaded;
   });
   builder.addCase(loadAuthInfo, (state, action) => {
     state.authInfo = action.payload;

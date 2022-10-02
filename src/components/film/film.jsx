@@ -1,20 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, Fragment} from "react";
 import {Link, useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
-import {redirectToRoute, resetReview} from "../../store/action.js";
+import {resetReview} from "../../store/action.js";
 import Tabs from "../tabs/tabs.jsx";
 import MoviesList from "../movies-list/movies-list.jsx";
 import {shuffleArray} from "../../utils/common.js";
 import {COUNT_SIMILAR_FILM_CARD, APPRoute, AuthorizationStatus} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
-import {fetchFilm, fetchComment, sendFavoriteStatus} from "../../store/api-actions.js";
+import {fetchFilmList, fetchComment, sendFavoriteStatus} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen.jsx";
+import browserHistory from "../../browser-history.js";
 
 const Film = () => {
-  const {films, reviews, authInfo, isOneFilmLoaded, isReviewLoaded} = useSelector((state) => state.DATA);
+  const {films, reviews, authInfo, isDataLoaded, isReviewLoaded} = useSelector((state) => state.DATA);
   const {authorizationStatus} = useSelector((state) => state.USER);
   const pageId = Number(useParams().id);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isDataLoaded) {
+      dispatch(fetchFilmList());
+    }
+  }, [isDataLoaded]);
 
   useEffect(() => {
     if (isReviewLoaded) {
@@ -23,37 +30,32 @@ const Film = () => {
   }, [pageId]);
 
   useEffect(() => {
-    if (!isOneFilmLoaded) {
-      dispatch(fetchFilm(pageId));
-    }
-  }, [isOneFilmLoaded]);
-
-  useEffect(() => {
     if (!isReviewLoaded) {
       dispatch(fetchComment(pageId));
     }
   }, [isReviewLoaded]);
 
   const film = films.find((item) => item.id === pageId);
+  if (isDataLoaded && film === undefined) {
+    browserHistory.push(APPRoute.FILMS);
+  }
   const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
 
-  const handlePlayClick = () => dispatch(redirectToRoute(`${APPRoute.PLAYER}/${film.id}`));
-
-  const handleAvatarClick = () => dispatch(redirectToRoute(APPRoute.MYLIST));
+  const handlePlayClick = () => browserHistory.push(`${APPRoute.PLAYER}/${film.id}`);
 
   const handleAddToFavoriteClick = () => {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       dispatch(sendFavoriteStatus(film.id, Number(!film.isFavorite)));
     } else {
-      dispatch(redirectToRoute(APPRoute.LOGIN));
+      browserHistory.push(APPRoute.LOGIN);
     }
   };
 
-  if (!isOneFilmLoaded) {
+  if (!isDataLoaded) {
     return (<LoadingScreen/>);
   }
 
-  return <React.Fragment>
+  return <Fragment>
     <section className="movie-card movie-card--full">
       <div className="movie-card__hero">
         <div className="movie-card__bg">
@@ -71,7 +73,7 @@ const Film = () => {
             </Link>
           </div>
 
-          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={handleAvatarClick}/>
+          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus}/>
         </header>
 
         <div className="movie-card__wrap">
@@ -89,7 +91,7 @@ const Film = () => {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list movie-card__button" type="button" onClick={handleAddToFavoriteClick}>
+              <button className={`btn btn--list movie-card__button ${film.isFavorite ? `btn--list__active` : ``}`} type="button" onClick={handleAddToFavoriteClick}>
                 <svg viewBox="0 0 19 20" width="19" height="20">
                   <use xlinkHref="#add"></use>
                 </svg>
@@ -135,7 +137,7 @@ const Film = () => {
         </div>
       </footer>
     </div>
-  </React.Fragment>;
+  </Fragment>;
 };
 
 export default Film;

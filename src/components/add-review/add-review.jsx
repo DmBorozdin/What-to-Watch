@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import AddReviewForm from "../add-review-form/add-review-form";
 import {APPRoute, AuthorizationStatus, ReviewFormStatus, ReviewFormError} from "../../const.js";
 import UserBlock from "../user-block/user-block.jsx";
-import {redirectToRoute, setReviewForm, setReviewFormError} from "../../store/action.js";
+import {setReviewForm, setReviewFormError} from "../../store/action.js";
 import {sendComment, fetchFilm} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen";
 
@@ -30,10 +30,6 @@ const AddReview = () => {
   const onSubmitReview = (commentPost) => {
     dispatch(sendComment(commentPost));
     dispatch(setReviewForm(ReviewFormStatus.DISABLE));
-  };
-
-  const handleUserAvatarClick = () => {
-    dispatch(redirectToRoute(APPRoute.MYLIST));
   };
 
   if (!isOneFilmLoaded) {
@@ -69,7 +65,7 @@ const AddReview = () => {
             </ul>
           </nav>
 
-          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={handleUserAvatarClick}/>
+          <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={AuthorizationStatus.AUTH}/>
         </header>
 
         <div className="movie-card__poster movie-card__poster--small">

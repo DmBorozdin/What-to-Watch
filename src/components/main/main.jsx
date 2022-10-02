@@ -1,10 +1,10 @@
-import React, {useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {changeGenre, resetFilmsList, redirectToRoute} from "../../store/action";
+import {changeGenre, resetFilmsList} from "../../store/action";
 import MoviesList from "../movies-list/movies-list";
 import GenreList from "../genre-list/genre-list";
 import ShowMore from "../show-more/show-more";
-import {FILM_CARD_PER_STEP, APPRoute} from "../../const";
+import {FILM_CARD_PER_STEP, Genre} from "../../const";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {fetchFilmList, fetchPromoFilm} from "../../store/api-actions";
 import TitleMovieCard from "../title-movie-card/title-movie-card";
@@ -35,7 +35,9 @@ const Main = () => {
   }, [isPromoFilmLoaded]);
 
   useEffect(() => {
-    dispatch(resetFilmsList());
+    if (selectedGenre !== Genre.ALL_GENRE) {
+      dispatch(resetFilmsList());
+    }
   }, []);
 
   useEffect(() => {
@@ -50,12 +52,8 @@ const Main = () => {
     dispatch(changeGenre(genre));
   };
 
-  const onUserAvatarClick = () => {
-    dispatch(redirectToRoute(APPRoute.MYLIST));
-  };
-
-  return <React.Fragment>
-    <TitleMovieCard promoFilm={promoFilm} avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
+  return <Fragment>
+    <TitleMovieCard promoFilm={promoFilm} avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus}/>
 
     <div className="page-content">
       <section className="catalog">
@@ -82,7 +80,7 @@ const Main = () => {
         </div>
       </footer>
     </div>
-  </React.Fragment>;
+  </Fragment>;
 };
 
 export default Main;

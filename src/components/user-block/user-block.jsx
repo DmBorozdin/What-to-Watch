@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import {AuthorizationStatus, APPRoute} from "../../const";
+import browserHistory from "../../browser-history";
 
-const UserBlock = ({avatarUrl, authorizationStatus, onUserAvatarClick}) => {
+const UserBlock = ({avatarUrl, authorizationStatus}) => {
 
-  const handleAvatarClick = () => onUserAvatarClick();
+  const handleAvatarClick = () => browserHistory.push(APPRoute.MYLIST);
 
   if (authorizationStatus === AuthorizationStatus.AUTH) {
     return (
@@ -27,7 +28,6 @@ const UserBlock = ({avatarUrl, authorizationStatus, onUserAvatarClick}) => {
 UserBlock.propTypes = {
   avatarUrl: PropTypes.string.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
-  onUserAvatarClick: PropTypes.func.isRequired,
 };
 
 export default UserBlock;

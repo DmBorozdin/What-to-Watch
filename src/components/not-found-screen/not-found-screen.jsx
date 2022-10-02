@@ -1,9 +1,9 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {Link} from "react-router-dom";
 import {APPRoute} from "../../const";
 
 const NotFoundScreen = () => {
-  return <React.Fragment>
+  return <Fragment>
     <div className="user-page">
       <header className="page-header">
         <div className="logo">
@@ -26,7 +26,7 @@ const NotFoundScreen = () => {
         </div>
       </footer>
     </div>
-  </React.Fragment>;
+  </Fragment>;
 };
 
 export default NotFoundScreen;

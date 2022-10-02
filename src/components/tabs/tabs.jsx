@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, Fragment} from "react";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
@@ -15,7 +15,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
     setCurrentNavItem(evt.target.dataset.navItem);
   };
 
-  return <React.Fragment>
+  return <Fragment>
     <div className="movie-card__desc">
       <nav className="movie-nav movie-card__nav">
         <ul className="movie-nav__list">
@@ -28,7 +28,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
       </nav>
 
       {currentNavItem === MovieNavItem.OVERVIEW &&
-        <React.Fragment>
+        <Fragment>
           <div className="movie-rating">
             <div className="movie-rating__score">{film.rating}</div>
             <p className="movie-rating__meta">
@@ -44,7 +44,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
 
             <p className="movie-card__starring"><strong>Starring: {film.starring.join(`, `)}</strong></p>
           </div>
-        </React.Fragment>
+        </Fragment>
       }
 
       {currentNavItem === MovieNavItem.DETAILS &&
@@ -80,7 +80,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
       }
 
       {currentNavItem === MovieNavItem.REVIEWS &&
-        <React.Fragment>
+        <Fragment>
           {isReviewLoaded &&
             <div className="movie-card__reviews movie-card__row">
               {reviewsFormat.map((columnsReview, index) => (
@@ -103,10 +103,10 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
               ))}
             </div>
           }
-        </React.Fragment>
+        </Fragment>
       }
     </div>
-  </React.Fragment>;
+  </Fragment>;
 };
 
 Tabs.propTypes = {

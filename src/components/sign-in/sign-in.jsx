@@ -16,21 +16,19 @@ const SignIn = () => {
     } else {
       let loginErrText = ``;
       let passwordErrText = ``;
-      // const loginErrText = loginRef.current.validity.patternMismatch ? `Please enter a valid email address. ` : ``;
-      // const passwordErrText = passwordRef.current.validity.patternMismatch ? `Please enter not empty password.` : ``;
       if (loginRef.current.validity.valueMissing) {
         loginErrText = `email address`;
-      } else if(loginRef.current.validity.patternMismatch) {
-        loginErrText = `a valid email address`;
+      } else if (loginRef.current.validity.patternMismatch) {
+        loginErrText = `a valid email address (e.g. keks@mail.ru)`;
       }
       if (passwordRef.current.validity.valueMissing) {
         passwordErrText = `password`;
-      } else if(passwordRef.current.validity.patternMismatch) {
+      } else if (passwordRef.current.validity.patternMismatch) {
         passwordErrText = `not empty password`;
       }
       setValidErrText(`Please enter ${loginErrText} ${loginErrText && passwordErrText ? ` and ` : ``} ${passwordErrText}`);
     }
-  }
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -41,7 +39,6 @@ const SignIn = () => {
         password: passwordRef.current.value,
       }));
     } else {
-      // setValidErrText(`Please enter a valid email address`);
       createValidErrText();
     }
   };

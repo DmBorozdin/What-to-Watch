@@ -1,22 +1,22 @@
 import React from "react";
 import {useDispatch} from "react-redux";
-import {redirectToRoute} from "../../store/action";
 import PropTypes from "prop-types";
 import UserBlock from "../user-block/user-block";
 import filmProp from "../../common-props/film";
 import {APPRoute, AuthorizationStatus} from "../../const";
 import {sendFavoriteStatus} from "../../store/api-actions";
+import browserHistory from "../../browser-history";
 
-const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatarClick}) => {
+const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus}) => {
   const dispatch = useDispatch();
 
-  const handlePlayClick = () => dispatch(redirectToRoute(`${APPRoute.PLAYER}/${promoFilm.id}`));
+  const handlePlayClick = () => browserHistory.push(`${APPRoute.PLAYER}/${promoFilm.id}`);
 
   const handleAddToFavoriteClick = () => {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       dispatch(sendFavoriteStatus(promoFilm.id, Number(!promoFilm.isFavorite)));
     } else {
-      dispatch(redirectToRoute(APPRoute.LOGIN));
+      browserHistory.push(APPRoute.LOGIN);
     }
   };
 
@@ -37,7 +37,7 @@ const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatar
           </a>
         </div>
 
-        <UserBlock avatarUrl={avatarUrl} authorizationStatus={authorizationStatus} onUserAvatarClick={onUserAvatarClick}/>
+        <UserBlock avatarUrl={avatarUrl} authorizationStatus={authorizationStatus}/>
       </header>
 
       <div className="movie-card__wrap">
@@ -60,7 +60,11 @@ const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus, onUserAvatar
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list movie-card__button" type="button" onClick={handleAddToFavoriteClick}>
+              <button
+                className={`btn btn--list movie-card__button ${promoFilm.isFavorite ? `btn--list__active` : ``}`}
+                type="button"
+                onClick={handleAddToFavoriteClick}
+              >
                 <svg viewBox="0 0 19 20" width="19" height="20">
                   <use xlinkHref="#add"></use>
                 </svg>
@@ -78,11 +82,6 @@ TitleMovieCard.propTypes = {
   promoFilm: filmProp,
   avatarUrl: PropTypes.string.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
-  onUserAvatarClick: PropTypes.func.isRequired,
 };
 
-export default React.memo(TitleMovieCard, (prevProps, nextProps) => {
-  return prevProps.authorizationStatus === nextProps.authorizationStatus &&
-    prevProps.avatarUrl === nextProps.avatarUrl &&
-    prevProps.titleMovie === prevProps.titleMovie;
-});
+export default React.memo(TitleMovieCard);

@@ -490,6 +490,15 @@ main {
     vertical-align: top;
     margin-right: 9px; }
 
+.btn--list__active {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #EEE5B5;
+}
+
+.btn--list__active:hover {
+  background: rgba(0, 0, 0, 0.26);;
+}
+
 .catalog {
   margin-bottom: 115px;
   max-width: 1300px;
