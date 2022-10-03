@@ -16,10 +16,16 @@ const Film = () => {
   const {authorizationStatus} = useSelector((state) => state.USER);
   const pageId = Number(useParams().id);
   const dispatch = useDispatch();
+  const film = films.find((item) => item.id === pageId);
+  let similarFilms = [];
 
   useEffect(() => {
     if (!isDataLoaded) {
       dispatch(fetchFilmList());
+    } else {
+      if (film === undefined) {
+        browserHistory.push(APPRoute.FILMS);
+      }
     }
   }, [isDataLoaded]);
 
@@ -35,11 +41,9 @@ const Film = () => {
     }
   }, [isReviewLoaded]);
 
-  const film = films.find((item) => item.id === pageId);
-  if (isDataLoaded && film === undefined) {
-    browserHistory.push(APPRoute.FILMS);
+  if (isDataLoaded && film !== undefined) {
+    similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
   }
-  const similarFilms = shuffleArray(films.filter((similarFilm) => similarFilm.id !== film.id && similarFilm.genre === film.genre)).slice(0, COUNT_SIMILAR_FILM_CARD);
 
   const handlePlayClick = () => browserHistory.push(`${APPRoute.PLAYER}/${film.id}`);
 
@@ -51,7 +55,7 @@ const Film = () => {
     }
   };
 
-  if (!isDataLoaded) {
+  if (!isDataLoaded || film === undefined) {
     return (<LoadingScreen/>);
   }
 
