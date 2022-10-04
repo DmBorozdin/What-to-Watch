@@ -43,7 +43,12 @@ const TitleMovieCard = ({promoFilm, avatarUrl, authorizationStatus}) => {
       <div className="movie-card__wrap">
         <div className="movie-card__info">
           <div className="movie-card__poster">
-            <img src={promoFilm.posterImage} alt={`${promoFilm.name} poster`} width="218" height="327" />
+            <img
+              src={promoFilm.posterImage}
+              alt={`${promoFilm.name} poster`}
+              width="218"
+              height="327"
+            />
           </div>
 
           <div className="movie-card__desc">

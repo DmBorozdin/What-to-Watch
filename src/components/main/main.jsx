@@ -54,12 +54,21 @@ const Main = () => {
   };
 
   return <Fragment>
-    <TitleMovieCard promoFilm={promoFilm} avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus}/>
+    <TitleMovieCard
+      promoFilm={promoFilm}
+      avatarUrl={authInfo.avatarUrl}
+      authorizationStatus={authorizationStatus}
+    />
 
     <div className="page-content">
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
-        {genreList.length > 1 && <GenreList genreList={genreList} activeGenre={selectedGenre} onGenreClick={onUserGenreClick}/>}
+        {genreList.length > 1 &&
+          <GenreList
+            genreList={genreList}
+            activeGenre={selectedGenre}
+            onGenreClick={onUserGenreClick}
+          />}
         <MoviesList films={filteredFilms.slice(0, shownsCardsCount)} autoPlay={true}/>
         {filteredFilms.length > shownsCardsCount && <ShowMore onShowMore={handleSetShownsCardsCount}/>}
       </section>

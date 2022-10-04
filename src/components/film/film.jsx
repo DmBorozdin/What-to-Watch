@@ -12,6 +12,8 @@ import LoadingScreen from "../loading-screen/loading-screen.jsx";
 import browserHistory from "../../browser-history.js";
 import {getFilmData} from "../../store/films-data/selectors.js";
 import {getUserData} from "../../store/user/selectors.js";
+import Logo from "../logo/logo.jsx";
+import PageFooter from "../page-footer/page-footer.jsx";
 
 const Film = () => {
   const {films, reviews, authInfo, isDataLoaded, isReviewLoaded} = useSelector(getFilmData);
@@ -71,13 +73,7 @@ const Film = () => {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header movie-card__head">
-          <div className="logo">
-            <Link to={APPRoute.MAIN} className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </Link>
-          </div>
+          <Logo/>
 
           <UserBlock avatarUrl={authInfo.avatarUrl} authorizationStatus={authorizationStatus}/>
         </header>
@@ -97,7 +93,11 @@ const Film = () => {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className={`btn btn--list movie-card__button ${film.isFavorite ? `btn--list__active` : ``}`} type="button" onClick={handleAddToFavoriteClick}>
+              <button
+                className={`btn btn--list movie-card__button ${film.isFavorite ? `btn--list__active` : ``}`}
+                type="button"
+                onClick={handleAddToFavoriteClick}
+              >
                 <svg viewBox="0 0 19 20" width="19" height="20">
                   <use xlinkHref="#add"></use>
                 </svg>
@@ -130,19 +130,7 @@ const Film = () => {
         </section>
       }
 
-      <footer className="page-footer">
-        <div className="logo">
-          <Link to={APPRoute.MAIN} className="logo__link logo__link--light">
-            <span className="logo__letter logo__letter--1">W</span>
-            <span className="logo__letter logo__letter--2">T</span>
-            <span className="logo__letter logo__letter--3">W</span>
-          </Link>
-        </div>
-
-        <div className="copyright">
-          <p>© 2022 What to watch Ltd.</p>
-        </div>
-      </footer>
+      <PageFooter render={() => <Logo isFooter={true}/>}/>
     </div>
   </Fragment>;
 };

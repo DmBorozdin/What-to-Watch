@@ -75,36 +75,49 @@ const AddReviewForm = ({onSubmit, pageId, reviewFormStatus}) => {
     });
   };
 
-  return <form ref={formRef} action="#" className="add-review__form" onChange={handleAddReview} onSubmit={handleSubmit}>
-    <fieldset className="add-review__fieldset" disabled={reviewFormStatus === ReviewFormStatus.DISABLE}>
-      <div className="rating">
-        <div className="rating__stars">
-          {ratingStars.map((starNumber) =>
-            <Fragment key={`star ${starNumber}`}>
-              <input className="rating__input" id={`star-${starNumber}`} type="radio" name="rating" value={starNumber} required/>
-              <label className="rating__label" htmlFor={`star-${starNumber}`}>{`star-${starNumber}`}</label>
-            </Fragment>
-          )}
+  return (
+    <form
+      ref={formRef}
+      action="#"
+      className="add-review__form"
+      onChange={handleAddReview}
+      onSubmit={handleSubmit}
+    >
+      <fieldset className="add-review__fieldset" disabled={reviewFormStatus === ReviewFormStatus.DISABLE}>
+        <div className="rating">
+          <div className="rating__stars">
+            {ratingStars.map((starNumber) =>
+              <Fragment key={`star ${starNumber}`}>
+                <input
+                  className="rating__input"
+                  id={`star-${starNumber}`}
+                  type="radio" name="rating"
+                  value={starNumber} required
+                />
+                <label className="rating__label" htmlFor={`star-${starNumber}`}>{`star-${starNumber}`}</label>
+              </Fragment>
+            )}
+          </div>
+          {!review.isRatingValid && <p className="rating__error-message">Выберите оценку фильму от 1 до 10</p>}
         </div>
-        {!review.isRatingValid && <p className="rating__error-message">Выберите оценку фильму от 1 до 10</p>}
-      </div>
 
-      <div className="add-review__text">
-        <textarea
-          className="add-review__textarea"
-          name="rating-text"
-          id="rating-text"
-          placeholder="Review text"
-          minLength={50}
-          maxLength={400}
-          required
-        ></textarea>
-        <div className="add-review__submit">
-          <button className="add-review__btn" type="submit" disabled={!review.isFormValid}>Post</button>
+        <div className="add-review__text">
+          <textarea
+            className="add-review__textarea"
+            name="rating-text"
+            id="rating-text"
+            placeholder="Review text"
+            minLength={50}
+            maxLength={400}
+            required
+          ></textarea>
+          <div className="add-review__submit">
+            <button className="add-review__btn" type="submit" disabled={!review.isFormValid}>Post</button>
+          </div>
         </div>
-      </div>
-    </fieldset>
-  </form>;
+      </fieldset>
+    </form>
+  );
 };
 
 AddReviewForm.propTypes = {
