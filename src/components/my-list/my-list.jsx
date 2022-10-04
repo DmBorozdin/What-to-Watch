@@ -5,9 +5,10 @@ import MoviesList from "../movies-list/movies-list";
 import {APPRoute} from "../../const.js";
 import {logout, fetchFavoriteFilms} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen";
+import {getFilmData} from "../../store/films-data/selectors";
 
 const MyList = () => {
-  const {favorite, isFavoriteFilmsLoaded} = useSelector((state) => state.DATA);
+  const {favorite, isFavoriteFilmsLoaded} = useSelector(getFilmData);
   const dispatch = useDispatch();
 
   useEffect(() => {

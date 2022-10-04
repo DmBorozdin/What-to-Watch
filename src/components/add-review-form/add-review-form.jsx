@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, Fragment} from "react";
 import PropTypes from "prop-types";
-import {ReviewFormType, ReviewValidation, ReviewFormStatus} from "../../const";
+import {ReviewFormType, ReviewValidation, ReviewFormStatus, ratingStars} from "../../const";
 
 const AddReviewForm = ({onSubmit, pageId, reviewFormStatus}) => {
   const [review, setReview] = useState({
@@ -12,7 +12,10 @@ const AddReviewForm = ({onSubmit, pageId, reviewFormStatus}) => {
   const formRef = useRef();
 
   useEffect(() => {
-    if (review.rating > 0 && review.comment.length >= ReviewValidation.MIN_TEXT_LENGTH && review.comment.length <= ReviewValidation.MAX_TEXT_LENGTH) {
+    if (review.rating > 0 &&
+        review.comment.length >= ReviewValidation.MIN_TEXT_LENGTH &&
+        review.comment.length <= ReviewValidation.MAX_TEXT_LENGTH
+    ) {
       setReview({
         ...review,
         isFormValid: true,
@@ -76,41 +79,26 @@ const AddReviewForm = ({onSubmit, pageId, reviewFormStatus}) => {
     <fieldset className="add-review__fieldset" disabled={reviewFormStatus === ReviewFormStatus.DISABLE}>
       <div className="rating">
         <div className="rating__stars">
-          <input className="rating__input" id="star-1" type="radio" name="rating" value="1" required/>
-          <label className="rating__label" htmlFor="star-1">Rating 1</label>
-
-          <input className="rating__input" id="star-2" type="radio" name="rating" value="2" required/>
-          <label className="rating__label" htmlFor="star-2">Rating 2</label>
-
-          <input className="rating__input" id="star-3" type="radio" name="rating" value="3" required/>
-          <label className="rating__label" htmlFor="star-3">Rating 3</label>
-
-          <input className="rating__input" id="star-4" type="radio" name="rating" value="4" required/>
-          <label className="rating__label" htmlFor="star-4">Rating 4</label>
-
-          <input className="rating__input" id="star-5" type="radio" name="rating" value="5" required/>
-          <label className="rating__label" htmlFor="star-5">Rating 5</label>
-
-          <input className="rating__input" id="star-6" type="radio" name="rating" value="6" required/>
-          <label className="rating__label" htmlFor="star-6">Rating 6</label>
-
-          <input className="rating__input" id="star-7" type="radio" name="rating" value="7" required/>
-          <label className="rating__label" htmlFor="star-7">Rating 7</label>
-
-          <input className="rating__input" id="star-8" type="radio" name="rating" value="8" required/>
-          <label className="rating__label" htmlFor="star-8">Rating 8</label>
-
-          <input className="rating__input" id="star-9" type="radio" name="rating" value="9" required/>
-          <label className="rating__label" htmlFor="star-9">Rating 9</label>
-
-          <input className="rating__input" id="star-10" type="radio" name="rating" value="10" required/>
-          <label className="rating__label" htmlFor="star-10">Rating 10</label>
+          {ratingStars.map((starNumber) =>
+            <Fragment key={`star ${starNumber}`}>
+              <input className="rating__input" id={`star-${starNumber}`} type="radio" name="rating" value={starNumber} required/>
+              <label className="rating__label" htmlFor={`star-${starNumber}`}>{`star-${starNumber}`}</label>
+            </Fragment>
+          )}
         </div>
         {!review.isRatingValid && <p className="rating__error-message">Выберите оценку фильму от 1 до 10</p>}
       </div>
 
       <div className="add-review__text">
-        <textarea className="add-review__textarea" name="rating-text" id="rating-text" placeholder="Review text" minLength={50} maxLength={400} required></textarea>
+        <textarea
+          className="add-review__textarea"
+          name="rating-text"
+          id="rating-text"
+          placeholder="Review text"
+          minLength={50}
+          maxLength={400}
+          required
+        ></textarea>
         <div className="add-review__submit">
           <button className="add-review__btn" type="submit" disabled={!review.isFormValid}>Post</button>
         </div>

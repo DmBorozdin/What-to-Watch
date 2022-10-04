@@ -59,9 +59,11 @@ const SignIn = () => {
 
       <div className="sign-in user-page__content">
         <form action="#" className="sign-in__form" onSubmit={handleSubmit} noValidate>
-          {validErrText && <div className="sign-in__message">
-            <p>{validErrText}</p>
-          </div>}
+          {validErrText &&
+            <div className="sign-in__message">
+              <p>{validErrText}</p>
+            </div>
+          }
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input

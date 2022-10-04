@@ -6,10 +6,14 @@ const GenreList = ({genreList, activeGenre, onGenreClick}) => {
   return <ul className="catalog__genres-list">
     {genreList.map((genre) =>
       <li className={`catalog__genres-item ${genre === activeGenre ? `catalog__genres-item--active` : ``}`} key={genre}>
-        <a href="#" className="catalog__genres-link" onClick={(evt) => {
-          evt.preventDefault();
-          onGenreClick(genre);
-        }}>
+        <a
+          href="#"
+          className="catalog__genres-link"
+          onClick={(evt) => {
+            evt.preventDefault();
+            onGenreClick(genre);
+          }}
+        >
           {genre.charAt(0).toUpperCase() + genre.slice(1)}
         </a>
       </li>

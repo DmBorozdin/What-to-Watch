@@ -82,3 +82,5 @@ export const HttpCode = {
   UNAUTHORIZED: 401,
   NOTFOUND: 404
 };
+
+export const ratingStars = [`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`];

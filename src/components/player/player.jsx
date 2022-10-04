@@ -4,9 +4,10 @@ import {useSelector, useDispatch} from "react-redux";
 import {getTimeInFormatHMS} from "../../utils/common";
 import browserHistory from "../../browser-history";
 import {fetchFilm} from "../../store/api-actions";
+import {getFilmData} from "../../store/films-data/selectors";
 
 const Player = () => {
-  const {films, isOneFilmLoaded} = useSelector((state) => state.DATA);
+  const {films, isOneFilmLoaded} = useSelector(getFilmData);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
   const videoRef = useRef();

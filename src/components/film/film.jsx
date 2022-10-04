@@ -10,10 +10,12 @@ import UserBlock from "../user-block/user-block.jsx";
 import {fetchFilmList, fetchComment, sendFavoriteStatus} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen.jsx";
 import browserHistory from "../../browser-history.js";
+import {getFilmData} from "../../store/films-data/selectors.js";
+import {getUserData} from "../../store/user/selectors.js";
 
 const Film = () => {
-  const {films, reviews, authInfo, isDataLoaded, isReviewLoaded} = useSelector((state) => state.DATA);
-  const {authorizationStatus} = useSelector((state) => state.USER);
+  const {films, reviews, authInfo, isDataLoaded, isReviewLoaded} = useSelector(getFilmData);
+  const {authorizationStatus} = useSelector(getUserData);
   const pageId = Number(useParams().id);
   const dispatch = useDispatch();
   const film = films.find((item) => item.id === pageId);
@@ -101,7 +103,9 @@ const Film = () => {
                 </svg>
                 <span>My list</span>
               </button>
-              {authorizationStatus === AuthorizationStatus.AUTH && <Link to={`${APPRoute.FILMS}/${film.id}${APPRoute.REVIEW}`} className="btn movie-card__button">Add review</Link>}
+              {authorizationStatus === AuthorizationStatus.AUTH &&
+                <Link to={`${APPRoute.FILMS}/${film.id}${APPRoute.REVIEW}`} className="btn movie-card__button">Add review</Link>
+              }
             </div>
           </div>
         </div>
@@ -122,7 +126,6 @@ const Film = () => {
       {similarFilms.length !== 0 &&
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-
           <MoviesList films={similarFilms} autoPlay={false}/>
         </section>
       }

@@ -39,9 +39,7 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
 
           <div className="movie-card__text">
             <p style={{whiteSpace: `pre-line`}}>{film.description}</p>
-
             <p className="movie-card__director"><strong>Director: {film.director}</strong></p>
-
             <p className="movie-card__starring"><strong>Starring: {film.starring.join(`, `)}</strong></p>
           </div>
         </Fragment>

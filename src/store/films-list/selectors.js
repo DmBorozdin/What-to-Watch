@@ -5,3 +5,5 @@ export const chooseGenre = createSelector(
     (state) => state.DATA.films,
     (films) => Array.from(new Set([Genre.ALL_GENRE, ...films.map((film) => film.genre)])).slice(0, MAX_GENRE_LIST_COUNT),
 );
+
+export const getFilmList = (state) => state.LIST;

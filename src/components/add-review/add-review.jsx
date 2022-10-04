@@ -7,10 +7,12 @@ import UserBlock from "../user-block/user-block.jsx";
 import {setReviewForm, setReviewFormError} from "../../store/action.js";
 import {sendComment, fetchFilm} from "../../store/api-actions.js";
 import LoadingScreen from "../loading-screen/loading-screen";
+import {getFilmData} from "../../store/films-data/selectors";
+import {getReviewData} from "../../store/review/selectors";
 
 const AddReview = () => {
-  const {films, authInfo, isOneFilmLoaded} = useSelector((state) => state.DATA);
-  const {reviewFormStatus, isReviewFormSubmError} = useSelector((state) => state.REVIEW);
+  const {films, authInfo, isOneFilmLoaded} = useSelector(getFilmData);
+  const {reviewFormStatus, isReviewFormSubmError} = useSelector(getReviewData);
   const pageId = Number(useParams().id);
   const film = films.find((item) => item.id === pageId);
   const dispatch = useDispatch();

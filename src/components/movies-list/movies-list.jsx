@@ -16,10 +16,10 @@ const MoviesList = ({films, autoPlay}) => {
     <div className="catalog__movies-list">
       {films.map((film) =>
         <MovieCard
-          key = {`moviecard ${film.id}`}
-          film = {film}
-          isPlaying = {autoPlay && activeCard === film.id}
-          onMouseOver = {handleSetActiveCard}
+          key={`moviecard ${film.id}`}
+          film={film}
+          isPlaying={autoPlay && activeCard === film.id}
+          onMouseOver={handleSetActiveCard}
         />
       )}
     </div>
