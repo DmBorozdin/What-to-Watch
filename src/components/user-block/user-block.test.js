@@ -1,21 +1,19 @@
 import React from "react";
 import {render, screen} from "@testing-library/react";
-import {Router} from "react-router-dom";
-import {createMemoryHistory} from "history";
+import {Router, Switch, Route} from "react-router-dom";
+import browserHistory from "../../browser-history";
 import UserBlock from "./user-block";
 import userEvent from "@testing-library/user-event";
 import {AuthorizationStatus} from "../../const";
 
-let history;
-
 describe(`UserBlock should render correctly`, () => {
   beforeEach(() => {
-    history = createMemoryHistory();
+    browserHistory.push(`/`);
   });
 
   it(`Should render link`, () => {
     render(
-        <Router history={history}>
+        <Router history={browserHistory}>
           <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.NO_AUTH} onUserAvatarClick={jest.fn()}/>
         </Router>
     );
@@ -26,7 +24,7 @@ describe(`UserBlock should render correctly`, () => {
 
   it(`Should render img`, () => {
     render(
-        <Router history={history}>
+        <Router history={browserHistory}>
           <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={jest.fn()}/>
         </Router>
     );
@@ -34,16 +32,41 @@ describe(`UserBlock should render correctly`, () => {
     expect(screen.getByAltText(`User avatar`)).toBeInTheDocument();
   });
 
-  it(`UserBlock should cal 'onUserAvatarClick' function when mouse click the avatar`, () => {
-    const handleUserAvatarClick = jest.fn();
+  it(`When user is authorized and click by User avatar should be redirect to "my list"`, () => {
     const {container} = render(
-        <Router history={history}>
-          <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.AUTH} onUserAvatarClick={handleUserAvatarClick}/>
+        <Router history={browserHistory}>
+          <Switch>
+            <Route exact path="/">
+              <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.AUTH}/>
+            </Route>
+            <Route exact path="/mylist">
+              <h1>My list</h1>
+            </Route>
+          </Switch>
         </Router>
     );
 
     expect(screen.getByAltText(`User avatar`)).toBeInTheDocument();
     userEvent.click(container.querySelector(`.user-block__avatar`));
-    expect(handleUserAvatarClick).toBeCalled();
+    expect(screen.getByText(/My list/i)).toBeInTheDocument();
+  });
+
+  it(`When user is not authorized and click by "Sign in" should be redirect to sign in`, () => {
+    render(
+        <Router history={browserHistory}>
+          <Switch>
+            <Route exact path="/">
+              <UserBlock avatarUrl={`../../../public/img/avatar.jpg`} authorizationStatus={AuthorizationStatus.NO_AUTH}/>
+            </Route>
+            <Route exact path="/login">
+              <h1>Login page</h1>
+            </Route>
+          </Switch>
+        </Router>
+    );
+
+    expect(screen.getByText(`Sign in`)).toBeInTheDocument();
+    userEvent.click(screen.getByText(`Sign in`));
+    expect(screen.getByText(`Login page`)).toBeInTheDocument();
   });
 });

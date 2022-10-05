@@ -70,7 +70,7 @@ describe(`Test Player`, () => {
 
     expect(container.querySelector(`video`)).toBeInTheDocument();
     expect(screen.getByText(/Exit/i)).toBeInTheDocument();
-    expect(screen.getByText(/Transpotting/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fantastic Beasts: The Crimes of Grindelwald/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
     expect(screen.getByText(/Full screen/i)).toBeInTheDocument();
   });

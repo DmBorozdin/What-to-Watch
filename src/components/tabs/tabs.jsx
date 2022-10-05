@@ -1,21 +1,31 @@
-import React, {useState, Fragment} from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import filmProp from "../../common-props/film.js";
 import reviewsProp from "../../common-props/reviews.js";
+import MovieOverview from "../movie-overview/movie-overview.jsx";
+import MovieDetails from "../movie-details/movie-details.jsx";
+import MovieReview from "../movie-review/movie-review.jsx";
 import {MovieNavItem} from "../../const";
-import {getTimeInFormatHM, getDateInFormatMDY, getDateInFormatYMD, getAssessmentDescription} from "../../utils/common";
 
 const Tabs = ({film, reviews, isReviewLoaded}) => {
   const [currentNavItem, setCurrentNavItem] = useState(MovieNavItem.OVERVIEW);
-  const reviewsFormat = [reviews.slice(0, Math.ceil(reviews.length / 2)), reviews.slice(Math.ceil(reviews.length / 2))];
-  const assessmentDescription = getAssessmentDescription(film.rating);
 
   const handleNavItemClick = (evt) => {
     evt.preventDefault();
     setCurrentNavItem(evt.target.dataset.navItem);
   };
 
-  return <Fragment>
+  const renderActiveTab = () => {
+    switch (currentNavItem) {
+      case MovieNavItem.DETAILS:
+        return <MovieDetails film={film}/>;
+      case MovieNavItem.REVIEWS:
+        return <MovieReview reviews={reviews} isReviewLoaded={isReviewLoaded}/>;
+    }
+    return <MovieOverview film={film}/>;
+  };
+
+  return (
     <div className="movie-card__desc">
       <nav className="movie-nav movie-card__nav">
         <ul className="movie-nav__list">
@@ -26,85 +36,9 @@ const Tabs = ({film, reviews, isReviewLoaded}) => {
           })}
         </ul>
       </nav>
-
-      {currentNavItem === MovieNavItem.OVERVIEW &&
-        <Fragment>
-          <div className="movie-rating">
-            <div className="movie-rating__score">{film.rating}</div>
-            <p className="movie-rating__meta">
-              <span className="movie-rating__level">{assessmentDescription}</span>
-              <span className="movie-rating__count">{film.scoresCount} ratings</span>
-            </p>
-          </div>
-
-          <div className="movie-card__text">
-            <p style={{whiteSpace: `pre-line`}}>{film.description}</p>
-            <p className="movie-card__director"><strong>Director: {film.director}</strong></p>
-            <p className="movie-card__starring"><strong>Starring: {film.starring.join(`, `)}</strong></p>
-          </div>
-        </Fragment>
-      }
-
-      {currentNavItem === MovieNavItem.DETAILS &&
-        <div className="movie-card__text movie-card__row">
-          <div className="movie-card__text-col">
-            <p className="movie-card__details-item">
-              <strong className="movie-card__details-name">Director</strong>
-              <span className="movie-card__details-value">{film.director}</span>
-            </p>
-            <p className="movie-card__details-item">
-              <strong className="movie-card__details-name">Starring</strong>
-              <span className="movie-card__details-value" style={{whiteSpace: `pre-line`}}>
-                {film.starring.join(`, \n`)}
-              </span>
-            </p>
-          </div>
-
-          <div className="movie-card__text-col">
-            <p className="movie-card__details-item">
-              <strong className="movie-card__details-name">Run Time</strong>
-              <span className="movie-card__details-value">{getTimeInFormatHM(film.runTime)} </span>
-            </p>
-            <p className="movie-card__details-item">
-              <strong className="movie-card__details-name">Genre</strong>
-              <span className="movie-card__details-value">{film.genre}</span>
-            </p>
-            <p className="movie-card__details-item">
-              <strong className="movie-card__details-name">Released</strong>
-              <span className="movie-card__details-value">{film.released}</span>
-            </p>
-          </div>
-        </div>
-      }
-
-      {currentNavItem === MovieNavItem.REVIEWS &&
-        <Fragment>
-          {isReviewLoaded &&
-            <div className="movie-card__reviews movie-card__row">
-              {reviewsFormat.map((columnsReview, index) => (
-                <div className="movie-card__reviews-col" key={`reviews-col ${index}`}>
-                  {columnsReview.map((review) => (
-                    <div className="review" key={`review ${review.id}`}>
-                      <blockquote className="review__quote">
-                        <p className="review__text">{review.comment}</p>
-
-                        <footer className="review__details">
-                          <cite className="review__author">{review.user.name}</cite>
-                          <time className="review__date" dateTime={getDateInFormatYMD(review.date)}>{getDateInFormatMDY(review.date)}</time>
-                        </footer>
-                      </blockquote>
-
-                      <div className="review__rating">{review.rating}</div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          }
-        </Fragment>
-      }
+      {renderActiveTab()}
     </div>
-  </Fragment>;
+  );
 };
 
 Tabs.propTypes = {

@@ -827,6 +827,10 @@ main {
 .movie-card__details-value {
   color: #131313; }
 
+.movie-card__details-starring .movie-card__details-value {
+  white-space: pre-line;
+}
+
 .movie-card__reviews {
   padding-top: 20px; }
 

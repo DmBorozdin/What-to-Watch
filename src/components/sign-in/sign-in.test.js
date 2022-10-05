@@ -4,10 +4,8 @@ import {Router, Switch, Route} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
-import * as redux from 'react-redux';
 import userEvent from "@testing-library/user-event";
 import SignIn from "./sign-in";
-import {login} from "../../store/api-actions";
 
 const mockStore = configureStore({});
 let history;
@@ -65,29 +63,6 @@ describe(`Sign in test`, () => {
     container.querySelectorAll(`.logo__link`).forEach((logo) => {
       userEvent.click(logo);
       expect(screen.getByText(/Main screen/i)).toBeInTheDocument();
-    });
-  });
-
-  it(`when user click "Sign in" dispatch login api-action should be called`, () => {
-    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
-    const mockDispatch = jest.fn();
-    mockUseDispatch.mockReturnValue(mockDispatch);
-
-    const {container} = render(
-        <Provider store={mockStore({})}>
-          <Router history={history}>
-            <SignIn/>
-          </Router>
-        </Provider>
-    );
-
-    userEvent.type(screen.getByTestId(`login`), `user`);
-    userEvent.type(screen.getByTestId(`password`), `123`);
-    userEvent.click(container.querySelector(`.sign-in__btn`));
-    expect(mockDispatch).toHaveBeenCalledWith(`login`);
-    expect(login).toHaveBeenCalledWith({
-      login: `user`,
-      password: `123`,
     });
   });
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import {render, screen} from "@testing-library/react";
-import {Router, Switch, Route} from "react-router-dom";
+import {Router} from "react-router-dom";
 import configureStore from "redux-mock-store";
 import userEvent from "@testing-library/user-event";
 import {Provider} from "react-redux";
@@ -239,82 +239,6 @@ describe(`Main test`, () => {
     expect(screen.getByText(`Show more`)).toBeInTheDocument();
   });
 
-  it(`When user is authorized and click by User avatar should be redirect to "my list"`, () => {
-    const store = mockStore({
-      DATA: {
-        films,
-        promoFilm: films[0],
-        authInfo: {
-          avatarUrl: `hello.jpg`
-        },
-        isDataLoaded: true,
-        isPromoFilmLoaded: true,
-      },
-      LIST: {
-        selectedGenre: Genre.ALL_GENRE,
-      },
-      USER: {
-        authorizationStatus: AuthorizationStatus.AUTH
-      }
-    });
-    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
-    const mockDispatch = jest.fn();
-    mockUseDispatch.mockReturnValue(mockDispatch);
-
-    const {container} = render(
-        <Provider store={store}>
-          <Router history={history}>
-            <Main />
-          </Router>
-        </Provider>
-    );
-
-    userEvent.click(container.querySelector(`.user-block__avatar`));
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: ActionType.REDIRECT_TO_ROUTE,
-      payload: `/mylist`
-    });
-  });
-
-  it(`When user is not authorized and click by "Sign in" should be redirect to sign in`, () => {
-    const store = mockStore({
-      DATA: {
-        films,
-        promoFilm: films[0],
-        authInfo: {
-          avatarUrl: `hello.jpg`
-        },
-        isDataLoaded: true,
-        isPromoFilmLoaded: true,
-      },
-      LIST: {
-        selectedGenre: Genre.ALL_GENRE,
-      },
-      USER: {
-        authorizationStatus: AuthorizationStatus.NO_AUTH
-      }
-    });
-
-    render(
-        <Provider store={store}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/">
-                <Main />
-              </Route>
-              <Route exact path="/login">
-                <h1>Login page</h1>
-              </Route>
-            </Switch>
-          </Router>
-        </Provider>
-    );
-
-    expect(screen.getByText(`Sign in`)).toBeInTheDocument();
-    userEvent.click(screen.getByText(`Sign in`));
-    expect(screen.getByText(`Login page`)).toBeInTheDocument();
-  });
-
   it(`When user click on "Show more" button, 8 more cards should be shown.The "Show More" button should disappear`, () => {
     const store = mockStore({
       DATA: {
@@ -452,7 +376,7 @@ describe(`Main test`, () => {
     expect(screen.getByTestId(`preloader`)).toBeInTheDocument();
   });
 
-  it(`When page rendered, dispatch should be called with resetFilmsList action`, () => {
+  it(`When page rendered and selected genre not equal 'All genre', dispatch should be called with resetFilmsList action`, () => {
     const store = mockStore({
       DATA: {
         films,
@@ -464,7 +388,7 @@ describe(`Main test`, () => {
         isPromoFilmLoaded: true,
       },
       LIST: {
-        selectedGenre: Genre.ALL_GENRE,
+        selectedGenre: `Crime`,
       },
       USER: {
         authorizationStatus: AuthorizationStatus.AUTH

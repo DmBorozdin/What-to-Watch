@@ -49,3 +49,5 @@ export const getAssessmentDescription = (rating) => {
 
   return description;
 };
+
+export const formatReviews = (reviews) => [reviews.slice(0, Math.ceil(reviews.length / 2)), reviews.slice(Math.ceil(reviews.length / 2))];
