@@ -9,7 +9,8 @@ import {createMemoryHistory} from "history";
 import Film from "./film";
 import {AuthorizationStatus} from "../../const";
 import {ActionType} from "../../store/action";
-import {fetchFilm, fetchComment, sendFavoriteStatus} from "../../store/api-actions";
+import {fetchComment, sendFavoriteStatus} from "../../store/api-actions";
+import browserHistory from "../../browser-history";
 
 const mockStore = configureStore({});
 let history;
@@ -111,7 +112,7 @@ jest.mock(`../../store/api-actions`, () => ({
   __esModule: true,
   ...jest.requireActual(`../../store/api-actions`),
   sendFavoriteStatus: jest.fn(() => `sendFavoriteStatus`),
-  fetchFilm: jest.fn(() => `fetchFilm`),
+  fetchFilmList: jest.fn(() => `fetchFilmList`),
   fetchComment: jest.fn()
 }));
 
@@ -124,6 +125,7 @@ describe(`Film test`, () => {
   beforeEach(() => {
     history = createMemoryHistory();
     history.push(`/films/2`);
+    browserHistory.push(`/films/2`);
   });
 
   it(`When user is authorized Film should be render correctly`, () => {
@@ -134,7 +136,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -144,7 +146,7 @@ describe(`Film test`, () => {
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
@@ -174,7 +176,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -184,7 +186,7 @@ describe(`Film test`, () => {
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
@@ -214,31 +216,30 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
         authorizationStatus: AuthorizationStatus.AUTH
       }
     });
-    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
-    const mockDispatch = jest.fn();
-    mockUseDispatch.mockReturnValue(mockDispatch);
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
-            <Film />
+          <Router history={browserHistory}>
+            <Route exact path="/films/2">
+              <Film/>
+            </Route>
+            <Route exact path="/player/2">
+              <h1>Player page</h1>
+            </Route>
           </Router>
         </Provider>
     );
 
     expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
     userEvent.click(container.querySelector(`.btn--play`));
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: ActionType.REDIRECT_TO_ROUTE,
-      payload: `/player/2`
-    });
+    expect(screen.getByText(`Player page`)).toBeInTheDocument();
   });
 
   it(`When user is authorized and click by "My list" film should be add to favorite`, () => {
@@ -249,7 +250,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -262,7 +263,7 @@ describe(`Film test`, () => {
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
@@ -282,7 +283,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -295,18 +296,20 @@ describe(`Film test`, () => {
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
-            <Film />
+          <Router history={browserHistory}>
+            <Route exact path="/films/2">
+              <Film/>
+            </Route>
+            <Route exact path="/login">
+              <h1>Login page</h1>
+            </Route>
           </Router>
         </Provider>
     );
 
     expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
     userEvent.click(container.querySelector(`.btn--list`));
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: ActionType.REDIRECT_TO_ROUTE,
-      payload: `/login`
-    });
+    expect(screen.getByText(`Login page`)).toBeInTheDocument();
   });
 
   it(`When user is authorized and click by "Add review" should be redirect to review page`, () => {
@@ -317,7 +320,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -327,7 +330,7 @@ describe(`Film test`, () => {
 
     render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Switch>
               <Route exact path="/films/2">
                 <Film />
@@ -345,115 +348,6 @@ describe(`Film test`, () => {
     expect(screen.getByText(`Review page`)).toBeInTheDocument();
   });
 
-  it(`When user is authorized and click by User avatar should be redirect to "my list"`, () => {
-    const store = mockStore({
-      DATA: {
-        films,
-        reviews: [],
-        authInfo: {
-          avatarUrl: `hello.jpg`
-        },
-        isOneFilmLoaded: true,
-        isReviewLoaded: true,
-      },
-      USER: {
-        authorizationStatus: AuthorizationStatus.AUTH
-      }
-    });
-    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
-    const mockDispatch = jest.fn();
-    mockUseDispatch.mockReturnValue(mockDispatch);
-
-    const {container} = render(
-        <Provider store={store}>
-          <Router history={history}>
-            <Film />
-          </Router>
-        </Provider>
-    );
-
-    expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
-    userEvent.click(container.querySelector(`.user-block__avatar`));
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: ActionType.REDIRECT_TO_ROUTE,
-      payload: `/mylist`
-    });
-  });
-
-  it(`When user is not authorized and click by "Sign in" should be redirect to sign in`, () => {
-    const store = mockStore({
-      DATA: {
-        films,
-        reviews: [],
-        authInfo: {
-          avatarUrl: `hello.jpg`
-        },
-        isOneFilmLoaded: true,
-        isReviewLoaded: true,
-      },
-      USER: {
-        authorizationStatus: AuthorizationStatus.NO_AUTH
-      }
-    });
-
-    render(
-        <Provider store={store}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/films/2">
-                <Film />
-              </Route>
-              <Route exact path="/login">
-                <h1>Login page</h1>
-              </Route>
-            </Switch>
-          </Router>
-        </Provider>
-    );
-
-    expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
-    userEvent.click(screen.getByText(`Sign in`));
-    expect(screen.getByText(`Login page`)).toBeInTheDocument();
-  });
-
-  it(`When user click by "Logo WTW" should be redirect to main page`, () => {
-    const store = mockStore({
-      DATA: {
-        films,
-        reviews: [],
-        authInfo: {
-          avatarUrl: `hello.jpg`
-        },
-        isOneFilmLoaded: true,
-        isReviewLoaded: true,
-      },
-      USER: {
-        authorizationStatus: AuthorizationStatus.NO_AUTH
-      }
-    });
-
-    const {container} = render(
-        <Provider store={store}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/films/2">
-                <Film />
-              </Route>
-              <Route exact path="/">
-                <h1>Main page</h1>
-              </Route>
-            </Switch>
-          </Router>
-        </Provider>
-    );
-
-    expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
-    container.querySelectorAll(`.logo__link`).forEach((element) => {
-      userEvent.click(element);
-      expect(screen.getByText(`Main page`)).toBeInTheDocument();
-    });
-  });
-
   it(`When the user clicks on a small movie card from the list of similar movies, it should be redirected to that movie's page.`, () => {
     const store = mockStore({
       DATA: {
@@ -462,31 +356,32 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
         authorizationStatus: AuthorizationStatus.NO_AUTH
       }
     });
-    const mockUseDispatch = jest.spyOn(redux, `useDispatch`);
-    const mockDispatch = jest.fn();
-    mockUseDispatch.mockReturnValue(mockDispatch);
 
     render(
         <Provider store={store}>
-          <Router history={history}>
-            <Film />
+          <Router history={browserHistory}>
+            <Switch>
+              <Route exact path="/films/2">
+                <Film />
+              </Route>
+              <Route exact path="/films/3">
+                <h1>Film 3 page</h1>
+              </Route>
+            </Switch>
           </Router>
         </Provider>
     );
 
     expect(screen.getByText(`Bohemian Rhapsody`)).toBeInTheDocument();
     userEvent.click(screen.getByText(`Revenant`));
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: ActionType.REDIRECT_TO_ROUTE,
-      payload: `/films/3`
-    });
+    expect(screen.getByText(`Film 3 page`)).toBeInTheDocument();
   });
 
   it(`When there are more than 4 movies in the list of similar movies, only 4 movie cards should be shown`, () => {
@@ -631,7 +526,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -641,7 +536,7 @@ describe(`Film test`, () => {
 
     const {container} = render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
@@ -670,7 +565,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       },
       USER: {
@@ -683,7 +578,7 @@ describe(`Film test`, () => {
 
     render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
@@ -695,7 +590,7 @@ describe(`Film test`, () => {
     });
   });
 
-  it(`When film is not loaded film should be fetch from server and preloaser will appear`, () => {
+  it(`When film is not loaded film should be fetch from server and preloader will appear`, () => {
     const store = mockStore({
       DATA: {
         films,
@@ -703,7 +598,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: false,
+        isDataLoaded: false,
         isReviewLoaded: true,
       },
       USER: {
@@ -716,13 +611,17 @@ describe(`Film test`, () => {
 
     render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>
     );
 
-    expect(fetchFilm).toHaveBeenCalledWith(2);
+    expect(mockDispatch).toHaveBeenCalledTimes(2);
+    expect(mockDispatch).toHaveBeenNthCalledWith(1, `fetchFilmList`);
+    expect(mockDispatch).toHaveBeenNthCalledWith(2, {
+      type: ActionType.RESET_REVIEW,
+    });
     expect(screen.getByTestId(`preloader`)).toBeInTheDocument();
   });
 
@@ -734,7 +633,7 @@ describe(`Film test`, () => {
         authInfo: {
           avatarUrl: `hello.jpg`
         },
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: false,
       },
       USER: {
@@ -747,7 +646,7 @@ describe(`Film test`, () => {
 
     render(
         <Provider store={store}>
-          <Router history={history}>
+          <Router history={browserHistory}>
             <Film />
           </Router>
         </Provider>

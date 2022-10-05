@@ -107,11 +107,14 @@ describe(`Test routing`, () => {
   });
 
   it(`Render 'SignIn' when user navigate to '/login' url`, () => {
+    const store = mockStore({
+      USER: {authorizationStatus: AuthorizationStatus.NO_AUTH},
+    });
     const history = createMemoryHistory();
     history.push(APPRoute.LOGIN);
 
     render(
-        <Provider store={mockStore({})}>
+        <Provider store={store}>
           <Router history={history}>
             <App/>
           </Router>
@@ -170,7 +173,7 @@ describe(`Test routing`, () => {
         }],
         reviews: [],
         authInfo: {avatarUrl: ``},
-        isOneFilmLoaded: true,
+        isDataLoaded: true,
         isReviewLoaded: true,
       }
     });
@@ -286,7 +289,7 @@ describe(`Test routing`, () => {
     );
 
     expect(screen.getByText(/Exit/i)).toBeInTheDocument();
-    expect(screen.getByText(/Transpotting/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fantastic Beasts: The Crimes of Grindelwald/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
     expect(screen.getByText(/Full screen/i)).toBeInTheDocument();
   });

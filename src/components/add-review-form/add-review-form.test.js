@@ -12,7 +12,7 @@ describe(`AddReviewForm test`, () => {
 
     expect(container.querySelector(`.add-review__fieldset`)).toBeInTheDocument();
     expect(container.querySelector(`.add-review__fieldset`)).not.toHaveAttribute(`disabled`);
-    expect(screen.getAllByText(/Rating/i)).toHaveLength(10);
+    expect(screen.getAllByText(/star/i)).toHaveLength(10);
     expect(screen.getByPlaceholderText(`Review text`)).toBeInTheDocument();
     expect(screen.getByText(`Post`)).toBeInTheDocument();
     expect(screen.getByText(`Post`)).toHaveAttribute(`disabled`);
@@ -32,9 +32,9 @@ describe(`AddReviewForm test`, () => {
         <AddReviewForm onSubmit={jest.fn()} pageId={1} reviewFormStatus={ReviewFormStatus.ENABLE}/>
     );
 
-    expect(screen.getByLabelText(`Rating 5`)).not.toBeChecked();
-    userEvent.click(screen.getByLabelText(`Rating 5`));
-    expect(screen.getByLabelText(`Rating 5`)).toBeChecked();
+    expect(screen.getByLabelText(`star-5`)).not.toBeChecked();
+    userEvent.click(screen.getByLabelText(`star-5`));
+    expect(screen.getByLabelText(`star-5`)).toBeChecked();
     expect(screen.getByText(`Post`)).toBeDisabled();
   });
 
@@ -57,10 +57,10 @@ describe(`AddReviewForm test`, () => {
     );
 
     expect(screen.getByPlaceholderText(`Review text`)).toHaveDisplayValue(``);
-    expect(screen.getByLabelText(`Rating 5`)).not.toBeChecked();
-    userEvent.click(screen.getByLabelText(`Rating 5`));
+    expect(screen.getByLabelText(`star-5`)).not.toBeChecked();
+    userEvent.click(screen.getByLabelText(`star-5`));
     fireEvent.change(screen.getByPlaceholderText(`Review text`), {target: {value: `Hello`}});
-    expect(screen.getByLabelText(`Rating 5`)).toBeChecked();
+    expect(screen.getByLabelText(`star-5`)).toBeChecked();
     expect(screen.getByPlaceholderText(`Review text`)).toHaveDisplayValue(`Hello`);
     expect(screen.getByText(`Post`)).toBeDisabled();
   });
@@ -82,8 +82,8 @@ describe(`AddReviewForm test`, () => {
     );
 
     expect(screen.getByPlaceholderText(`Review text`)).toHaveDisplayValue(``);
-    expect(screen.getByLabelText(`Rating 5`)).not.toBeChecked();
-    userEvent.click(screen.getByLabelText(`Rating 5`));
+    expect(screen.getByLabelText(`star-5`)).not.toBeChecked();
+    userEvent.click(screen.getByLabelText(`star-5`));
     fireEvent.change(screen.getByPlaceholderText(`Review text`), {target: {value: `I love this movie. Great Immersive camera-work. This film is an experience and i has already seen it 4 times.`}});
     expect(screen.getByText(`Post`)).toBeEnabled();
   });
@@ -94,7 +94,7 @@ describe(`AddReviewForm test`, () => {
         <AddReviewForm onSubmit={handleSubmit} pageId={1} reviewFormStatus={ReviewFormStatus.ENABLE}/>
     );
 
-    userEvent.click(screen.getByLabelText(`Rating 5`));
+    userEvent.click(screen.getByLabelText(`star-5`));
     fireEvent.change(screen.getByPlaceholderText(`Review text`), {target: {value: `I love this movie. Great Immersive camera-work. This film is an experience and i has already seen it 4 times.`}});
     userEvent.click(screen.getByText(`Post`));
     expect(handleSubmit).toHaveBeenCalledWith({
